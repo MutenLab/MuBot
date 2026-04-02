@@ -10,8 +10,12 @@ echo "[$(date '+%H:%M:%S')] Starting game app..."
 # Start the game using monkey (simulates launcher tap - works with non-exported activities)
 adb_shell monkey -p "$GAME_PACKAGE" -c android.intent.category.LAUNCHER 1 >/dev/null 2>&1
 
+# Dismiss startup add popup
+sleep 5
+tap_startup_close_ads
+
 # Wait for game to load
-sleep 60
+sleep 55
 # Click Start Game at login
 tap_login_start_game
 sleep 15

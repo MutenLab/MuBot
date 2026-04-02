@@ -104,6 +104,7 @@ tap_login_start_game() { adb_tap 960 805; } # Migrated
 tap_update_confirm() { adb_tap 1260 715; } # PENDING TO VALIDATE
 tap_close_ads() { adb_tap 1890 40; } # PENDING TO VALIDATE
 tap_auto_party_box() { adb_tap 140 338; } # Migrated
+tap_startup_close_ads() { adb_tap 1889 76; }
 
 # Game Package Name
 # ==================
