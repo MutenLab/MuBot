@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find .:*)",
+      "Bash(brew install:*)",
+      "Bash(/opt/homebrew/bin/pip3.12 install:*)",
+      "Bash(/opt/homebrew/bin/python3.12:*)",
+      "Bash(ls:*)",
+      "Bash(adb connect:*)",
+      "Bash(adb:*)",
+      "Bash(chmod +x:*)",
+      "Bash(magick:*)",
+      "Bash(bash:*)",
+      "Bash(python3 -c \"import easyocr\")"
+    ]
+  }
+}

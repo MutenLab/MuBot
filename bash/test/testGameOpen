@@ -1,0 +1,31 @@
+#!/bin/bash
+# Test script to check if user is logged in
+# This script tests the isLoggedIn function from visionUtils.sh
+
+# Source vision utilities
+source /Users/icerrate/xCodeProjects/MuBot/MuBot/scripts/bash/utils/visionUtils.sh
+
+echo "========================================"
+echo "     Testing isGameRunning Function"
+echo "========================================"
+echo ""
+echo "[$(date '+%H:%M:%S')] Checking if game is running..."
+echo ""
+
+# Call isGameRunning function
+isGameRunning
+
+# Check the result
+if [ $? -eq 0 ]; then
+    echo "✓ Result: IS running"
+    exit_code=0
+else
+    echo "✗ Result: is NOT running"
+    exit_code=1
+fi
+
+echo ""
+echo "========================================"
+echo ""
+
+exit $exit_code

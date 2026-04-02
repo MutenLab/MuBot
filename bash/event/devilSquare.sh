@@ -1,0 +1,73 @@
+#!/bin/bash
+# Load configuration
+source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
+source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/eventUtils.sh
+
+# ENTER EVENT
+# ================
+echo "[$(date '+%H:%M:%S')] Going to Devil Square..."
+/Users/icerrate/AndroidStudioProjects/bot/bash/actions/openEventWindow.sh
+sleep 1
+clickEventGoButton "devil"
+sleep 12
+# Click on last level
+tap_event_last_level
+sleep 0.5
+screenshotName="DS_$(date '+%H.%M').png"
+adb_screencap > "/Users/icerrate/Desktop/$screenshotName"
+echo "[$(date '+%H:%M:%S')] Screenshot saved: $screenshotName"
+sleep 0.5
+# Enter button
+tap_event_enter
+sleep 5
+echo "[$(date '+%H:%M:%S')] Entering Event..."
+
+# Check if we are at correct location
+currentLocation=$(getLocation)
+if [ "$currentLocation" -ne "$LOC_DEVIL_SQUARE" ]; then
+    currentName=$(getLocationName $currentLocation)
+    echo "[$(date '+%H:%M:%S')] ERROR: Not at Devil Square (at $currentName). Aborting event..."
+    exit 1
+fi
+echo "[$(date '+%H:%M:%S')] Confirmed at Devil Square."
+
+# POSITION
+# ================
+# Open Map
+tap_openMap
+sleep 0.5
+# Go to best spot on map
+tap_event_ds_best_location
+sleep 0.5
+# Close Map
+tap_closeMap
+sleep 1
+
+# CHANGE TO EVIL SPIRIT PLAN
+# ================
+changePlan 1
+
+# RECYCLER & SATAN VALIDATION
+# ================
+# During wait time
+runDuringTravelling 15 true "satan"
+
+# WAIT COUNTDOWN & START EVENT
+# ================
+eventStartEpoch=$(waitToStartEvent)
+
+# ATTACK DURING EVENT
+# ================
+runWhileEvent $eventStartEpoch
+
+waitToEndEvent
+
+# CHANGE BACK TO BLIZZARD PLAN
+# ================
+changePlan 2
+
+# LEAVE PARTY
+# ================
+leaveParty
+sleep 0.5
