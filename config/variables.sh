@@ -14,6 +14,10 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     EMULATOR_ID="$(grep '^emulator.id=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     USE_IMMORTAL_SATAN="$(grep '^use.immortal.satan=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     GAME_PACKAGE="$(grep '^game.package=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    PLAN_BEFORE_DEVIL_SQUARE="$(grep '^plan.before.devil.square=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    PLAN_AFTER_DEVIL_SQUARE="$(grep '^plan.after.devil.square=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    PLAN_BEFORE_BLOOD_CASTLE="$(grep '^plan.before.blood.castle=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    PLAN_AFTER_BLOOD_CASTLE="$(grep '^plan.after.blood.castle=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
 fi
 : "${PROJECT_DIR:=$_PROJECT_ROOT}"
 : "${QUICK_BUFF:=false}"
@@ -23,6 +27,10 @@ fi
 : "${EMULATOR_ID:=127.0.0.1:5555}"
 : "${USE_IMMORTAL_SATAN:=true}"
 : "${GAME_PACKAGE:=com.tszz.gpen.nowgg}"
+: "${PLAN_BEFORE_DEVIL_SQUARE:=1}"
+: "${PLAN_AFTER_DEVIL_SQUARE:=2}"
+: "${PLAN_BEFORE_BLOOD_CASTLE:=2}"
+: "${PLAN_AFTER_BLOOD_CASTLE:=0}"
 export PROJECT_DIR
 export QUICK_BUFF
 export PICKUP_ITEMS_BOSS
@@ -31,6 +39,10 @@ export AUTOPLAY_ATTACK_TIMEOUT
 export EMULATOR_ID
 export USE_IMMORTAL_SATAN
 export GAME_PACKAGE
+export PLAN_BEFORE_DEVIL_SQUARE
+export PLAN_AFTER_DEVIL_SQUARE
+export PLAN_BEFORE_BLOOD_CASTLE
+export PLAN_AFTER_BLOOD_CASTLE
 unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings

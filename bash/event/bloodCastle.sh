@@ -33,9 +33,11 @@ if [ "$currentLocation" -ne "$LOC_BLOOD_CASTLE" ]; then
 fi
 echo "[$(date '+%H:%M:%S')] Confirmed at Blood Castle."
 
-# CHANGE TO BLIZZARD PLAN
+# CHANGE PLAN BEFORE EVENT
 # ================
-changePlan 2
+if [ "$PLAN_BEFORE_BLOOD_CASTLE" -ne 0 ]; then
+    changePlan $PLAN_BEFORE_BLOOD_CASTLE
+fi
 
 # RECYCLER & SATAN VALIDATION
 # ================
@@ -65,6 +67,12 @@ echo "[$(date '+%H:%M:%S')] Arrived to good spot. Attacking..."
 runWhileEvent $eventStartEpoch
 
 waitToEndEvent
+
+# CHANGE PLAN AFTER EVENT
+# ================
+if [ "$PLAN_AFTER_BLOOD_CASTLE" -ne 0 ]; then
+    changePlan $PLAN_AFTER_BLOOD_CASTLE
+fi
 
 # LEAVE PARTY
 # ================

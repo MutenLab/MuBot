@@ -44,9 +44,11 @@ sleep 0.5
 tap_closeMap
 sleep 1
 
-# CHANGE TO EVIL SPIRIT PLAN
+# CHANGE PLAN BEFORE EVENT
 # ================
-changePlan 1
+if [ "$PLAN_BEFORE_DEVIL_SQUARE" -ne 0 ]; then
+    changePlan $PLAN_BEFORE_DEVIL_SQUARE
+fi
 
 # RECYCLER & SATAN VALIDATION
 # ================
@@ -63,9 +65,11 @@ runWhileEvent $eventStartEpoch
 
 waitToEndEvent
 
-# CHANGE BACK TO BLIZZARD PLAN
+# CHANGE PLAN AFTER EVENT
 # ================
-changePlan 2
+if [ "$PLAN_AFTER_DEVIL_SQUARE" -ne 0 ]; then
+    changePlan $PLAN_AFTER_DEVIL_SQUARE
+fi
 
 # LEAVE PARTY
 # ================

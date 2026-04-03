@@ -71,6 +71,10 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `pickup.items.boss` | Seconds to wait picking up items after killing a boss | `10` |
 | `pickup.items.golden` | Seconds to wait picking up items after killing a golden monster | `4` |
 | `autoPlay.attack.timeout` | Timeout in seconds for the smartAutoPlay attack script | `240` |
+| `plan.before.devil.square` | Plan to set before Devil Square (0=no change, 1=plan 1, 2=plan 2) | `1` |
+| `plan.after.devil.square` | Plan to set after Devil Square (0=no change, 1=plan 1, 2=plan 2) | `2` |
+| `plan.before.blood.castle` | Plan to set before Blood Castle (0=no change, 1=plan 1, 2=plan 2) | `2` |
+| `plan.after.blood.castle` | Plan to set after Blood Castle (0=no change, 1=plan 1, 2=plan 2) | `0` |
 
 ### 5. Update configuration
 
