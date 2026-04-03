@@ -14,6 +14,8 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [x] `python/readTextOCR.py` — no migration needed
 - [x] `python/compareImages.py` — no migration needed
 - [x] `python/optimizeBossRouteOnSanctuaryMap.py` — no migration needed
+- [ ] `python/debug/debugBossColors.py`
+- [ ] `python/debug/debugBossHealthBar.py`
 
 ### Utility Scripts
 - [~] `bash/utils/visionUtils.sh` — remaining: isExpiredPopupVisible, isOpenNowButtonVisible, checkRemainTimeForEventToEnd
@@ -77,6 +79,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [ ] `bash/teleport/toCorruptedLands.sh`
 - [ ] `bash/teleport/toRaklion3.sh`
 - [ ] `bash/teleport/toRaklion2.sh`
+- [ ] `bash/teleport/toAbyssalFerea.sh`
 
 ### Travel
 - [x] `bash/travel/foggyForest/toMobsFromCenter.sh`
@@ -92,6 +95,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [ ] `bash/travel/corruptedLands/*.sh`
 - [ ] `bash/travel/landOfDemons/*.sh`
 - [ ] `bash/travel/plain1/*.sh`
+- [ ] `bash/travel/abyssalFerea/*.sh`
 
 ### Boss
 - [ ] `bash/boss/goToSwamp350Boss.sh`
@@ -135,3 +139,5 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [ ] `autoPlay450CorruptedLands.sh`
 - [ ] `autoPlay440Sanctuary1.sh`
 - [ ] `autoPlay410MobPlain1.sh`
+- [ ] `autoPlayGoldenAbyssalFerea.sh`
+- [ ] `autoPlayMobAbyssalFerea.sh`
