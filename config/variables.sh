@@ -46,6 +46,10 @@ export PATH="/opt/homebrew/bin:$PATH"
 # For BlueStacks: typically localhost:5555, localhost:5556, etc.
 #   Make sure ADB is connected first: adb connect localhost:5555
 
+# Game Package Name
+# ===================
+# Resolved from local.properties (game.package)
+
 # ADB wrapper functions - automatically target the correct emulator
 adb_shell() {
     adb -s "$EMULATOR_ID" shell "$@"
@@ -133,10 +137,6 @@ tap_close_ads() { adb_tap 1890 40; } # PENDING TO VALIDATE
 tap_auto_party_box() { adb_tap 140 338; } # Migrated
 tap_startup_close_ads() { adb_tap 1889 76; }
 
-# Game Package Name
-# ==================
-# Resolved from local.properties (game.package)
-
 # Satan Imp Settings
 # ==================
 # Resolved from local.properties (use.immortal.satan)
@@ -145,21 +145,3 @@ if [ "$USE_IMMORTAL_SATAN" = true ]; then
 else
     satanImpType="satan"
 fi
-
-# Recycle Settings
-# ================
-# Set to true to enable automatic recycling during offensive mode,
-# otherwise it will be disabled
-recycleEnable=true
-# Number of cycles before triggering recycle action
-# Higher values = less frequent recycling
-recycleCycleCounter=90
-
-# Reposition Settings
-# ===================
-# Set to true to enable automatic repositioning during offensive mode,
-# otherwise it will be disabled
-repositionEnable=true
-# Number of cycles before triggering reposition action
-# Also triggers at cycle 0 (start of loop)
-repositionCycleCounter=30

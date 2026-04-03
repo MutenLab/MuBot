@@ -47,20 +47,18 @@ while true; do
   # RECYCLE TO CLEAN INVENTORY.
   # ===============================================
   if [ $recyclerCounter -eq $recycleCycleAt ]; then
-    if [ "$recycleEnable" = true ]; then
-      echo "Recycling..."
-      # Background execution
-      $PROJECT_DIR/bash/actions/recycle.sh &
-      recycle_pid=$!
-      read -t 2 -n 1 key
-      if [ $? = 0 ]; then
-        echo "Key pressed. Aborting..."
-        kill $recycle_pid 2>/dev/null
-        wait $recycle_pid 2>/dev/null
-        exit 0
-      else
-        wait $recycle_pid
-      fi
+    echo "Recycling..."
+    # Background execution
+    $PROJECT_DIR/bash/actions/recycle.sh &
+    recycle_pid=$!
+    read -t 2 -n 1 key
+    if [ $? = 0 ]; then
+      echo "Key pressed. Aborting..."
+      kill $recycle_pid 2>/dev/null
+      wait $recycle_pid 2>/dev/null
+      exit 0
+    else
+      wait $recycle_pid
     fi
     # Restart counter
     recyclerCounter=0

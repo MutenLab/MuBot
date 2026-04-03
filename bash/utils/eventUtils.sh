@@ -3,7 +3,7 @@
 # Functions for checking event times and handling event-related operations
 # ==================================================
 
-# Load configuration for variables like recycleEnable
+# Load configuration
 source $PROJECT_DIR/config/variables.sh
 
 # Change auto-play plan
@@ -250,7 +250,7 @@ runWhileEvent() {
         sinceLastRecycle=$((sinceLastRecycle + tapInterval))
 
         # Recycle every 3 minutes
-        if [ $sinceLastRecycle -ge $recycleInterval ] && [ "$recycleEnable" = true ]; then
+        if [ $sinceLastRecycle -ge $recycleInterval ]; then
             echo "[$(date '+%H:%M:%S')] Recycling inventory... (${elapsed}s/${eventDuration}s)"
             $PROJECT_DIR/bash/actions/recycle.sh
             sleep 1

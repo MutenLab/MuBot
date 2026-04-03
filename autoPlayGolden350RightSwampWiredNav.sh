@@ -39,55 +39,53 @@ while true; do
   # RECYCLE TO CLEAN INVENTORY.
   # ============================
   if [ $recyclerCounter -eq $recycleCycleAt ]; then
-    if [ "$recycleEnable" = true ]; then
-      echo "Recycling..."
-      # Background execution
-      $PROJECT_DIR/bash/actions/recycle.sh &
-      recycle_pid=$!
-      read -t 2 -n 1 key
-      if [ $? = 0 ]; then
-        if [ "$key" = "n" ]; then
-          echo " key pressed. Moving to next wire..."
-          kill $recycle_pid 2>/dev/null
-          wait $recycle_pid 2>/dev/null
+    echo "Recycling..."
+    # Background execution
+    $PROJECT_DIR/bash/actions/recycle.sh &
+    recycle_pid=$!
+    read -t 2 -n 1 key
+    if [ $? = 0 ]; then
+      if [ "$key" = "n" ]; then
+        echo " key pressed. Moving to next wire..."
+        kill $recycle_pid 2>/dev/null
+        wait $recycle_pid 2>/dev/null
+        key_action="next"
+        continue
+      elif [ "$key" = "-" ]; then
+        echo " key pressed. Moving to previous wire..."
+        kill $recycle_pid 2>/dev/null
+        wait $recycle_pid 2>/dev/null
+        key_action="prev"
+        continue
+      elif [ "$key" = "p" ]; then
+        kill $recycle_pid 2>/dev/null
+        wait $recycle_pid 2>/dev/null
+        $PROJECT_DIR/bash/actions/wait.sh
+        wait_exit_code=$?
+        if [ $wait_exit_code -eq 1 ]; then
           key_action="next"
-          continue
-        elif [ "$key" = "-" ]; then
-          echo " key pressed. Moving to previous wire..."
-          kill $recycle_pid 2>/dev/null
-          wait $recycle_pid 2>/dev/null
+        elif [ $wait_exit_code -eq 2 ]; then
           key_action="prev"
-          continue
-        elif [ "$key" = "p" ]; then
-          kill $recycle_pid 2>/dev/null
-          wait $recycle_pid 2>/dev/null
-          $PROJECT_DIR/bash/actions/wait.sh
-          wait_exit_code=$?
-          if [ $wait_exit_code -eq 1 ]; then
-            key_action="next"
-          elif [ $wait_exit_code -eq 2 ]; then
-            key_action="prev"
-          elif [ $wait_exit_code -eq 4 ]; then
-            key_action="restart"
-          elif [ $wait_exit_code -eq 3 ]; then
-            break
-          fi
-          continue
-        elif [ "$key" = "r" ]; then
-          echo " key pressed. Restarting at current wire..."
-          kill $recycle_pid 2>/dev/null
-          wait $recycle_pid 2>/dev/null
+        elif [ $wait_exit_code -eq 4 ]; then
           key_action="restart"
-          continue
-        else
-          echo "Key pressed. Aborting..."
-          kill $recycle_pid 2>/dev/null
-          wait $recycle_pid 2>/dev/null
+        elif [ $wait_exit_code -eq 3 ]; then
           break
         fi
+        continue
+      elif [ "$key" = "r" ]; then
+        echo " key pressed. Restarting at current wire..."
+        kill $recycle_pid 2>/dev/null
+        wait $recycle_pid 2>/dev/null
+        key_action="restart"
+        continue
       else
-        wait $recycle_pid
+        echo "Key pressed. Aborting..."
+        kill $recycle_pid 2>/dev/null
+        wait $recycle_pid 2>/dev/null
+        break
       fi
+    else
+      wait $recycle_pid
     fi
     # Restart counter
     recyclerCounter=0
