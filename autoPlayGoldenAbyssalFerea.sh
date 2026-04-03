@@ -553,7 +553,7 @@ while true; do
   # RUN AUTO PLAY AT 570 GOLDEN
   # ===============================================
   echo "[$(date '+%H:%M:%S')] Arrived to 570 Golden spot..."
-  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh golden &
   cycle_pid=$!                          # Save PID
 
   # Wait for AutoPlay to finish, checking for key presses
@@ -784,7 +784,7 @@ while true; do
   # RUN AUTO PLAY AT 560 GOLDEN
   # ===============================================
   echo "[$(date '+%H:%M:%S')] Arrived to 560 Golden spot..."
-  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh golden &
   cycle_pid=$!                          # Save PID
 
   # Wait for AutoPlay to finish, checking for key presses

@@ -588,7 +588,7 @@ while true; do
         echo "[$(date '+%H:%M:%S')] $boss_name - Fighting..."
 
         # Call smartAutoPlay in background (grabTime)
-        $PROJECT_DIR/bash/attack/smartAutoPlay.sh 10 boss &
+        $PROJECT_DIR/bash/attack/smartAutoPlay.sh boss &
         attack_pid=$!
 
         # Monitor for key presses while attacking
@@ -637,7 +637,7 @@ while true; do
                         echo "[$(date '+%H:%M:%S')] Resuming..."
                     fi
                     # Resume attacking after stop
-                    $PROJECT_DIR/bash/attack/smartAutoPlay.sh 10 boss &
+                    $PROJECT_DIR/bash/attack/smartAutoPlay.sh boss &
                     attack_pid=$!
                 else
                     handleKeyPress "$key"

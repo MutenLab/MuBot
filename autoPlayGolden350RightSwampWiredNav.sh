@@ -225,7 +225,7 @@ while true; do
   # RUN OFFENSIVE CYCLE SCRIPT
   # ============================
   totalOffensiveCycleTime=$((attackTime + autoTime))
-  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh golden &
   cycle_pid=$!                          # Save PID
   read -t $totalOffensiveCycleTime -n 1 key
   if [ $? = 0 ]; then

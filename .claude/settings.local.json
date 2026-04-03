@@ -11,7 +11,8 @@
       "Bash(chmod +x:*)",
       "Bash(magick:*)",
       "Bash(bash:*)",
-      "Bash(python3 -c \"import easyocr\")"
+      "Bash(python3 -c \"import easyocr\")",
+      "Bash(xargs sed:*)"
     ]
   }
 }

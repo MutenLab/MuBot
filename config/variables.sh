@@ -8,11 +8,20 @@ _PROJECT_ROOT="$(dirname "$_VARS_DIR")"
 if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     PROJECT_DIR="$(grep '^project.dir=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     QUICK_BUFF="$(grep '^quick.buff=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    PICKUP_ITEMS_BOSS="$(grep '^pickup.items.boss=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    PICKUP_ITEMS_GOLDEN="$(grep '^pickup.items.golden=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    AUTOPLAY_ATTACK_TIMEOUT="$(grep '^autoPlay.attack.timeout=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
 fi
 : "${PROJECT_DIR:=$_PROJECT_ROOT}"
 : "${QUICK_BUFF:=false}"
+: "${PICKUP_ITEMS_BOSS:=10}"
+: "${PICKUP_ITEMS_GOLDEN:=4}"
+: "${AUTOPLAY_ATTACK_TIMEOUT:=240}"
 export PROJECT_DIR
 export QUICK_BUFF
+export PICKUP_ITEMS_BOSS
+export PICKUP_ITEMS_GOLDEN
+export AUTOPLAY_ATTACK_TIMEOUT
 unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings

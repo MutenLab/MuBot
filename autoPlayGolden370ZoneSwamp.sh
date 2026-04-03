@@ -172,7 +172,7 @@ while true; do
   # ===============================================
   echo "Arrived to 370 A spot... [$(date '+%H:%M:%S')]"
   totalOffensiveCycleTimeA=$((attackTimeA + autoTimeA))
-  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh golden &
   cycle_a_pid=$!                          # Save PID
   read -t $totalOffensiveCycleTimeA -n 1 key
   if [ $? = 0 ]; then
@@ -207,7 +207,7 @@ while true; do
   # ===============================================
   echo "Arrived to 370 B spot... [$(date '+%H:%M:%S')]"
   totalOffensiveCycleTimeB=$((attackTimeB + autoTimeB))
-  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh golden &
   cycle_b_pid=$!                          # Save PID
   read -t $totalOffensiveCycleTimeB -n 1 key
   if [ $? = 0 ]; then

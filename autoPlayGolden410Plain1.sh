@@ -552,7 +552,7 @@ while true; do
   # RUN AUTO PLAY
   # ===============================================
   echo "[$(date '+%H:%M:%S')] Arrived to 410 Golden spot..."
-  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh golden &
   cycle_pid=$!                          # Save PID
 
   # Wait for AutoPlay to finish, checking for key presses

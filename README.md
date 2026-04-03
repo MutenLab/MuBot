@@ -52,6 +52,8 @@ Create a `local.properties` file at the project root with your local project dir
 # local.properties
 project.dir=/path/to/your/MuBot
 quick.buff=false
+pickup.items.boss=10
+pickup.items.golden=4
 ```
 
 This file is gitignored — each computer needs its own. If omitted, the project path is auto-detected from the script location.
@@ -60,6 +62,9 @@ This file is gitignored — each computer needs its own. If omitted, the project
 |----------|-------------|---------|
 | `project.dir` | Absolute path to the project directory | Auto-detected |
 | `quick.buff` | When `true`, only one buff (attack or defense) is needed during buff check. When `false`, both are required. | `false` |
+| `pickup.items.boss` | Seconds to wait picking up items after killing a boss | `10` |
+| `pickup.items.golden` | Seconds to wait picking up items after killing a golden monster | `4` |
+| `autoPlay.attack.timeout` | Timeout in seconds for the smartAutoPlay attack script | `240` |
 
 ### 5. Update configuration
 

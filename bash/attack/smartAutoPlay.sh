@@ -4,8 +4,9 @@
 # Supports both boss (red health bar) and golden monster (golden health bar).
 #
 # Parameters:
-#   $1 - Grab items time in seconds (default: 4)
-#   $2 - Target type: "boss" or "golden" (default: boss)
+#   $1 - Target type: "boss" or "golden" (default: boss)
+#
+# Pickup time is read from local.properties (pickup.items.boss / pickup.items.golden).
 #
 # Exit codes:
 #   0 - Target killed successfully
@@ -15,11 +16,17 @@
 # ==================================================
 
 # Parameters
-grabItemsTime=${1:-4}            # Seconds to wait while grabbing items (default 4)
-targetType=${2:-boss}            # Target type: boss or golden (default boss)
+targetType=${1:-boss}            # Target type: boss or golden (default boss)
+
+# Resolve grab items time from local.properties based on target type
+if [ "$targetType" = "golden" ]; then
+    grabItemsTime=$PICKUP_ITEMS_GOLDEN
+else
+    grabItemsTime=$PICKUP_ITEMS_BOSS
+fi
 
 # Constants
-SCRIPT_TIMEOUT=240               # Script timeout in seconds (4 minutes)
+SCRIPT_TIMEOUT=$AUTOPLAY_ATTACK_TIMEOUT  # Script timeout in seconds (from local.properties)
 CHECK_INTERVAL=1                 # Check status every X seconds
 
 # Load utilities
