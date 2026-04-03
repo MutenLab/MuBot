@@ -37,6 +37,7 @@ readonly LOC_SANCTUARY_6=24
 readonly LOC_EVERSONG_FOREST=18
 readonly LOC_DEVIL_SQUARE=19
 readonly LOC_BLOOD_CASTLE=20
+readonly LOC_ABYSSAL_FEREA=25
 
 # Script to check if a cropped zone has red tone dominance
 # Returns: "true" if red tones are dominant, "false" otherwise
@@ -327,6 +328,8 @@ getLocation() {
         echo $LOC_DEVIL_SQUARE
     elif [[ "$locationLower" == *"blood"* && "$locationLower" == *"cast"* ]]; then
         echo $LOC_BLOOD_CASTLE
+    elif [[ "$locationLower" == *"abby"* || "$locationLower" == *"fer"* ]]; then
+        echo $LOC_ABYSSAL_FEREA
     else
         echo $LOC_UNKNOWN
     fi

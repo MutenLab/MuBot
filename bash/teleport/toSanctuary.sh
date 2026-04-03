@@ -26,7 +26,7 @@ esac
 
 /Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toDivine.sh
 
-sleep 7
+sleep 10
 # Open map
 tap_openMap
 sleep 0.5

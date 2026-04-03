@@ -795,6 +795,7 @@ getLocationName() {
         $LOC_EVERSONG_FOREST) echo "Eversong Forest" ;;
         $LOC_DEVIL_SQUARE) echo "Devil Square" ;;
         $LOC_BLOOD_CASTLE) echo "Blood Castle" ;;
+        $LOC_ABYSSAL_FEREA) echo "Abyssal Ferea" ;;
         *) echo "Unknown ($location)" ;;
     esac
 }
@@ -882,6 +883,9 @@ teleportTo() {
             ;;
         $LOC_EVERSONG_FOREST)
             teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toEversongForest.sh"
+            ;;
+        $LOC_ABYSSAL_FEREA)
+            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toAbyssalFerea.sh"
             ;;
         *)
             echo "[$(date '+%H:%M:%S')] Error: Unknown location: $locationName" >&2

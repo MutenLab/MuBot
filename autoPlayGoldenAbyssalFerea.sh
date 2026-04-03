@@ -1,0 +1,907 @@
+#!/bin/bash
+# KEEP OFFENSIVE MODE AT Abyssal Ferea 560/570 golden
+# Does active farming with two golden spots. Recycles items to clean inventory during traveling.
+# By pressing "p" key, pauses execution (5 minutes timeout).
+# By pressing "s" key, pauses execution (infinite wait) OR stops events (Devil Square/Blood Castle with 15 minutes timeout).
+# By pressing "n" key, skips to next loop.
+# By pressing "m" key, skips to next loop and forces reposition from entrance.
+# By pressing "b" key, skips to next loop and forces buff.
+# By pressing "q" key, skips to next loop and forces Devil Square event.
+# By pressing "r" key, skips to next loop and forces Blood Castle event.
+# Other keys cancels process.
+# Parameters: [skipBuffOnStart=false]
+# ==================================================
+
+skipBuffOnStart=${1:-false}     # Skip buff on first run (true/false)
+
+# Load configuration and utilities
+source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
+source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/eventUtils.sh
+
+echo "[$(date '+%H:%M:%S')] Starting auto play. Press key to cancel..."
+# Constants for configuration
+pauseFlagFile="/tmp/mubot_paused"
+
+# Event flags
+devilSquareEnabled=true    # Set to false to disable Devil Square event
+bloodCastleEnabled=true    # Set to false to disable Blood Castle event
+buffEnabled=true           # Set to false to disable buff
+
+# Aux variables
+lastCycleTime=$(date +%s)   # Used for analytics
+doGameCheck=true           # Alternates between recycle+validation and game check
+firstReposition=true
+needsGoToMap=true
+
+# Track last buff time - set to current time if skipping buff on start, otherwise 0
+if [ "$skipBuffOnStart" = true ]; then
+  lastBuffTime=$(date +%s)
+  echo "[$(date '+%H:%M:%S')] Skipping buff on first run (will buff in 28 minutes)"
+else
+  lastBuffTime=0
+fi
+forceBuff=false            # Flag to force buff on next cycle
+forceDevilSquare=false     # Flag to force Devil Square event on next cycle
+forceBloodCastle=false     # Flag to force Blood Castle event on next cycle
+
+# Statistics tracking
+startTime=$(date +%s)
+startTimeFormatted=$(date '+%d/%m %H:%M:%S')
+monstersKilled=0
+monstersAlreadyDead=0
+monstersSkipped=0
+devilSquareCount=0
+bloodCastleCount=0
+deathCount=0
+buffCount=0
+cycleCount=0
+shouldExit=false  # Flag to control script exit
+
+# Function to display statistics and cleanup on exit
+displayStats() {
+    local endTime=$(date +%s)
+    local endTimeFormatted=$(date '+%d/%m %H:%M:%S')
+    local totalTime=$((endTime - startTime))
+    local hours=$((totalTime / 3600))
+    local minutes=$(((totalTime % 3600) / 60))
+    local seconds=$((totalTime % 60))
+    # Last cycle doesn't count
+    ((cycleCount--))
+
+    # Clean up pause flag
+    rm -f "$pauseFlagFile" 2>/dev/null
+
+    # Output to stderr to ensure visibility
+    echo "" >&2
+    echo "=========================================" >&2
+    echo "         SESSION STATISTICS" >&2
+    echo "=========================================" >&2
+    echo "               Start time: $startTimeFormatted" >&2
+    echo "                 End time: $endTimeFormatted" >&2
+    echo "            Total session: ${hours}h ${minutes}m ${seconds}s" >&2
+    echo "             Total cycles: $cycleCount" >&2
+    echo "" >&2
+    echo "           Goldens killed: $monstersKilled" >&2
+    echo "     Goldens already dead: $monstersAlreadyDead" >&2
+    echo "          Goldens skipped: $monstersSkipped" >&2
+    echo "" >&2
+    echo "      Devil Square events: $devilSquareCount" >&2
+    echo "      Blood Castle events: $bloodCastleCount" >&2
+    echo "                   Buffed: $buffCount" >&2
+    echo "" >&2
+    echo "                     Died: $deathCount" >&2
+    echo "=========================================" >&2
+    echo "" >&2
+}
+
+# Clean up pause flag on start
+rm -f "$pauseFlagFile"
+
+while true; do
+  ((cycleCount++))
+  # Check if we should exit
+  if [ "$shouldExit" = true ]; then
+    break
+  fi
+
+  # CHECK FOR BUFF (every 28 minutes or if forced)
+  # ===============================================
+  if [ "$buffEnabled" = true ]; then
+    currentTime=$(date +%s)
+    timeSinceLastBuff=$((currentTime - lastBuffTime))
+
+    # 28 minutes = 1680 seconds, or forceBuff flag is set
+    if [ $timeSinceLastBuff -gt 1680 ] || [ "$forceBuff" = true ]; then
+      if [ "$forceBuff" = true ]; then
+        echo "[$(date '+%H:%M:%S')] Buff forced by user..."
+      else
+        echo "[$(date '+%H:%M:%S')] Buff needed (last buff: $((timeSinceLastBuff / 60)) minutes ago)..."
+      fi
+
+      # Call buff function
+      performBuffFoggyForest
+      buff_exit_code=$?
+
+      # Handle exit codes from buff
+      if [ $buff_exit_code -eq 10 ]; then
+        # User aborted
+        shouldExit=true
+        continue
+      elif [ $buff_exit_code -eq 5 ]; then
+        # Teleport to buff location failed - skip buff and continue
+        echo "[$(date '+%H:%M:%S')] Warning: Could not reach buff location. Skipping buff..."
+      elif [ $buff_exit_code -eq 4 ]; then
+        # User wants to force Blood Castle
+        forceBloodCastle=true
+      elif [ $buff_exit_code -eq 3 ]; then
+        # User wants to force Devil Square
+        forceDevilSquare=true
+      elif [ $buff_exit_code -eq 2 ]; then
+        # User wants to force buff again (keep flag)
+        forceBuff=true
+      elif [ $buff_exit_code -eq 1 ]; then
+        # User wants to skip (continue to next cycle)
+        continue
+      else
+        # Buff completed normally
+        ((buffCount++))
+        lastBuffTime=$(date +%s)
+      fi
+
+      # GO BACK TO ABYSSAL FEREA after buffing
+      needsGoToMap=false
+      teleportTo $LOC_ABYSSAL_FEREA
+      teleport_exit_code=$?
+
+      # Handle exit codes from teleport
+      if [ $teleport_exit_code -eq 10 ]; then
+        # User aborted - exit the script
+        shouldExit=true
+        continue
+      elif [ $teleport_exit_code -eq 5 ]; then
+        # Automatic retry failure - just continue, game validation will handle issues
+        echo "[$(date '+%H:%M:%S')] Warning: Teleport failed after retries. Continuing anyway..."
+      elif [ $teleport_exit_code -eq 4 ]; then
+        forceBloodCastle=true
+      elif [ $teleport_exit_code -eq 3 ]; then
+        forceDevilSquare=true
+      elif [ $teleport_exit_code -eq 2 ]; then
+        forceBuff=true
+      elif [ $teleport_exit_code -eq 1 ]; then
+        continue
+      fi
+
+      # Reset force flag
+      forceBuff=false
+      firstReposition=true
+    fi
+  fi
+
+  # CHECK FOR DEVIL SQUARE EVENT (hours 0,2,4,6 at :10-:15 OR forced by user)
+  # ===============================================
+  if ( [ "$devilSquareEnabled" = true ] && isDevilSquareTime ) || [ "$forceDevilSquare" = true ]; then
+    if [ "$forceDevilSquare" = true ]; then
+      echo "[$(date '+%H:%M:%S')] Devil Square event forced by user!"
+    else
+      echo "[$(date '+%H:%M:%S')] Devil Square event time detected!"
+    fi
+
+    # Force buff before event if buffing is enabled and it's been more than 16 minutes
+    if [ "$buffEnabled" = true ]; then
+      currentTime=$(date +%s)
+      timeSinceLastBuff=$((currentTime - lastBuffTime))
+
+      # 16 minutes = 960 seconds
+      if [ $timeSinceLastBuff -gt 960 ]; then
+        echo "[$(date '+%H:%M:%S')] Buffing before Devil Square event (last buff: $((timeSinceLastBuff / 60)) minutes ago)..."
+        performBuffFoggyForest
+        buff_exit_code=$?
+
+        # Handle exit codes from buff
+        if [ $buff_exit_code -eq 10 ]; then
+          # User aborted
+          shouldExit=true
+          continue
+        elif [ $buff_exit_code -eq 5 ]; then
+          # Teleport to buff location failed - skip buff and continue with event
+          echo "[$(date '+%H:%M:%S')] Warning: Could not reach buff location. Continuing to Devil Square without buff..."
+        elif [ $buff_exit_code -eq 1 ]; then
+          # User wants to skip buff, continue with event
+          echo "Skipping pre-event buff, continuing to Devil Square..."
+        elif [ $buff_exit_code -eq 0 ]; then
+          # Buff completed normally
+          ((buffCount++))
+          lastBuffTime=$(date +%s)
+          forceBuff=false
+        fi
+        # Note: exit codes 2, 3, 4 are ignored here since we're already doing what they request
+      else
+        echo "[$(date '+%H:%M:%S')] Buff is still fresh (buffed $((timeSinceLastBuff / 60)) minutes ago), skipping pre-event buff"
+      fi
+    fi
+
+    # Call Devil Square script (it will return to Union at the end)
+    /Users/icerrate/AndroidStudioProjects/bot/bash/event/devilSquare.sh &
+    devilsquare_pid=$!
+
+    # Wait for Devil Square to finish, checking for key presses
+    event_stopped=false
+    while kill -0 $devilsquare_pid 2>/dev/null; do
+      read -t 1 -n 1 key
+      if [ $? = 0 ]; then
+        # Key pressed during Devil Square - kill process and handle
+        kill $devilsquare_pid 2>/dev/null
+        wait $devilsquare_pid 2>/dev/null
+        if [ "$key" = "s" ]; then
+          echo "[$(date '+%H:%M:%S')] Devil Square stopped by user. Waiting (15 minutes timeout)..."
+          /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 900
+          wait_exit_code=$?
+          if [ $wait_exit_code -eq 10 ]; then
+            shouldExit=true
+          elif [ $wait_exit_code -eq 4 ]; then
+            forceBloodCastle=true
+          elif [ $wait_exit_code -eq 3 ]; then
+            forceDevilSquare=true
+          elif [ $wait_exit_code -eq 2 ]; then
+            forceBuff=true
+          fi
+          event_stopped=true
+          break
+        else
+          echo "[$(date '+%H:%M:%S')] Devil Square interrupted by user"
+          event_stopped=true
+          break
+        fi
+      fi
+    done
+
+    wait $devilsquare_pid 2>/dev/null
+
+    if [ "$event_stopped" = false ]; then
+      ((devilSquareCount++))
+      echo "[$(date '+%H:%M:%S')] Devil Square completed. Going back to Abyssal Ferea..."
+    else
+      echo "[$(date '+%H:%M:%S')] Devil Square interrupted. Going back to Abyssal Ferea..."
+    fi
+
+    # GO BACK TO ABYSSAL FEREA after Devil Square
+    teleportTo $LOC_ABYSSAL_FEREA
+    teleport_exit_code=$?
+
+    # Handle exit codes from teleport
+    if [ $teleport_exit_code -eq 10 ]; then
+      # User aborted - exit the script
+      shouldExit=true
+      continue
+    elif [ $teleport_exit_code -eq 5 ]; then
+      # Automatic retry failure - just continue, game validation will handle issues
+      echo "[$(date '+%H:%M:%S')] Warning: Teleport failed after retries. Continuing anyway..."
+    elif [ $teleport_exit_code -eq 4 ]; then
+      forceBloodCastle=true
+    elif [ $teleport_exit_code -eq 3 ]; then
+      forceDevilSquare=true
+    elif [ $teleport_exit_code -eq 2 ]; then
+      forceBuff=true
+    elif [ $teleport_exit_code -eq 1 ]; then
+      continue
+    fi
+
+    sleep 1
+    tap_equipAngel
+    sleep 1
+
+    # Reset force flags
+    forceDevilSquare=false
+    forceBloodCastle=false
+    firstReposition=true
+  fi
+
+  # CHECK FOR BLOOD CASTLE EVENT (hours 1,3,5 at :10-:15 OR forced by user)
+  # ===============================================
+  if ( [ "$bloodCastleEnabled" = true ] && isBloodCastleTime ) || [ "$forceBloodCastle" = true ]; then
+    if [ "$forceBloodCastle" = true ]; then
+      echo "[$(date '+%H:%M:%S')] Blood Castle event forced by user!"
+    else
+      echo "[$(date '+%H:%M:%S')] Blood Castle event time detected!"
+    fi
+
+    # Force buff before event if buffing is enabled and it's been more than 16 minutes
+    if [ "$buffEnabled" = true ]; then
+      currentTime=$(date +%s)
+      timeSinceLastBuff=$((currentTime - lastBuffTime))
+
+      # 16 minutes = 960 seconds
+      if [ $timeSinceLastBuff -gt 960 ]; then
+        echo "[$(date '+%H:%M:%S')] Buffing before Blood Castle event (last buff: $((timeSinceLastBuff / 60)) minutes ago)..."
+        performBuffFoggyForest
+        buff_exit_code=$?
+
+        # Handle exit codes from buff
+        if [ $buff_exit_code -eq 10 ]; then
+          # User aborted
+          shouldExit=true
+          continue
+        elif [ $buff_exit_code -eq 5 ]; then
+          # Teleport to buff location failed - skip buff and continue with event
+          echo "[$(date '+%H:%M:%S')] Warning: Could not reach buff location. Continuing to Blood Castle without buff..."
+        elif [ $buff_exit_code -eq 1 ]; then
+          # User wants to skip buff, continue with event
+          echo "Skipping pre-event buff, continuing to Blood Castle..."
+        elif [ $buff_exit_code -eq 0 ]; then
+          # Buff completed normally
+          ((buffCount++))
+          lastBuffTime=$(date +%s)
+          forceBuff=false
+        fi
+        # Note: exit codes 2, 3, 4 are ignored here since we're already doing what they request
+      else
+        echo "[$(date '+%H:%M:%S')] Buff is still fresh (buffed $((timeSinceLastBuff / 60)) minutes ago), skipping pre-event buff"
+      fi
+    fi
+
+    # Call Blood Castle script (it will return to Union at the end)
+    /Users/icerrate/AndroidStudioProjects/bot/bash/event/bloodCastle.sh &
+    bloodcastle_pid=$!
+
+    # Wait for Blood Castle to finish, checking for key presses
+    event_stopped=false
+    while kill -0 $bloodcastle_pid 2>/dev/null; do
+      read -t 1 -n 1 key
+      if [ $? = 0 ]; then
+        # Key pressed during Blood Castle - kill process and handle
+        kill $bloodcastle_pid 2>/dev/null
+        wait $bloodcastle_pid 2>/dev/null
+        if [ "$key" = "s" ]; then
+          echo "[$(date '+%H:%M:%S')] Blood Castle stopped by user. Waiting (15 minutes timeout)..."
+          /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 900
+          wait_exit_code=$?
+          if [ $wait_exit_code -eq 10 ]; then
+            shouldExit=true
+          elif [ $wait_exit_code -eq 4 ]; then
+            forceBloodCastle=true
+          elif [ $wait_exit_code -eq 3 ]; then
+            forceDevilSquare=true
+          elif [ $wait_exit_code -eq 2 ]; then
+            forceBuff=true
+          fi
+          event_stopped=true
+          break
+        else
+          echo "[$(date '+%H:%M:%S')] Blood Castle interrupted by user"
+          event_stopped=true
+          break
+        fi
+      fi
+    done
+
+    wait $bloodcastle_pid 2>/dev/null
+
+    if [ "$event_stopped" = false ]; then
+      ((bloodCastleCount++))
+      echo "[$(date '+%H:%M:%S')] Blood Castle completed. Going back to Abyssal Ferea..."
+    else
+      echo "[$(date '+%H:%M:%S')] Blood Castle interrupted. Going back to Abyssal Ferea..."
+    fi
+
+    # GO BACK TO ABYSSAL FEREA after Blood Castle
+    teleportTo $LOC_ABYSSAL_FEREA
+    teleport_exit_code=$?
+
+    # Handle exit codes from teleport
+    if [ $teleport_exit_code -eq 10 ]; then
+      # User aborted - exit the script
+      shouldExit=true
+      continue
+    elif [ $teleport_exit_code -eq 5 ]; then
+      # Automatic retry failure - just continue, game validation will handle issues
+      echo "[$(date '+%H:%M:%S')] Warning: Teleport failed after retries. Continuing anyway..."
+    elif [ $teleport_exit_code -eq 4 ]; then
+      forceBloodCastle=true
+    elif [ $teleport_exit_code -eq 3 ]; then
+      forceDevilSquare=true
+    elif [ $teleport_exit_code -eq 2 ]; then
+      forceBuff=true
+    elif [ $teleport_exit_code -eq 1 ]; then
+      continue
+    fi
+
+    sleep 1
+    tap_equipAngel
+    sleep 1
+
+    # Reset force flags
+    forceDevilSquare=false
+    forceBloodCastle=false
+    firstReposition=true
+  fi
+
+  # Calculate elapsed time since last cycle
+  currentTime=$(date +%s)
+  elapsed=$((currentTime - lastCycleTime))
+  minutes=$((elapsed / 60))
+  seconds=$((elapsed % 60))
+  elapsedFormatted=$(printf "%d:%02d" $minutes $seconds)
+
+  # Save new cycle timing
+  lastCycleTime=$(date +%s)
+
+  echo "[$(date '+%H:%M:%S')]-New cycle... [$elapsedFormatted]"
+
+  if [ "$needsGoToMap" = true ]; then
+    teleportTo $LOC_ABYSSAL_FEREA
+      needsGoToMap=false
+  fi
+
+  # GO TO 570 GOLDEN POSITION.
+  # ===============================================
+  sleep 1
+  # Wait for travel to finish, checking for key presses
+  # Alternate between recycle+validation and game check
+  if [ "$firstReposition" = true ]; then
+    /Users/icerrate/AndroidStudioProjects/bot/bash/travel/abyssalFerea/toGolden570FromEntrance.sh "satan" "$doGameCheck" &
+    reposition_pid=$!
+    firstReposition=false
+  else
+    /Users/icerrate/AndroidStudioProjects/bot/bash/travel/abyssalFerea/toGolden570From560.sh "satan" "$doGameCheck" &
+    reposition_pid=$!
+  fi
+
+  while kill -0 $reposition_pid 2>/dev/null; do
+    read -t 1 -n 1 key
+    if [ $? = 0 ]; then
+      # Key pressed while traveling - kill process and handle
+      kill $reposition_pid 2>/dev/null
+      wait $reposition_pid 2>/dev/null
+      if [ "$key" = "p" ]; then # "p" pressed while traveling
+        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        wait_exit_code=$?
+        if [ $wait_exit_code -eq 1 ]; then # "n" pressed from wait
+          echo "Skipping to next spot..."
+        elif [ $wait_exit_code -eq 2 ]; then # "b" pressed from wait
+          echo "Forcing buff on next cycle..."
+          forceBuff=true
+          continue 2
+        elif [ $wait_exit_code -eq 3 ]; then # "q" pressed from wait
+          echo "Forcing Devil Square event on next cycle..."
+          forceDevilSquare=true
+          continue 2
+        elif [ $wait_exit_code -eq 4 ]; then # "r" pressed from wait
+          echo "Forcing Blood Castle event on next cycle..."
+          forceBloodCastle=true
+          continue 2
+        else # Other key was pressed from wait
+          echo "Preparing stats..."
+          shouldExit=true
+          continue 2
+        fi
+      elif [ "$key" = "s" ]; then # "s" pressed while traveling (infinite wait)
+        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 0
+        wait_exit_code=$?
+        if [ $wait_exit_code -eq 1 ]; then # "n" pressed from wait
+          echo "Skipping to next spot..."
+        elif [ $wait_exit_code -eq 2 ]; then # "b" pressed from wait
+          echo "Forcing buff on next cycle..."
+          forceBuff=true
+          continue 2
+        elif [ $wait_exit_code -eq 3 ]; then # "q" pressed from wait
+          echo "Forcing Devil Square event on next cycle..."
+          forceDevilSquare=true
+          continue 2
+        elif [ $wait_exit_code -eq 4 ]; then # "r" pressed from wait
+          echo "Forcing Blood Castle event on next cycle..."
+          forceBloodCastle=true
+          continue 2
+        else # Other key was pressed from wait
+          echo "Preparing stats..."
+          shouldExit=true
+          continue 2
+        fi
+      elif [ "$key" = "n" ]; then # "n" pressed while traveling
+        # Skip to next parent loop
+        echo " key pressed. Skipping to next spot..."
+      elif [ "$key" = "m" ]; then # "m" pressed while traveling
+        # Skip to next parent loop and force reposition
+        echo " key pressed. Skipping and forcing reposition..."
+        firstReposition=true
+      elif [ "$key" = "b" ]; then # "b" pressed while traveling
+        # Force buff on next cycle
+        echo " key pressed. Forcing buff on next loop..."
+        forceBuff=true
+        continue 2
+      elif [ "$key" = "q" ]; then # "q" pressed while traveling
+        # Force Devil Square event on next cycle
+        echo " key pressed. Forcing Devil Square event on next loop..."
+        forceDevilSquare=true
+        continue 2
+      elif [ "$key" = "r" ]; then # "r" pressed while traveling
+        # Force Blood Castle event on next cycle
+        echo " key pressed. Forcing Blood Castle event on next loop..."
+        forceBloodCastle=true
+        continue 2
+      else
+        echo " key pressed. Aborting..."
+        shouldExit=true
+        continue 2
+      fi
+    fi
+  done
+
+  wait $reposition_pid
+  travel_exit_code=$?
+
+  # Check if game or location validation failed during travel
+  if [ $travel_exit_code -eq 1 ]; then
+    sleep 5
+    echo "[$(date '+%H:%M:%S')] Game recovered. Returning to Abyssal Ferea..."
+    teleportTo $LOC_ABYSSAL_FEREA
+    sleep 1
+    tap_equipAngel
+    sleep 1
+    firstReposition=true
+    needsGoToMap=false
+    continue
+  elif [ $travel_exit_code -eq 2 ]; then
+    echo "[$(date '+%H:%M:%S')] Wrong location detected (likely killed). Returning to Abyssal Ferea..."
+    ((deathCount++))
+    forceBuff=true
+    firstReposition=true
+    needsGoToMap=true
+    continue
+  fi
+
+  # RUN AUTO PLAY AT 570 GOLDEN
+  # ===============================================
+  echo "[$(date '+%H:%M:%S')] Arrived to 570 Golden spot..."
+  /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 4 golden &
+  cycle_pid=$!                          # Save PID
+
+  # Wait for AutoPlay to finish, checking for key presses
+  while kill -0 $cycle_pid 2>/dev/null; do
+    read -t 1 -n 1 key
+    if [ $? = 0 ]; then
+      # Key pressed while autoPlay - kill process and handle
+      kill $cycle_pid 2>/dev/null
+      wait $cycle_pid 2>/dev/null
+
+      if [ "$key" = "p" ]; then # "p" pressed while autoplay
+        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        wait_exit_code=$?
+        if [ $wait_exit_code -eq 1 ]; then # n pressed from wait
+          echo "Skipping to next spot..."
+          ((monstersKilled++))
+        elif [ $wait_exit_code -eq 2 ]; then # b pressed from wait
+          echo "Forcing buff on next cycle..."
+          forceBuff=true
+          ((monstersKilled++))
+          continue 2
+        elif [ $wait_exit_code -eq 3 ]; then # q pressed from wait
+          echo "Forcing Devil Square event on next cycle..."
+          forceDevilSquare=true
+          ((monstersKilled++))
+          continue 2
+        elif [ $wait_exit_code -eq 4 ]; then # r pressed from wait
+          echo "Forcing Blood Castle event on next cycle..."
+          forceBloodCastle=true
+          ((monstersKilled++))
+          continue 2
+        else # Other than "n" aborts script
+          echo "Preparing stats..."
+          shouldExit=true
+          continue 2
+        fi
+      elif [ "$key" = "s" ]; then # "s" pressed while autoplay (infinite wait)
+        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 0
+        wait_exit_code=$?
+        if [ $wait_exit_code -eq 1 ]; then # n pressed from wait
+          echo "Skipping to next spot..."
+          ((monstersKilled++))
+        elif [ $wait_exit_code -eq 2 ]; then # b pressed from wait
+          echo "Forcing buff on next cycle..."
+          forceBuff=true
+          ((monstersKilled++))
+          continue 2
+        elif [ $wait_exit_code -eq 3 ]; then # q pressed from wait
+          echo "Forcing Devil Square event on next cycle..."
+          forceDevilSquare=true
+          ((monstersKilled++))
+          continue 2
+        elif [ $wait_exit_code -eq 4 ]; then # r pressed from wait
+          echo "Forcing Blood Castle event on next cycle..."
+          forceBloodCastle=true
+          ((monstersKilled++))
+          continue 2
+        else # Other than "n" aborts script
+          echo "Preparing stats..."
+          shouldExit=true
+          continue 2
+        fi
+      elif [ "$key" = "n" ]; then # "n" pressed while autoplay
+        # Skip to next parent loop
+        echo " key pressed. Moving to next spot..."
+        ((monsterSkipped++))
+      elif [ "$key" = "m" ]; then # "m" pressed while autoplay
+        # Skip to next parent loop and force reposition
+        echo " key pressed. Moving and forcing reposition..."
+        ((monsterSkipped++))
+        firstReposition=true
+        needsGoToMap=true
+      elif [ "$key" = "b" ]; then
+        # Force buff on next cycle
+        echo " key pressed. Forcing buff on next loop..."
+        forceBuff=true
+        ((monsterSkipped++))
+        continue 2
+      elif [ "$key" = "q" ]; then
+        # Force Devil Square event on next cycle
+        echo " key pressed. Forcing Devil Square event on next loop..."
+        forceDevilSquare=true
+        ((monsterSkipped++))
+        continue 2
+      elif [ "$key" = "r" ]; then
+        # Force Blood Castle event on next cycle
+        echo " key pressed. Forcing Blood Castle event on next loop..."
+        forceBloodCastle=true
+        ((monsterSkipped++))
+        continue 2
+      else
+        echo " key pressed. Aborting..."
+        shouldExit=true
+        continue 2
+      fi
+    fi
+  done
+
+  wait $cycle_pid
+  cycle_exit_code=$?
+
+  # Track monster kills (only count valid cycles, not already dead)
+  if [ $cycle_exit_code -eq 0 ]; then # Monster killed
+    ((monstersKilled++))
+  elif [ $cycle_exit_code -eq 1 ]; then # Character died
+    ((monsterSkipped++))
+    ((deathCount++))
+    forceBuff=true
+    firstReposition=true
+    needsGoToMap=true
+  elif [ $cycle_exit_code -eq 2 ]; then # Monster already dead
+    ((monstersAlreadyDead++))
+  elif [ $cycle_exit_code -eq 3 ]; then # Timeout
+    ((monsterSkipped++))
+  fi
+
+  # GO TO 560 GOLDEN FROM 570.
+  # ===============================================
+  sleep 1
+  # Wait for travel to finish, checking for key presses
+  # Alternate between recycle+validation and game check
+  /Users/icerrate/AndroidStudioProjects/bot/bash/travel/abyssalFerea/toGolden560From570.sh "satan" "$doGameCheck" &
+  reposition_pid=$!
+  while kill -0 $reposition_pid 2>/dev/null; do
+    read -t 1 -n 1 key
+    if [ $? = 0 ]; then
+      # Key pressed while traveling - kill process and handle
+      kill $reposition_pid 2>/dev/null
+      wait $reposition_pid 2>/dev/null
+      if [ "$key" = "p" ]; then # "p" pressed while traveling
+        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        wait_exit_code=$?
+        if [ $wait_exit_code -eq 1 ]; then # "n" pressed from wait
+          echo "Skipping to next spot..."
+        elif [ $wait_exit_code -eq 2 ]; then # "b" pressed from wait
+          echo "Forcing buff on next cycle..."
+          forceBuff=true
+          continue 2
+        elif [ $wait_exit_code -eq 3 ]; then # "q" pressed from wait
+          echo "Forcing Devil Square event on next cycle..."
+          forceDevilSquare=true
+          continue 2
+        elif [ $wait_exit_code -eq 4 ]; then # "r" pressed from wait
+          echo "Forcing Blood Castle event on next cycle..."
+          forceBloodCastle=true
+          continue 2
+        else # Other key was pressed from wait
+          echo "Preparing stats..."
+          shouldExit=true
+          continue 2
+        fi
+      elif [ "$key" = "s" ]; then # "s" pressed while traveling (infinite wait)
+        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 0
+        wait_exit_code=$?
+        if [ $wait_exit_code -eq 1 ]; then # "n" pressed from wait
+          echo "Skipping to next spot..."
+        elif [ $wait_exit_code -eq 2 ]; then # "b" pressed from wait
+          echo "Forcing buff on next cycle..."
+          forceBuff=true
+          continue 2
+        elif [ $wait_exit_code -eq 3 ]; then # "q" pressed from wait
+          echo "Forcing Devil Square event on next cycle..."
+          forceDevilSquare=true
+          continue 2
+        elif [ $wait_exit_code -eq 4 ]; then # "r" pressed from wait
+          echo "Forcing Blood Castle event on next cycle..."
+          forceBloodCastle=true
+          continue 2
+        else # Other key was pressed from wait
+          echo "Preparing stats..."
+          shouldExit=true
+          continue 2
+        fi
+      elif [ "$key" = "n" ]; then # "n" pressed while traveling
+        # Skip to next parent loop
+        echo " key pressed. Skipping to next spot..."
+      elif [ "$key" = "m" ]; then # "m" pressed while traveling
+        # Skip to next parent loop and force reposition
+        echo " key pressed. Skipping and forcing reposition..."
+        firstReposition=true
+        needsGoToMap=true
+      elif [ "$key" = "b" ]; then # "b" pressed while traveling
+        # Force buff on next cycle
+        echo " key pressed. Forcing buff on next loop..."
+        forceBuff=true
+        continue 2
+      elif [ "$key" = "q" ]; then # "q" pressed while traveling
+        # Force Devil Square event on next cycle
+        echo " key pressed. Forcing Devil Square event on next loop..."
+        forceDevilSquare=true
+        continue 2
+      elif [ "$key" = "r" ]; then # "r" pressed while traveling
+        # Force Blood Castle event on next cycle
+        echo " key pressed. Forcing Blood Castle event on next loop..."
+        forceBloodCastle=true
+        continue 2
+      else
+        echo " key pressed. Aborting..."
+        shouldExit=true
+        continue 2
+      fi
+    fi
+  done
+
+  wait $reposition_pid
+  travel_exit_code=$?
+
+  # Check if game or location validation failed during travel
+  if [ $travel_exit_code -eq 1 ]; then
+    sleep 5
+    echo "[$(date '+%H:%M:%S')] Game recovered. Returning to Abyssal Ferea..."
+    teleportTo $LOC_ABYSSAL_FEREA
+    sleep 1
+    tap_equipAngel
+    sleep 1
+    firstReposition=true
+    needsGoToMap=false
+    continue
+  elif [ $travel_exit_code -eq 2 ]; then
+    echo "[$(date '+%H:%M:%S')] Wrong location detected (likely killed). Returning to Abyssal Ferea..."
+    ((deathCount++))
+    forceBuff=true
+    firstReposition=true
+    needsGoToMap=true
+    continue
+  fi
+
+  # RUN AUTO PLAY AT 560 GOLDEN
+  # ===============================================
+  echo "[$(date '+%H:%M:%S')] Arrived to 560 Golden spot..."
+  /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 4 golden &
+  cycle_pid=$!                          # Save PID
+
+  # Wait for AutoPlay to finish, checking for key presses
+  while kill -0 $cycle_pid 2>/dev/null; do
+    read -t 1 -n 1 key
+    if [ $? = 0 ]; then
+      # Key pressed while autoPlay - kill process and handle
+      kill $cycle_pid 2>/dev/null
+      wait $cycle_pid 2>/dev/null
+
+      if [ "$key" = "p" ]; then # "p" pressed while autoplay
+        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        wait_exit_code=$?
+        if [ $wait_exit_code -eq 1 ]; then # n pressed from wait
+          echo "Skipping to next spot..."
+          ((monstersKilled++))
+        elif [ $wait_exit_code -eq 2 ]; then # b pressed from wait
+          echo "Forcing buff on next cycle..."
+          forceBuff=true
+          ((monstersKilled++))
+          continue 2
+        elif [ $wait_exit_code -eq 3 ]; then # q pressed from wait
+          echo "Forcing Devil Square event on next cycle..."
+          forceDevilSquare=true
+          ((monstersKilled++))
+          continue 2
+        elif [ $wait_exit_code -eq 4 ]; then # r pressed from wait
+          echo "Forcing Blood Castle event on next cycle..."
+          forceBloodCastle=true
+          ((monstersKilled++))
+          continue 2
+        else # Other than "n" aborts script
+          echo "Preparing stats..."
+          shouldExit=true
+          continue 2
+        fi
+      elif [ "$key" = "s" ]; then # "s" pressed while autoplay (infinite wait)
+        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 0
+        wait_exit_code=$?
+        if [ $wait_exit_code -eq 1 ]; then # n pressed from wait
+          echo "Skipping to next spot..."
+          ((monstersKilled++))
+        elif [ $wait_exit_code -eq 2 ]; then # b pressed from wait
+          echo "Forcing buff on next cycle..."
+          forceBuff=true
+          ((monstersKilled++))
+          continue 2
+        elif [ $wait_exit_code -eq 3 ]; then # q pressed from wait
+          echo "Forcing Devil Square event on next cycle..."
+          forceDevilSquare=true
+          ((monstersKilled++))
+          continue 2
+        elif [ $wait_exit_code -eq 4 ]; then # r pressed from wait
+          echo "Forcing Blood Castle event on next cycle..."
+          forceBloodCastle=true
+          ((monstersKilled++))
+          continue 2
+        else # Other than "n" aborts script
+          echo "Preparing stats..."
+          shouldExit=true
+          continue 2
+        fi
+      elif [ "$key" = "n" ]; then # "n" pressed while autoplay
+        # Skip to next parent loop
+        echo " key pressed. Moving to next spot..."
+        ((monsterSkipped++))
+      elif [ "$key" = "m" ]; then # "m" pressed while autoplay
+        # Skip to next parent loop and force reposition
+        echo " key pressed. Moving and forcing reposition..."
+        ((monsterSkipped++))
+        firstReposition=true
+        needsGoToMap=true
+      elif [ "$key" = "b" ]; then
+        # Force buff on next cycle
+        echo " key pressed. Forcing buff on next loop..."
+        forceBuff=true
+        ((monsterSkipped++))
+        continue 2
+      elif [ "$key" = "q" ]; then
+        # Force Devil Square event on next cycle
+        echo " key pressed. Forcing Devil Square event on next loop..."
+        forceDevilSquare=true
+        ((monsterSkipped++))
+        continue 2
+      elif [ "$key" = "r" ]; then
+        # Force Blood Castle event on next cycle
+        echo " key pressed. Forcing Blood Castle event on next loop..."
+        forceBloodCastle=true
+        ((monsterSkipped++))
+        continue 2
+      else
+        echo " key pressed. Aborting..."
+        shouldExit=true
+        continue 2
+      fi
+    fi
+  done
+
+  wait $cycle_pid
+  cycle_exit_code=$?
+
+  # Track monster kills (only count valid cycles, not already dead)
+  if [ $cycle_exit_code -eq 0 ]; then # Monster killed
+    ((monstersKilled++))
+  elif [ $cycle_exit_code -eq 1 ]; then # Character died
+    ((monsterSkipped++))
+    ((deathCount++))
+    forceBuff=true
+    firstReposition=true
+    needsGoToMap=true
+  elif [ $cycle_exit_code -eq 2 ]; then # Monster already dead
+    ((monstersAlreadyDead++))
+  elif [ $cycle_exit_code -eq 3 ]; then # Timeout
+    ((monsterSkipped++))
+  fi
+
+done
+
+# Display statistics before exiting
+displayStats
