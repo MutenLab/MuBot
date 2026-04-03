@@ -11,9 +11,9 @@
 buyPotsCycleAtInit=${1:-0}      # Start cycle for buy potions action
 
 # Load configuration and utilities
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/eventUtils.sh
+source "$(dirname "$0")/config/variables.sh"
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/bash/utils/eventUtils.sh
 
 echo "[$(date '+%H:%M:%S')] Starting auto play at Abyssal Ferea mob zone. Press key to cancel..."
 
@@ -121,7 +121,7 @@ while true; do
       else
         echo "[$(date '+%H:%M:%S')] Buff remaining: ${buffRemaining}s (>=12min). Skipping buff."
       fi
-      /Users/icerrate/AndroidStudioProjects/bot/bash/event/devilSquare.sh
+      $PROJECT_DIR/bash/event/devilSquare.sh
       if [ $? -eq 0 ]; then
         ((devilSquareCount++))
       else
@@ -155,7 +155,7 @@ while true; do
       else
         echo "[$(date '+%H:%M:%S')] Buff remaining: ${buffRemaining}s (>=12min). Skipping buff."
       fi
-      /Users/icerrate/AndroidStudioProjects/bot/bash/event/bloodCastle.sh
+      $PROJECT_DIR/bash/event/bloodCastle.sh
       if [ $? -eq 0 ]; then
         ((bloodCastleCount++))
       else
@@ -219,7 +219,7 @@ while true; do
   # ===============================================
   sleep 1
   # Alternate between recycle+validation and game check
-  /Users/icerrate/AndroidStudioProjects/bot/bash/travel/abyssalFerea/toMobsFromCenter.sh "satan" true &
+  $PROJECT_DIR/bash/travel/abyssalFerea/toMobsFromCenter.sh "satan" true &
   reposition_pid=$!
 
   while kill -0 $reposition_pid 2>/dev/null; do
@@ -229,7 +229,7 @@ while true; do
       kill $reposition_pid 2>/dev/null
       wait $reposition_pid 2>/dev/null
       if [ "$key" = "p" ]; then
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        $PROJECT_DIR/bash/actions/wait.sh
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then
           echo "Skipping to next cycle..."
@@ -277,7 +277,7 @@ while true; do
 
     # Run autoPlaySkill with death detection and event time check
     # Parameters: duration, keyCode, cooldown, checkDevilSquare, checkBloodCastle
-    /Users/icerrate/AndroidStudioProjects/bot/bash/attack/autoPlaySkill.sh $remainingBuffTime 5 3 $devilSquareEnabled $bloodCastleEnabled
+    $PROJECT_DIR/bash/attack/autoPlaySkill.sh $remainingBuffTime 5 3 $devilSquareEnabled $bloodCastleEnabled
     autoSkill_exit=$?
 
     # Handle autoPlaySkill exit codes

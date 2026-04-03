@@ -3,7 +3,7 @@
 # ==================================================
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 # Tap top-right menu
 tap_more_top_button

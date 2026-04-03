@@ -26,7 +26,7 @@
 pauseFlagFile="/tmp/mubot_paused"
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 # Parameter: maxTime (default 300 seconds = 5 minutes, 0 = infinite)
 maxTime=${1:-300}

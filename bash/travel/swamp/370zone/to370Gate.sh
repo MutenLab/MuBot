@@ -4,7 +4,7 @@
 # ==================================================
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 sleep 2.5
 # Open map

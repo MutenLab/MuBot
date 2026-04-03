@@ -4,11 +4,11 @@
 # ==================================================
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 # TO TOP GATE
 # ==============
-/Users/icerrate/AndroidStudioProjects/bot/bash/travel/swamp/370zone/to370Gate.sh
+$PROJECT_DIR/bash/travel/swamp/370zone/to370Gate.sh
 
 # TO BOSS
 # ====================

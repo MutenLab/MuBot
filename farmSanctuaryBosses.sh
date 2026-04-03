@@ -16,10 +16,10 @@ if [ "$SANCTUARY_LEVEL" -lt 1 ] || [ "$SANCTUARY_LEVEL" -gt 6 ]; then
 fi
 
 # Load configuration and utilities
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/eventUtils.sh
-source /Users/icerrate/AndroidStudioProjects/bot/config/sanctuary_bosses.sh
+source "$(dirname "$0")/config/variables.sh"
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/bash/utils/eventUtils.sh
+source $PROJECT_DIR/config/sanctuary_bosses.sh
 
 # Map level to location constant
 case $SANCTUARY_LEVEL in
@@ -31,8 +31,8 @@ case $SANCTUARY_LEVEL in
     6) SANCTUARY_LOC=$LOC_SANCTUARY_6 ;;
 esac
 
-PYTHON_DETECT="/Users/icerrate/AndroidStudioProjects/bot/python/detectBossStatusOnSanctuaryMap.py"
-PYTHON_OPTIMIZE="/Users/icerrate/AndroidStudioProjects/bot/python/optimizeBossRouteOnSanctuaryMap.py"
+PYTHON_DETECT="$PROJECT_DIR/python/detectBossStatusOnSanctuaryMap.py"
+PYTHON_OPTIMIZE="$PROJECT_DIR/python/optimizeBossRouteOnSanctuaryMap.py"
 WIRE_SWITCH_TIME=3  # Seconds added when using wire switch to entrance
 
 # Handle key press: 'p' to pause, 'q' to force Devil Square, 'r' to force Blood Castle, any other key to abort
@@ -286,8 +286,8 @@ while true; do
     # Buy potions every X cycles
     if [ $buyPotsCounter -ge $buyPotsCycleAt ]; then
         # Read current potion counts
-        currentHP=$(/Users/icerrate/AndroidStudioProjects/bot/bash/utils/readNumbers.sh 795 1047 57 20) # Migrated
-        currentMP=$(/Users/icerrate/AndroidStudioProjects/bot/bash/utils/readNumbers.sh 894 1047 57 20) # Migrated
+        currentHP=$($PROJECT_DIR/bash/utils/readNumbers.sh 795 1047 57 20) # Migrated
+        currentMP=$($PROJECT_DIR/bash/utils/readNumbers.sh 894 1047 57 20) # Migrated
         echo "[$(date '+%H:%M:%S')] Current potions - HP: $currentHP, MP: $currentMP"
         echo "[$(date '+%H:%M:%S')] Buying potions ($healthPotions HP, $manaPotions MP)..."
         performBuyPotions $healthPotions $manaPotions
@@ -306,7 +306,7 @@ while true; do
     wireSwitched=false
     if [ $cycleCount -gt 1 ] && [ $currentWire -ne $targetWire ]; then
         echo "[$(date '+%H:%M:%S')] Switching to wire $targetWire..."
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/switchWire.sh $targetWire
+        $PROJECT_DIR/bash/actions/switchWire.sh $targetWire
         currentWire=$targetWire
         wireSwitched=true
         sleep 3
@@ -356,7 +356,7 @@ while true; do
             fi
 
             # Call Devil Square script
-            /Users/icerrate/AndroidStudioProjects/bot/bash/event/devilSquare.sh &
+            $PROJECT_DIR/bash/event/devilSquare.sh &
             devilsquare_pid=$!
 
             # Wait for Devil Square to finish, checking for key presses
@@ -368,7 +368,7 @@ while true; do
                     wait $devilsquare_pid 2>/dev/null
                     if [ "$key" = "s" ]; then
                         echo "[$(date '+%H:%M:%S')] Devil Square stopped by user. Waiting (15 minutes timeout)..."
-                        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 900
+                        $PROJECT_DIR/bash/actions/wait.sh 900
                         event_stopped=true
                         break
                     else
@@ -430,7 +430,7 @@ while true; do
             fi
 
             # Call Blood Castle script
-            /Users/icerrate/AndroidStudioProjects/bot/bash/event/bloodCastle.sh &
+            $PROJECT_DIR/bash/event/bloodCastle.sh &
             bloodcastle_pid=$!
 
             # Wait for Blood Castle to finish, checking for key presses
@@ -442,7 +442,7 @@ while true; do
                     wait $bloodcastle_pid 2>/dev/null
                     if [ "$key" = "s" ]; then
                         echo "[$(date '+%H:%M:%S')] Blood Castle stopped by user. Waiting (15 minutes timeout)..."
-                        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 900
+                        $PROJECT_DIR/bash/actions/wait.sh 900
                         event_stopped=true
                         break
                     else
@@ -536,7 +536,7 @@ while true; do
         # Check for entrance marker - switch wire to go to entrance
         if [ "$i" = "E" ]; then
             echo "[$(date '+%H:%M:%S')] Going to entrance (wire switch)..."
-            /Users/icerrate/AndroidStudioProjects/bot/bash/actions/switchWire.sh $currentWire
+            $PROJECT_DIR/bash/actions/switchWire.sh $currentWire
             sleep $WIRE_SWITCH_TIME
             previousBoss=0
             continue
@@ -588,7 +588,7 @@ while true; do
         echo "[$(date '+%H:%M:%S')] $boss_name - Fighting..."
 
         # Call smartAutoPlay in background (grabTime)
-        /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 10 boss &
+        $PROJECT_DIR/bash/attack/smartAutoPlay.sh 10 boss &
         attack_pid=$!
 
         # Monitor for key presses while attacking
@@ -637,7 +637,7 @@ while true; do
                         echo "[$(date '+%H:%M:%S')] Resuming..."
                     fi
                     # Resume attacking after stop
-                    /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 10 boss &
+                    $PROJECT_DIR/bash/attack/smartAutoPlay.sh 10 boss &
                     attack_pid=$!
                 else
                     handleKeyPress "$key"

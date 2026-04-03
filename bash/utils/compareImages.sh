@@ -5,7 +5,7 @@
 # Example: ./compareScreen.sh 100 200 300 50 /path/to/reference.png
 
 # Source visionUtils to get the compareScreenWithImage function
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/visionUtils.sh
+source $PROJECT_DIR/bash/utils/visionUtils.sh
 
 # Get parameters from command line arguments
 X=${1:-0}

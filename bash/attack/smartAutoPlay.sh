@@ -23,18 +23,18 @@ SCRIPT_TIMEOUT=240               # Script timeout in seconds (4 minutes)
 CHECK_INTERVAL=1                 # Check status every X seconds
 
 # Load utilities
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
 
 # Check for expired popup before starting
 detectAndCloseExpiredPopup
 
 # Select Python detection script based on target type
 if [ "$targetType" = "golden" ]; then
-    PYTHON_DETECT="/Users/icerrate/AndroidStudioProjects/bot/python/detectGoldenHealthBar.py"
+    PYTHON_DETECT="$PROJECT_DIR/python/detectGoldenHealthBar.py"
     TARGET_NAME="Golden"
 else
-    PYTHON_DETECT="/Users/icerrate/AndroidStudioProjects/bot/python/detectBossHealthBar.py"
+    PYTHON_DETECT="$PROJECT_DIR/python/detectBossHealthBar.py"
     TARGET_NAME="Boss"
 fi
 

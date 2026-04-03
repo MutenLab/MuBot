@@ -4,11 +4,11 @@
 # ==================================================
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 # TO RIGHT GATE
 # ==============
-/Users/icerrate/AndroidStudioProjects/bot/bash/travel/swamp/350zone/to350Gate.sh
+$PROJECT_DIR/bash/travel/swamp/350zone/to350Gate.sh
 
 # TO RIGHT GOLDEN 350
 # ====================

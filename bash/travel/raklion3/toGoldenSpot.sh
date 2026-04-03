@@ -8,8 +8,8 @@
 validationType=${1:-"none"}  # Default to none validation if not specified
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
 
 # Open map
 sleep 2

@@ -5,7 +5,7 @@
 # ==================================================
 
 # Source visionUtils to get the readTextFromZone function
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/visionUtils.sh
+source $PROJECT_DIR/bash/utils/visionUtils.sh
 
 # Get parameters from command line arguments
 X=${1:-0}

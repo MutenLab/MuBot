@@ -3,8 +3,8 @@
 # Usage: ./checkCurrentLocation.sh
 # ==================================================
 
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/visionUtils.sh
+source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/visionUtils.sh
 
 echo "Checking current location..."
 location=$(getLocation)

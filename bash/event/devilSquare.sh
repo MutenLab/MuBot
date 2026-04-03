@@ -1,13 +1,13 @@
 #!/bin/bash
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/eventUtils.sh
+source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/bash/utils/eventUtils.sh
 
 # ENTER EVENT
 # ================
 echo "[$(date '+%H:%M:%S')] Going to Devil Square..."
-/Users/icerrate/AndroidStudioProjects/bot/bash/actions/openEventWindow.sh
+$PROJECT_DIR/bash/actions/openEventWindow.sh
 sleep 1
 clickEventGoButton "devil"
 sleep 12
@@ -15,7 +15,7 @@ sleep 12
 tap_event_last_level
 sleep 0.5
 screenshotName="DS_$(date '+%H.%M').png"
-adb_screencap > "/Users/icerrate/Desktop/$screenshotName"
+adb_screencap > "$HOME/Desktop/$screenshotName"
 echo "[$(date '+%H:%M:%S')] Screenshot saved: $screenshotName"
 sleep 0.5
 # Enter button

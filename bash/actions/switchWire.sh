@@ -2,7 +2,7 @@
 wireToGo=${1:-1}
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 sleep 0.2
 # Click open wires popup

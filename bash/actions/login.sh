@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 sleep 1
 # Click Start Game at login

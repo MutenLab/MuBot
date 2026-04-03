@@ -17,9 +17,9 @@ buyPotsCycleAtInit=${1:-0}      # Start cycle for buy potions action. 0
 skipBuffOnStart=${2:-false}     # Skip buff on first run (true/false)
 
 # Load configuration and utilities
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/eventUtils.sh
+source "$(dirname "$0")/config/variables.sh"
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/bash/utils/eventUtils.sh
 
 echo "[$(date '+%H:%M:%S')] Starting auto play at Land of Demons. Press key to cancel..."
 # Constants for configuration
@@ -106,7 +106,7 @@ displayStats() {
 switchToTargetWire() {
     sleep 2
     echo "[$(date '+%H:%M:%S')] Switching to wire 2..."
-    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/switchWire.sh 2 &
+    $PROJECT_DIR/bash/actions/switchWire.sh 2 &
     local switchPID=$!
     wait $switchPID
     sleep 2
@@ -241,7 +241,7 @@ while true; do
     fi
 
     # Call Devil Square script (it will return to Union at the end)
-    /Users/icerrate/AndroidStudioProjects/bot/bash/event/devilSquare.sh &
+    $PROJECT_DIR/bash/event/devilSquare.sh &
     devilsquare_pid=$!
 
     # Wait for Devil Square to finish, checking for key presses
@@ -254,7 +254,7 @@ while true; do
         wait $devilsquare_pid 2>/dev/null
         if [ "$key" = "s" ]; then
           echo "[$(date '+%H:%M:%S')] Devil Square stopped by user. Waiting (15 minutes timeout)..."
-          /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 900
+          $PROJECT_DIR/bash/actions/wait.sh 900
           wait_exit_code=$?
           if [ $wait_exit_code -eq 10 ]; then
             shouldExit=true
@@ -337,7 +337,7 @@ while true; do
     fi
 
     # Call Blood Castle script (it will return to Union at the end)
-    /Users/icerrate/AndroidStudioProjects/bot/bash/event/bloodCastle.sh &
+    $PROJECT_DIR/bash/event/bloodCastle.sh &
     bloodcastle_pid=$!
 
     # Wait for Blood Castle to finish, checking for key presses
@@ -350,7 +350,7 @@ while true; do
         wait $bloodcastle_pid 2>/dev/null
         if [ "$key" = "s" ]; then
           echo "[$(date '+%H:%M:%S')] Blood Castle stopped by user. Waiting (15 minutes timeout)..."
-          /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 900
+          $PROJECT_DIR/bash/actions/wait.sh 900
           wait_exit_code=$?
           if [ $wait_exit_code -eq 10 ]; then
             shouldExit=true
@@ -449,18 +449,18 @@ while true; do
   sleep 1
   if [ "$firstReposition" = true ]; then
     echo "[$(date '+%H:%M:%S')] Repositioning from entrance to 480A..."
-    /Users/icerrate/AndroidStudioProjects/bot/bash/travel/landOfDemons/to480AGoldenFromEntrance.sh "satan" true &
+    $PROJECT_DIR/bash/travel/landOfDemons/to480AGoldenFromEntrance.sh "satan" true &
     reposition_pid=$!
     firstReposition=false
     atSpotA=true
   elif [ "$atSpotA" = true ]; then
     echo "[$(date '+%H:%M:%S')] Moving from 480A to 480B..."
-    /Users/icerrate/AndroidStudioProjects/bot/bash/travel/landOfDemons/to480BGoldenFrom480AGolden.sh "satan" true &
+    $PROJECT_DIR/bash/travel/landOfDemons/to480BGoldenFrom480AGolden.sh "satan" true &
     reposition_pid=$!
     atSpotA=false
   else
     echo "[$(date '+%H:%M:%S')] Moving from 480B to 480A..."
-    /Users/icerrate/AndroidStudioProjects/bot/bash/travel/landOfDemons/to480AGoldenFrom480BGolden.sh "satan" true &
+    $PROJECT_DIR/bash/travel/landOfDemons/to480AGoldenFrom480BGolden.sh "satan" true &
     reposition_pid=$!
     atSpotA=true
   fi
@@ -472,7 +472,7 @@ while true; do
       kill $reposition_pid 2>/dev/null
       wait $reposition_pid 2>/dev/null
       if [ "$key" = "p" ]; then # "p" pressed while traveling
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        $PROJECT_DIR/bash/actions/wait.sh
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then # "n" pressed from wait
           echo "Skipping to next spot..."
@@ -494,7 +494,7 @@ while true; do
           continue 2
         fi
       elif [ "$key" = "s" ]; then # "s" pressed while traveling (infinite wait)
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 0
+        $PROJECT_DIR/bash/actions/wait.sh 0
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then # "n" pressed from wait
           echo "Skipping to next spot..."
@@ -574,7 +574,7 @@ while true; do
   else
     echo "[$(date '+%H:%M:%S')] Arrived to 480B Golden spot..."
   fi
-  /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
   cycle_pid=$!
 
   # Wait for AutoPlay to finish, checking for key presses
@@ -586,7 +586,7 @@ while true; do
       wait $cycle_pid 2>/dev/null
 
       if [ "$key" = "p" ]; then # "p" pressed while autoplay
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        $PROJECT_DIR/bash/actions/wait.sh
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then # n pressed from wait
           echo "Skipping to next spot..."
@@ -612,7 +612,7 @@ while true; do
           continue 2
         fi
       elif [ "$key" = "s" ]; then # "s" pressed while autoplay (infinite wait)
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 0
+        $PROJECT_DIR/bash/actions/wait.sh 0
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then # n pressed from wait
           echo "Skipping to next spot..."
@@ -694,11 +694,11 @@ while true; do
     echo "[$(date '+%H:%M:%S')] Timeout detected, checking game state..."
     if ! isGameRunning; then
       echo "[$(date '+%H:%M:%S')] Game is closed! Reopening..."
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/openGame.sh
+      $PROJECT_DIR/bash/actions/openGame.sh
       sleep 5
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/login.sh
+      $PROJECT_DIR/bash/actions/login.sh
       sleep 2
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/selectCharacter.sh
+      $PROJECT_DIR/bash/actions/selectCharacter.sh
       sleep 2
       switchToTargetWire
       teleportTo $LOC_LAND_OF_DEMONS
@@ -706,9 +706,9 @@ while true; do
       forceBuff=true
     elif ! isLoggedIn; then
       echo "[$(date '+%H:%M:%S')] Not logged in! Logging in..."
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/login.sh
+      $PROJECT_DIR/bash/actions/login.sh
       sleep 2
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/selectCharacter.sh
+      $PROJECT_DIR/bash/actions/selectCharacter.sh
       sleep 2
       switchToTargetWire
       teleportTo $LOC_LAND_OF_DEMONS
@@ -716,7 +716,7 @@ while true; do
       forceBuff=true
     elif ! isCharacterSelected; then
       echo "[$(date '+%H:%M:%S')] Character not selected! Selecting..."
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/selectCharacter.sh
+      $PROJECT_DIR/bash/actions/selectCharacter.sh
       sleep 2
       switchToTargetWire
       teleportTo $LOC_LAND_OF_DEMONS

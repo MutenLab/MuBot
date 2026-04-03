@@ -13,7 +13,7 @@ targetManaPotionsInit=${4:-1980}      # Target mana potions. 1980
 wireToAvoid=${5:-0}             # Wire to avoid (0 = none, 1-3 = wire number to skip)
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source "$(dirname "$0")/config/variables.sh"
 
 echo "Starting auto play with wired nav. Press any key to cancel..."
 # Constants for configuration
@@ -42,7 +42,7 @@ while true; do
     if [ "$recycleEnable" = true ]; then
       echo "Recycling..."
       # Background execution
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/recycle.sh &
+      $PROJECT_DIR/bash/actions/recycle.sh &
       recycle_pid=$!
       read -t 2 -n 1 key
       if [ $? = 0 ]; then
@@ -61,7 +61,7 @@ while true; do
         elif [ "$key" = "p" ]; then
           kill $recycle_pid 2>/dev/null
           wait $recycle_pid 2>/dev/null
-          /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+          $PROJECT_DIR/bash/actions/wait.sh
           wait_exit_code=$?
           if [ $wait_exit_code -eq 1 ]; then
             key_action="next"
@@ -98,7 +98,7 @@ while true; do
   if [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
     echo "Buying potions..."
     # Background execution
-    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/buyPotions.sh $targetHealthPotions $targetManaPotions &
+    $PROJECT_DIR/bash/actions/buyPotions.sh $targetHealthPotions $targetManaPotions &
     buyPots_pid=$!
     read -t 10 -n 1 key  # Give more time for potion buying
     if [ $? = 0 ]; then
@@ -114,7 +114,7 @@ while true; do
   
     # GO BACK TO RAKLION 3.
     # ======================
-    /Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toSwampOfPeace.sh $currentWire &
+    $PROJECT_DIR/bash/teleport/toSwampOfPeace.sh $currentWire &
     teleportPID=$!              # Save PID
     wait $teleportPID           # Wait to ensure it's terminated
   fi
@@ -172,7 +172,7 @@ while true; do
   # ======================
   if [ "$key_action" != "restart" ]; then
     sleep 0.2
-    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/switchWire.sh $currentWire &
+    $PROJECT_DIR/bash/actions/switchWire.sh $currentWire &
     switchWirePID=$!              # Save PID
     wait $switchWirePID           # Wait to ensure it's terminated
   fi
@@ -182,7 +182,7 @@ while true; do
   sleep 0.2
   echo "Switched to wire $currentWire... (Recycler: $recyclerCounter/$recycleCycleAt, BuyPots: $buyPotsCounter/$buyPotsCycleAt) [$(date '+%H:%M:%S')]"
   # Background execution
-  /Users/icerrate/AndroidStudioProjects/bot/bash/travel/swamp/350zone/toRightGolden350FromCenter.sh &
+  $PROJECT_DIR/bash/travel/swamp/350zone/toRightGolden350FromCenter.sh &
   reposition_pid=$!
   
   while kill -0 $reposition_pid 2>/dev/null; do
@@ -199,7 +199,7 @@ while true; do
         key_action="prev"
         continue 2
       elif [ "$key" = "p" ]; then
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        $PROJECT_DIR/bash/actions/wait.sh
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then
           key_action="next"
@@ -225,7 +225,7 @@ while true; do
   # RUN OFFENSIVE CYCLE SCRIPT
   # ============================
   totalOffensiveCycleTime=$((attackTime + autoTime))
-  /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
   cycle_pid=$!                          # Save PID
   read -t $totalOffensiveCycleTime -n 1 key
   if [ $? = 0 ]; then
@@ -244,7 +244,7 @@ while true; do
       key_action="prev"
       continue
     elif [ "$key" = "p" ]; then
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+      $PROJECT_DIR/bash/actions/wait.sh
       wait_exit_code=$?
       if [ $wait_exit_code -eq 1 ]; then
         ((recyclerCounter++))

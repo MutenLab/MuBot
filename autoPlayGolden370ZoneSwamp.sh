@@ -14,7 +14,7 @@ smallPath=${5:-false}           # Small path doesn't relocate at center. false
 avoidReposition=${6:-false}     # Avoid reposition. false
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source "$(dirname "$0")/config/variables.sh"
 
 echo "Starting auto play at golden 370 zone. Press any key to cancel..."
 # Constants for configuration
@@ -50,7 +50,7 @@ while true; do
     if [ "$recycleEnable" = true ]; then
       echo "Recycling..."
       # Background execution
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/recycle.sh &
+      $PROJECT_DIR/bash/actions/recycle.sh &
       recycle_pid=$!
       read -t 2 -n 1 key
       if [ $? = 0 ]; then
@@ -71,7 +71,7 @@ while true; do
   if [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
     echo "Buying potions... [$(date '+%H:%M:%S')]"
     # Background execution
-    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/buyPotions.sh $targetHealthPotions $targetManaPotions &
+    $PROJECT_DIR/bash/actions/buyPotions.sh $targetHealthPotions $targetManaPotions &
     buyPotsPID=$!
     read -t 10 -n 1 key  # Give more time for potion buying
     if [ $? = 0 ]; then
@@ -87,7 +87,7 @@ while true; do
     forceReposition=true
     # GO BACK TO SWAMP OF PEACE.
     # ===============================================
-    /Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toSwampOfPeace.sh &
+    $PROJECT_DIR/bash/teleport/toSwampOfPeace.sh &
     teleportPID=$!              # Save PID
     wait $teleportPID           # Wait to ensure it's terminated
     
@@ -130,7 +130,7 @@ while true; do
   # ===============================================
   if [ "$forceReposition" = true ]; then
     sleep 0.2
-    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/switchWire.sh $currentWire &
+    $PROJECT_DIR/bash/actions/switchWire.sh $currentWire &
     switchWirePID=$!              # Save PID
     wait $switchWirePID           # Wait to ensure it's terminated
     
@@ -138,7 +138,7 @@ while true; do
     # ===============================================
     sleep 1
     # Background execution
-    /Users/icerrate/AndroidStudioProjects/bot/bash/travel/swamp/370zone/toTopGolden370FromCenter.sh &
+    $PROJECT_DIR/bash/travel/swamp/370zone/toTopGolden370FromCenter.sh &
     reposition_pid=$!
     while kill -0 $reposition_pid 2>/dev/null; do
       read -t 1 -n 1 key
@@ -146,7 +146,7 @@ while true; do
         kill $reposition_pid 2>/dev/null
         wait $reposition_pid 2>/dev/null
         if [ "$key" = "p" ]; then
-          /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+          $PROJECT_DIR/bash/actions/wait.sh
           wait_exit_code=$?
           if [ $wait_exit_code -ne 1 ]; then
             # Other than "n" aborts script
@@ -163,7 +163,7 @@ while true; do
     # MOVE TO 370 A ZONE SCRIPT (FROM 370 B ZONE ON PREVIOUS LOOP)
     # ===============================================
     sleep 1
-    /Users/icerrate/AndroidStudioProjects/bot/bash/travel/swamp/370zone/toGolden370AFromB.sh &
+    $PROJECT_DIR/bash/travel/swamp/370zone/toGolden370AFromB.sh &
     to370APID=$!              # Save PID
     wait $to370APID
   fi
@@ -172,14 +172,14 @@ while true; do
   # ===============================================
   echo "Arrived to 370 A spot... [$(date '+%H:%M:%S')]"
   totalOffensiveCycleTimeA=$((attackTimeA + autoTimeA))
-  /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
   cycle_a_pid=$!                          # Save PID
   read -t $totalOffensiveCycleTimeA -n 1 key
   if [ $? = 0 ]; then
     kill $cycle_a_pid 2>/dev/null
     wait $cycle_a_pid 2>/dev/null
     if [ "$key" = "p" ]; then
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+      $PROJECT_DIR/bash/actions/wait.sh
       wait_exit_code=$?
       if [ $wait_exit_code -ne 1 ]; then
         # Other than "n" aborts script
@@ -199,7 +199,7 @@ while true; do
   # MOVE TO 370 B ZONE SCRIPT
   # ===============================================
   sleep 1
-  /Users/icerrate/AndroidStudioProjects/bot/bash/travel/swamp/370zone/toGolden370BFromA.sh &
+  $PROJECT_DIR/bash/travel/swamp/370zone/toGolden370BFromA.sh &
   to370BPID=$!              # Save PID
   wait $to370BPID           # Wait to ensure it's terminated
   
@@ -207,14 +207,14 @@ while true; do
   # ===============================================
   echo "Arrived to 370 B spot... [$(date '+%H:%M:%S')]"
   totalOffensiveCycleTimeB=$((attackTimeB + autoTimeB))
-  /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
   cycle_b_pid=$!                          # Save PID
   read -t $totalOffensiveCycleTimeB -n 1 key
   if [ $? = 0 ]; then
     kill $cycle_b_pid 2>/dev/null
     wait $cycle_b_pid 2>/dev/null
     if [ "$key" = "p" ]; then
-      /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+      $PROJECT_DIR/bash/actions/wait.sh
       wait_exit_code=$?
       if [ $wait_exit_code -ne 1 ]; then
         # Other than "+" aborts script

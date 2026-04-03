@@ -44,10 +44,20 @@ adb connect 127.0.0.1:5555
 adb devices  # verify connection
 ```
 
-### 4. Update configuration
+### 4. Configure project path
+
+Create a `local.properties` file at the project root with your local project directory:
+
+```bash
+# local.properties
+project.dir=/path/to/your/MuBot
+```
+
+This file is gitignored — each computer needs its own. If omitted, the project path is auto-detected from the script location.
+
+### 5. Update configuration
 
 Edit `config/variables.sh`:
-- `PROJECT_DIR` - path to this project directory
 - `EMULATOR_ID` - ADB device ID (check with `adb devices`)
 - `GAME_PACKAGE` - game package name
 - `satanImpType` - set to `"satan"` or `"satan_old"` depending on equipped imp

@@ -12,9 +12,9 @@ buyPotsCycleAtInit=${1:-0}      # Start cycle for buy potions action
 skipBuffOnStart=${2:-false}     # Skip buff on first run (true/false)
 
 # Load configuration and utilities
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/eventUtils.sh
+source "$(dirname "$0")/config/variables.sh"
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/bash/utils/eventUtils.sh
 
 echo "[$(date '+%H:%M:%S')] Starting auto play at 410 mob zone. Press key to cancel..."
 
@@ -138,7 +138,7 @@ while true; do
   # ===============================================
   sleep 1
   # Alternate between recycle+validation and game check
-  /Users/icerrate/AndroidStudioProjects/bot/bash/travel/plain1/to410MobsFromCenter.sh "satan" "$doGameCheck" &
+  $PROJECT_DIR/bash/travel/plain1/to410MobsFromCenter.sh "satan" "$doGameCheck" &
   reposition_pid=$!
   # Toggle for next cycle
   if [ "$doGameCheck" = "true" ]; then
@@ -154,7 +154,7 @@ while true; do
       kill $reposition_pid 2>/dev/null
       wait $reposition_pid 2>/dev/null
       if [ "$key" = "p" ]; then
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        $PROJECT_DIR/bash/actions/wait.sh
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then
           echo "Skipping to next cycle..."

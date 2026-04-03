@@ -10,9 +10,9 @@ recyclerCounterInit=${1:-0}     # Start cycle for recycler action. 0
 buyPotsCycleAtInit=${2:-0}      # Start cycle for buy potions action. 0
 
 # Load configuration and utilities
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/eventUtils.sh
+source "$(dirname "$0")/config/variables.sh"
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/bash/utils/eventUtils.sh
 
 echo "[$(date '+%H:%M:%S')] Starting auto play at golden 400 zone. Press key to cancel..."
 # Constants for configuration
@@ -56,7 +56,7 @@ while true; do
     fi
     
     # GO BACK TO SWAMP OF PEACE after buying potions
-    /Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toPlainOfFourWinds1.sh &
+    $PROJECT_DIR/bash/teleport/toPlainOfFourWinds1.sh &
     teleportPID=$!
     wait $teleportPID
     
@@ -84,7 +84,7 @@ while true; do
     fi
     
     # GO BACK TO PLAIN after buying potions
-    /Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toPlainOfFourWinds1.sh &
+    $PROJECT_DIR/bash/teleport/toPlainOfFourWinds1.sh &
     teleportPID=$!
     wait $teleportPID
 
@@ -99,12 +99,12 @@ while true; do
     echo "[$(date '+%H:%M:%S')] Devil Square event time detected!"
     
     # Call Devil Square script (it will return to Union at the end)
-    /Users/icerrate/AndroidStudioProjects/bot/bash/event/devilSquare.sh
+    $PROJECT_DIR/bash/event/devilSquare.sh
     
     echo "[$(date '+%H:%M:%S')] Devil Square completed. Going back to Plan 1..."
             
     # GO BACK TO SWAMP OF PEACE after buying potions
-    /Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toPlainOfFourWinds1.sh &
+    $PROJECT_DIR/bash/teleport/toPlainOfFourWinds1.sh &
     teleportPID=$!
     wait $teleportPID
   fi
@@ -115,12 +115,12 @@ while true; do
     echo "[$(date '+%H:%M:%S')] Blood Castle event time detected!"
     
     # Call Devil Square script (it will return to Union at the end)
-    /Users/icerrate/AndroidStudioProjects/bot/bash/event/bloodCastle.sh
+    $PROJECT_DIR/bash/event/bloodCastle.sh
     
     echo "[$(date '+%H:%M:%S')] Blood Castle completed. Going back to Plain 1..."
             
     # GO BACK TO SWAMP OF PEACE after buying potions
-    /Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toPlainOfFourWinds1.sh &
+    $PROJECT_DIR/bash/teleport/toPlainOfFourWinds1.sh &
     teleportPID=$!
     wait $teleportPID
   fi
@@ -137,7 +137,7 @@ while true; do
   # ===============================================
   sleep 1
   # Background execution
-  /Users/icerrate/AndroidStudioProjects/bot/bash/travel/plain1/toGolden400FromCenter.sh &
+  $PROJECT_DIR/bash/travel/plain1/toGolden400FromCenter.sh &
   reposition_pid=$!
   while kill -0 $reposition_pid 2>/dev/null; do
     read -t 1 -n 1 key
@@ -145,7 +145,7 @@ while true; do
       kill $reposition_pid 2>/dev/null
       wait $reposition_pid 2>/dev/null
       if [ "$key" = "p" ]; then
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        $PROJECT_DIR/bash/actions/wait.sh
         wait_exit_code=$?
         if [ $wait_exit_code -ne 1 ]; then
           # Other than "n" aborts script
@@ -175,7 +175,7 @@ while true; do
   # RUN AUTO PLAY
   # ===============================================
   echo "[$(date '+%H:%M:%S')]-Arrived to 400 spot..."
-  /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
   cycle_pid=$!                          # Save PID
 
   # Wait for smartAutoPlay to finish, checking for key presses
@@ -185,7 +185,7 @@ while true; do
       kill $cycle_pid 2>/dev/null
       wait $cycle_pid 2>/dev/null
       if [ "$key" = "p" ]; then
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        $PROJECT_DIR/bash/actions/wait.sh
         wait_exit_code=$?
         if [ $wait_exit_code -ne 1 ]; then
           # Other than "+" aborts script

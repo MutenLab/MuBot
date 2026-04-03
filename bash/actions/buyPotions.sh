@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 # Target potion counts (accept as parameters with defaults)
 TARGET_HEALTH_POTIONS=${1:-2200}
@@ -10,8 +10,8 @@ POTIONS_PER_BUY=99
 
 # Read current potion counts from screen
 echo "[$(date '+%H:%M:%S')] Reading current potion counts from screen..."
-CURRENT_HEALTH_POTIONS=$(/Users/icerrate/AndroidStudioProjects/bot/bash/utils/readNumbers.sh 795 1047 57 20) # Migrated
-CURRENT_MANA_POTIONS=$(/Users/icerrate/AndroidStudioProjects/bot/bash/utils/readNumbers.sh 894 1047 57 20) # Migrated
+CURRENT_HEALTH_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 795 1047 57 20) # Migrated
+CURRENT_MANA_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 894 1047 57 20) # Migrated
 
 # Validate that we got numbers
 if [[ -z "$CURRENT_HEALTH_POTIONS" ]]; then

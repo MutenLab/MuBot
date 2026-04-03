@@ -5,10 +5,10 @@
 #   ./checkBossStatus.sh 5         # Returns single: "alive" or "dead"
 # ==================================================
 
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 SCRIPT_DIR="$(dirname "$0")"
-PYTHON_SCRIPT="/Users/icerrate/AndroidStudioProjects/bot/python/detectBossStatusOnSanctuaryMap.py"
+PYTHON_SCRIPT="$PROJECT_DIR/python/detectBossStatusOnSanctuaryMap.py"
 
 boss_num=$1
 

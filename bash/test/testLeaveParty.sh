@@ -3,7 +3,7 @@
 # This script tests the leaveParty function from visionUtils.sh
 
 # Source vision utilities
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
 
 echo "========================================"
 echo "     Testing leaveParty Function"

@@ -7,7 +7,7 @@ fi
 _VISION_UTILS_LOADED=1
 
 # Load configuration for device targeting
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 # ============================================
 # Location Constants (Enum-like values)
@@ -69,7 +69,7 @@ readNumbersFromZone() {
     fi
 
     # Get OCR script path
-    local OCR_SCRIPT="/Users/icerrate/AndroidStudioProjects/bot/python/readNumbersOCR.py"
+    local OCR_SCRIPT="$PROJECT_DIR/python/readNumbersOCR.py"
 
     # Capture screenshot, crop, and enhance for OCR
     # Using ImageMagick preprocessing to improve OCR accuracy:
@@ -141,7 +141,7 @@ readTextFromZone() {
     fi
 
     # Get OCR script path
-    local OCR_SCRIPT="/Users/icerrate/AndroidStudioProjects/bot/python/readTextOCR.py"
+    local OCR_SCRIPT="$PROJECT_DIR/python/readTextOCR.py"
 
     # Capture screenshot, crop, and enhance for OCR
     # Using ImageMagick preprocessing to improve OCR accuracy:
@@ -196,7 +196,7 @@ checkRemainTimeForEventToEnd() {
     local HEIGHT=40
 
     # Get OCR script path
-    local OCR_SCRIPT="/Users/icerrate/AndroidStudioProjects/bot/python/readTextOCR.py"
+    local OCR_SCRIPT="$PROJECT_DIR/python/readTextOCR.py"
 
     # Capture screenshot, crop, isolate red channel, and OCR
     local DETECTED_TEXT
@@ -239,7 +239,7 @@ checkRemainTimeForEventToStart() {
     local HEIGHT=23
 
     # Get OCR script path
-    local OCR_SCRIPT="/Users/icerrate/AndroidStudioProjects/bot/python/readTextOCR.py"
+    local OCR_SCRIPT="$PROJECT_DIR/python/readTextOCR.py"
 
     # Capture screenshot, crop, isolate red channel, and OCR
     local DETECTED_TEXT
@@ -375,7 +375,7 @@ compareScreenRegionWithImage() {
     fi
 
     # Get comparison script path
-    local COMPARE_SCRIPT="/Users/icerrate/AndroidStudioProjects/bot/python/compareImages.py"
+    local COMPARE_SCRIPT="$PROJECT_DIR/python/compareImages.py"
 
     # Capture screenshot, crop, and compare with reference image
     local SIMILARITY_PERCENT
@@ -471,7 +471,7 @@ isGameRunning() {
 
 isLoggedIn() {
     # Reference image path
-    local LOGOUT_MARKER_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/logout_marker.png"
+    local LOGOUT_MARKER_IMAGE="$PROJECT_DIR/img/logout_marker.png"
 
     # Zone coordinates to check for logout marker
     local X=731 # Migrated
@@ -493,7 +493,7 @@ isLoggedIn() {
 
 isCharacterSelected() {
     # Reference image path
-    local LOGOUT_MARKER_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/character_selection_marker.png"
+    local LOGOUT_MARKER_IMAGE="$PROJECT_DIR/img/character_selection_marker.png"
 
     # Zone coordinates to check for character selection marker
     local X=805 # Migrated
@@ -516,7 +516,7 @@ isCharacterSelected() {
 # Function to check if event has ended by looking for "Event is over" screen
 # Returns: 0 if event is over, 1 if not
 isEventOver() {
-    local MARKER_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/event_is_over_marker.png"
+    local MARKER_IMAGE="$PROJECT_DIR/img/event_is_over_marker.png"
 
     local X=595 # Migrated
     local Y=166 # Migrated
@@ -538,7 +538,7 @@ isEventOver() {
 # Detects the "Go recharge" button at position 1585,865
 # Returns: 0 if popup is visible, 1 if not
 isExpiredPopupVisible() {
-    local MARKER_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/expired_popup_marker.png"
+    local MARKER_IMAGE="$PROJECT_DIR/img/expired_popup_marker.png"
 
     local X=1585
     local Y=865
@@ -555,7 +555,7 @@ isExpiredPopupVisible() {
 }
 
 isOpenNowButtonVisible() {
-    local MARKER_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/open_now_button_marker.png"
+    local MARKER_IMAGE="$PROJECT_DIR/img/open_now_button_marker.png"
 
     local X=371
     local Y=381
@@ -575,7 +575,7 @@ isOpenNowButtonVisible() {
 # Detects the red "Recycle" button at the bottom-left of the popup
 # Returns: 0 if popup is visible, 1 if not
 isRecyclePopupVisible() {
-    local MARKER_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/recycle_popup_marker.png"
+    local MARKER_IMAGE="$PROJECT_DIR/img/recycle_popup_marker.png"
 
     local X=775 # Migrated
     local Y=620 # Migrated

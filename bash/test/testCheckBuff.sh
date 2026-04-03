@@ -4,8 +4,8 @@
 # If no screenshot provided, uses live adb_screencap
 # ==================================================
 
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
 
 # Override adb_screencap if a screenshot path is provided
 if [ -n "$1" ]; then

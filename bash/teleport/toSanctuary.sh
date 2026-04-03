@@ -4,7 +4,7 @@
 # ==================================================
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 SANCTUARY_LEVEL=${1:-2}
 
@@ -24,7 +24,7 @@ case $SANCTUARY_LEVEL in
     6) LEVEL_Y=600 ;;
 esac
 
-/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toDivine.sh
+$PROJECT_DIR/bash/teleport/toDivine.sh
 
 sleep 10
 # Open map

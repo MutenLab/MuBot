@@ -16,9 +16,9 @@ buyPotsCycleAtInit=${1:-0}      # Start cycle for buy potions action. 0
 skipBuffOnStart=${2:-false}     # Skip buff on first run (true/false)
 
 # Load configuration and utilities
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/eventUtils.sh
+source "$(dirname "$0")/config/variables.sh"
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/bash/utils/eventUtils.sh
 
 echo "[$(date '+%H:%M:%S')] Starting auto play. Press key to cancel..."
 # Constants for configuration
@@ -244,7 +244,7 @@ while true; do
     fi
 
     # Call Devil Square script (it will return to Union at the end)
-    /Users/icerrate/AndroidStudioProjects/bot/bash/event/devilSquare.sh &
+    $PROJECT_DIR/bash/event/devilSquare.sh &
     devilsquare_pid=$!
 
     # Wait for Devil Square to finish, checking for key presses
@@ -257,7 +257,7 @@ while true; do
         wait $devilsquare_pid 2>/dev/null
         if [ "$key" = "s" ]; then
           echo "[$(date '+%H:%M:%S')] Devil Square stopped by user. Waiting (15 minutes timeout)..."
-          /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 900
+          $PROJECT_DIR/bash/actions/wait.sh 900
           wait_exit_code=$?
           if [ $wait_exit_code -eq 10 ]; then
             shouldExit=true
@@ -363,7 +363,7 @@ while true; do
     fi
 
     # Call Blood Castle script (it will return to Union at the end)
-    /Users/icerrate/AndroidStudioProjects/bot/bash/event/bloodCastle.sh &
+    $PROJECT_DIR/bash/event/bloodCastle.sh &
     bloodcastle_pid=$!
 
     # Wait for Blood Castle to finish, checking for key presses
@@ -376,7 +376,7 @@ while true; do
         wait $bloodcastle_pid 2>/dev/null
         if [ "$key" = "s" ]; then
           echo "[$(date '+%H:%M:%S')] Blood Castle stopped by user. Waiting (15 minutes timeout)..."
-          /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 900
+          $PROJECT_DIR/bash/actions/wait.sh 900
           wait_exit_code=$?
           if [ $wait_exit_code -eq 10 ]; then
             shouldExit=true
@@ -463,7 +463,7 @@ while true; do
   # Alternate between recycle+validation and game check
   
   echo "[$(date '+%H:%M:%S')] Reposition at w$currentWire..."
-  /Users/icerrate/AndroidStudioProjects/bot/bash/travel/corruptedLands/to450GoldenFromEntrance.sh "satan" false &
+  $PROJECT_DIR/bash/travel/corruptedLands/to450GoldenFromEntrance.sh "satan" false &
   reposition_pid=$!
   
   while kill -0 $reposition_pid 2>/dev/null; do
@@ -473,7 +473,7 @@ while true; do
       kill $reposition_pid 2>/dev/null
       wait $reposition_pid 2>/dev/null
       if [ "$key" = "p" ]; then # "p" pressed while traveling
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        $PROJECT_DIR/bash/actions/wait.sh
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then # "n" pressed from wait
           echo "Skipping to next spot..."
@@ -495,7 +495,7 @@ while true; do
           continue 2
         fi
       elif [ "$key" = "s" ]; then # "s" pressed while traveling (infinite wait)
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 0
+        $PROJECT_DIR/bash/actions/wait.sh 0
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then # "n" pressed from wait
           echo "Skipping to next spot..."
@@ -568,7 +568,7 @@ while true; do
   # RUN AUTO PLAY AT ZONE
   # ===============================================
   echo "[$(date '+%H:%M:%S')] Arrived to 450 Golden spot..."
-  /Users/icerrate/AndroidStudioProjects/bot/bash/attack/smartAutoPlay.sh 4 golden &
+  $PROJECT_DIR/bash/attack/smartAutoPlay.sh 4 golden &
   cycle_pid=$!                          # Save PID
 
   # Wait for AutoPlay to finish, checking for key presses
@@ -580,7 +580,7 @@ while true; do
       wait $cycle_pid 2>/dev/null
 
       if [ "$key" = "p" ]; then # "p" pressed while autoplay
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+        $PROJECT_DIR/bash/actions/wait.sh
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then # n pressed from wait
           echo "Skipping to next spot..."
@@ -606,7 +606,7 @@ while true; do
           continue 2
         fi
       elif [ "$key" = "s" ]; then # "s" pressed while autoplay (infinite wait)
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 0
+        $PROJECT_DIR/bash/actions/wait.sh 0
         wait_exit_code=$?
         if [ $wait_exit_code -eq 1 ]; then # n pressed from wait
           echo "Skipping to next spot..."

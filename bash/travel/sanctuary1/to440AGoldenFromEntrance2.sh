@@ -9,8 +9,8 @@ validationType=${1:-"none"}  # Default to none validation if not specified
 performGameValidation=${2:-"false"}  # Default to false if not specified
 
 # Load configuration
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
 
 sleep 2
 # TO Golden

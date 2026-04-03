@@ -5,7 +5,7 @@
 # Example: ./exportCrop.sh 100 200 300 50
 
 # Source visionUtils to get the exportCroppedImage function
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/visionUtils.sh
+source $PROJECT_DIR/bash/utils/visionUtils.sh
 
 # Get parameters from command line arguments
 X=${1:-0}

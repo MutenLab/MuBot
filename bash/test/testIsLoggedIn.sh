@@ -3,7 +3,7 @@
 # This script tests the isLoggedIn function from visionUtils.sh
 
 # Source vision utilities
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/visionUtils.sh
+source $PROJECT_DIR/bash/utils/visionUtils.sh
 
 echo "========================================"
 echo "     Testing isLoggedIn Function"

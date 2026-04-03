@@ -4,7 +4,7 @@
 # ==================================================
 
 # Load configuration for variables like recycleEnable
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 # Change auto-play plan
 # Parameters: $1 = plan number (1 = Evil Spirit, 2 = Blizzard)
@@ -188,7 +188,7 @@ clickEventGoButton() {
     local headerHeight=30 # Migrated
     local buttonY=860 # Migrated
 
-    local OCR_SCRIPT="/Users/icerrate/AndroidStudioProjects/bot/python/readTextOCR.py"
+    local OCR_SCRIPT="$PROJECT_DIR/python/readTextOCR.py"
 
     # Check each of the 4 visible panels
     for i in 0 1 2 3; do
@@ -252,7 +252,7 @@ runWhileEvent() {
         # Recycle every 3 minutes
         if [ $sinceLastRecycle -ge $recycleInterval ] && [ "$recycleEnable" = true ]; then
             echo "[$(date '+%H:%M:%S')] Recycling inventory... (${elapsed}s/${eventDuration}s)"
-            /Users/icerrate/AndroidStudioProjects/bot/bash/actions/recycle.sh
+            $PROJECT_DIR/bash/actions/recycle.sh
             sleep 1
             adb_tap 1200 600
             sinceLastRecycle=0

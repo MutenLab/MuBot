@@ -3,7 +3,7 @@
 # Common functions used across farming scripts
 # ==================================================
 
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/visionUtils.sh
+source $PROJECT_DIR/bash/utils/visionUtils.sh
 
 # Check if a specific app is running (process exists)
 # Parameters: $1 = package name (e.g., "com.tszz.gpen")
@@ -43,7 +43,7 @@ performSingleRecycle() {
     if [ "$recycleEnable" = true ]; then
         # echo "[$(date '+%H:%M:%S')] Recycling while traveling..."
         # Background execution
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/recycle.sh &
+        $PROJECT_DIR/bash/actions/recycle.sh &
         recycle_pid=$!
         read -t 2 -n 1 key
         if [ $? = 0 ]; then
@@ -91,7 +91,7 @@ performBuyPotions() {
 
     echo "[$(date '+%H:%M:%S')] Running Buying potions block..."
     # Background execution
-    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/buyPotions.sh $targetHealthPotions $targetManaPotions &
+    $PROJECT_DIR/bash/actions/buyPotions.sh $targetHealthPotions $targetManaPotions &
     buyPotsPID=$!
     read -t 10 -n 1 key  # Give more time for potion buying
     if [ $? = 0 ]; then
@@ -127,7 +127,7 @@ getNextWireAndSwitch() {
     
     # Switch to the selected wire
     sleep 0.2
-    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/switchWire.sh $currentWire &
+    $PROJECT_DIR/bash/actions/switchWire.sh $currentWire &
     local switchWirePID=$!
     wait $switchWirePID
     
@@ -148,7 +148,7 @@ performBuffKanturuRelics2() {
     fi
 
     # Switch wire in background with key monitoring
-    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/switchWire.sh 1 &
+    $PROJECT_DIR/bash/actions/switchWire.sh 1 &
     switchWirePID=$!
     while kill -0 $switchWirePID 2>/dev/null; do
         read -t 1 -n 1 key
@@ -156,7 +156,7 @@ performBuffKanturuRelics2() {
             kill $switchWirePID 2>/dev/null
             wait $switchWirePID 2>/dev/null
             if [ "$key" = "p" ]; then
-                /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+                $PROJECT_DIR/bash/actions/wait.sh
                 wait_exit_code=$?
                 if [ $wait_exit_code -ne 1 ]; then
                     return 1
@@ -174,7 +174,7 @@ performBuffKanturuRelics2() {
     wait $switchWirePID
 
     # Move to spot in background with key monitoring
-    /Users/icerrate/AndroidStudioProjects/bot/bash/travel/kanturuRelics2/toBuffSpotBot.sh &
+    $PROJECT_DIR/bash/travel/kanturuRelics2/toBuffSpotBot.sh &
     travelPID=$!
     while kill -0 $travelPID 2>/dev/null; do
         read -t 1 -n 1 key
@@ -182,7 +182,7 @@ performBuffKanturuRelics2() {
             kill $travelPID 2>/dev/null
             wait $travelPID 2>/dev/null
             if [ "$key" = "p" ]; then
-                /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+                $PROJECT_DIR/bash/actions/wait.sh
                 wait_exit_code=$?
                 if [ $wait_exit_code -ne 1 ]; then
                     return 1
@@ -205,7 +205,7 @@ performBuffKanturuRelics2() {
         read -t 1 -n 1 key
         if [ $? = 0 ]; then
             if [ "$key" = "p" ]; then
-                /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+                $PROJECT_DIR/bash/actions/wait.sh
                 wait_exit_code=$?
                 if [ $wait_exit_code -ne 1 ]; then
                     return 1
@@ -240,7 +240,7 @@ performBuffFoggyForest() {
         echo "[$(date '+%H:%M:%S')] Looking for buff at Foggy Forest (attempt $attempt/$maxRetries)..."
 
         # Move to buff spot in background with key monitoring
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/goToFoggyForestBuffSpot.sh &
+        $PROJECT_DIR/bash/actions/goToFoggyForestBuffSpot.sh &
         travelPID=$!
         while kill -0 $travelPID 2>/dev/null; do
             read -t 1 -n 1 key
@@ -248,7 +248,7 @@ performBuffFoggyForest() {
                 kill $travelPID 2>/dev/null
                 wait $travelPID 2>/dev/null
                 if [ "$key" = "p" ]; then
-                    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+                    $PROJECT_DIR/bash/actions/wait.sh
                     wait_exit_code=$?
                     if [ $wait_exit_code -ne 1 ]; then
                         return 1
@@ -271,7 +271,7 @@ performBuffFoggyForest() {
             read -t 1 -n 1 key
             if [ $? = 0 ]; then
                 if [ "$key" = "p" ]; then
-                    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+                    $PROJECT_DIR/bash/actions/wait.sh
                     wait_exit_code=$?
                     if [ $wait_exit_code -ne 1 ]; then
                         return 1
@@ -313,7 +313,7 @@ performBuffLandOfDemons() {
     fi
 
     # Switch wire in background with key monitoring
-    /Users/icerrate/AndroidStudioProjects/bot/bash/actions/switchWire.sh 1 &
+    $PROJECT_DIR/bash/actions/switchWire.sh 1 &
     switchWirePID=$!
     while kill -0 $switchWirePID 2>/dev/null; do
         read -t 1 -n 1 key
@@ -321,7 +321,7 @@ performBuffLandOfDemons() {
             kill $switchWirePID 2>/dev/null
             wait $switchWirePID 2>/dev/null
             if [ "$key" = "p" ]; then
-                /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+                $PROJECT_DIR/bash/actions/wait.sh
                 wait_exit_code=$?
                 if [ $wait_exit_code -ne 1 ]; then
                     return 1
@@ -339,7 +339,7 @@ performBuffLandOfDemons() {
     wait $switchWirePID
 
     # Move to buff spot in background with key monitoring
-    /Users/icerrate/AndroidStudioProjects/bot/bash/travel/landOfDemons/toBuffSpotBot.sh &
+    $PROJECT_DIR/bash/travel/landOfDemons/toBuffSpotBot.sh &
     travelPID=$!
     while kill -0 $travelPID 2>/dev/null; do
         read -t 1 -n 1 key
@@ -347,7 +347,7 @@ performBuffLandOfDemons() {
             kill $travelPID 2>/dev/null
             wait $travelPID 2>/dev/null
             if [ "$key" = "p" ]; then
-                /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+                $PROJECT_DIR/bash/actions/wait.sh
                 wait_exit_code=$?
                 if [ $wait_exit_code -ne 1 ]; then
                     return 1
@@ -370,7 +370,7 @@ performBuffLandOfDemons() {
         read -t 1 -n 1 key
         if [ $? = 0 ]; then
             if [ "$key" = "p" ]; then
-                /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+                $PROJECT_DIR/bash/actions/wait.sh
                 wait_exit_code=$?
                 if [ $wait_exit_code -ne 1 ]; then
                     return 1
@@ -423,7 +423,7 @@ performBuffWithFallback() {
 
 validateSatanImp() {
     # Reference image path
-    REFERENCE_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/${satanImpType}.png"
+    REFERENCE_IMAGE="$PROJECT_DIR/img/${satanImpType}.png"
 
     # Inventory slot coordinates for satan item
     X=792 # Migrated
@@ -458,7 +458,7 @@ validateSatanImp() {
 
 validateAngelImp() {
     # Reference image path
-    REFERENCE_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/angel.png"
+    REFERENCE_IMAGE="$PROJECT_DIR/img/angel.png"
 
     # Inventory slot coordinates for angel item
     X=792 # Migrated
@@ -491,7 +491,7 @@ validateAngelImp() {
 
 validateCharacterIsDead() {
     # Reference image path
-    REFERENCE_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/dead_title.png"
+    REFERENCE_IMAGE="$PROJECT_DIR/img/dead_title.png"
 
     # Dead title coordinates
     X=664 # Migrated
@@ -513,9 +513,9 @@ validateCharacterIsDead() {
 
 checkBuff() {
     # Reference image paths
-    local ATTACK_BUFF="/Users/icerrate/AndroidStudioProjects/bot/img/attack_buff.png"
-    local SHIELD_BUFF="/Users/icerrate/AndroidStudioProjects/bot/img/shield_buff.png"
-    local COMPARE_SCRIPT="/Users/icerrate/AndroidStudioProjects/bot/python/compareImages.py"
+    local ATTACK_BUFF="$PROJECT_DIR/img/attack_buff.png"
+    local SHIELD_BUFF="$PROJECT_DIR/img/shield_buff.png"
+    local COMPARE_SCRIPT="$PROJECT_DIR/python/compareImages.py"
     local THRESHOLD=80
 
     # Scan positions: buffs can shift depending on other status icons
@@ -567,8 +567,8 @@ validatePots() {
     local MIN_MANA_POTIONS=100
 
     # Read current potion counts from screen
-    local CURRENT_HEALTH_POTIONS=$(/Users/icerrate/AndroidStudioProjects/bot/bash/utils/readNumbers.sh 1325 1305 69 25)
-    local CURRENT_MANA_POTIONS=$(/Users/icerrate/AndroidStudioProjects/bot/bash/utils/readNumbers.sh 1445 1303 68 28)
+    local CURRENT_HEALTH_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 1325 1305 69 25)
+    local CURRENT_MANA_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 1445 1303 68 28)
 
     # Validate that we got numbers
     if [[ -z "$CURRENT_HEALTH_POTIONS" || ! "$CURRENT_HEALTH_POTIONS" =~ ^[0-9]+$ ]]; then
@@ -654,18 +654,18 @@ runDuringTravelling() {
         if ! isGameRunning; then
             echo "[$(date '+%H:%M:%S')] Game validation failed: Game is closed!"
             gameValidationFailed=true
-            /Users/icerrate/AndroidStudioProjects/bot/bash/actions/openGame.sh
+            $PROJECT_DIR/bash/actions/openGame.sh
             sleep 2
         elif ! isLoggedIn; then
             echo "[$(date '+%H:%M:%S')] Game validation failed: Not logged in!"
             gameValidationFailed=true
-            /Users/icerrate/AndroidStudioProjects/bot/bash/actions/login.sh
+            $PROJECT_DIR/bash/actions/login.sh
             sleep 2
         elif ! isCharacterSelected; then
             echo "[$(date '+%H:%M:%S')] Game validation failed: Character not selected!"
             gameValidationFailed=true
             ((gameClosedCount++))
-            /Users/icerrate/AndroidStudioProjects/bot/bash/actions/selectCharacter.sh
+            $PROJECT_DIR/bash/actions/selectCharacter.sh
             sleep 2
         fi
         endTime=$(date +%s)
@@ -735,11 +735,11 @@ waitProcessWithKeyMonitoring() {
             wait $pid 2>/dev/null
 
             if [ "$key" = "p" ]; then
-                /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh
+                $PROJECT_DIR/bash/actions/wait.sh
                 local wait_exit_code=$?
                 return $wait_exit_code
             elif [ "$key" = "s" ]; then
-                /Users/icerrate/AndroidStudioProjects/bot/bash/actions/wait.sh 0
+                $PROJECT_DIR/bash/actions/wait.sh 0
                 local wait_exit_code=$?
                 return $wait_exit_code
             elif [ "$key" = "n" ]; then
@@ -822,70 +822,70 @@ teleportTo() {
     # Map location constant to teleport script
     case $targetLocation in
         $LOC_PLAIN_OF_WINDS_1)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toPlainOfFourWinds1.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toPlainOfFourWinds1.sh"
             ;;
         $LOC_KANTURU_RELICS_2)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toKanturuRelics2.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toKanturuRelics2.sh"
             ;;
         $LOC_LORENCIA)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toLorencia.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toLorencia.sh"
             ;;
         $LOC_SWAMP_OF_PEACE)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toSwampOfPeace.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toSwampOfPeace.sh"
             ;;
         $LOC_RAKLION_3)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toRaklion3.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toRaklion3.sh"
             ;;
         $LOC_RAKLION_2)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toRaklion2.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toRaklion2.sh"
             ;;
         $LOC_DIVINE_REALM)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toDivine.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toDivine.sh"
             ;;
         $LOC_HIGH_HEAVEN)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toHighHeaven.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toHighHeaven.sh"
             ;;
         $LOC_PURGATORY_OF_MISERY)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toPurgatoryOfMissery.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toPurgatoryOfMissery.sh"
             ;;
         $LOC_ENDLESS_ABYSS)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toEndlessAbyss.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toEndlessAbyss.sh"
             ;;
         $LOC_CORRIDOR_OF_AGONY)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toCorridorOfAgony.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toCorridorOfAgony.sh"
             ;;
         $LOC_SANCTUARY_1)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toSanctuary.sh 1"
+            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 1"
             ;;
         $LOC_CORRUPTED_LANDS)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toCorruptedLands.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toCorruptedLands.sh"
             ;;
         $LOC_LAND_OF_DEMONS)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toLandOfDemons.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toLandOfDemons.sh"
             ;;
         $LOC_SANCTUARY_2)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toSanctuary.sh 2"
+            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 2"
             ;;
         $LOC_SANCTUARY_3)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toSanctuary.sh 3"
+            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 3"
             ;;
         $LOC_SANCTUARY_4)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toSanctuary.sh 4"
+            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 4"
             ;;
         $LOC_SANCTUARY_5)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toSanctuary.sh 5"
+            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 5"
             ;;
         $LOC_SANCTUARY_6)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toSanctuary.sh 6"
+            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 6"
             ;;
         $LOC_FOGGY_FOREST)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toFoggyForest.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toFoggyForest.sh"
             ;;
         $LOC_EVERSONG_FOREST)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toEversongForest.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toEversongForest.sh"
             ;;
         $LOC_ABYSSAL_FEREA)
-            teleportScript="/Users/icerrate/AndroidStudioProjects/bot/bash/teleport/toAbyssalFerea.sh"
+            teleportScript="$PROJECT_DIR/bash/teleport/toAbyssalFerea.sh"
             ;;
         *)
             echo "[$(date '+%H:%M:%S')] Error: Unknown location: $locationName" >&2
@@ -953,11 +953,11 @@ teleportTo() {
     echo "[$(date '+%H:%M:%S')] Checking game state after teleport failure..."
     if ! isGameRunning; then
         echo "[$(date '+%H:%M:%S')] Game is not running! Attempting recovery..."
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/openGame.sh
+        $PROJECT_DIR/bash/actions/openGame.sh
         sleep 5
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/login.sh
+        $PROJECT_DIR/bash/actions/login.sh
         sleep 2
-        /Users/icerrate/AndroidStudioProjects/bot/bash/actions/selectCharacter.sh
+        $PROJECT_DIR/bash/actions/selectCharacter.sh
         sleep 2
         return 6  # Return 6 to indicate game was recovered
     fi
@@ -967,7 +967,7 @@ teleportTo() {
 
 leaveParty() {
     # Reference image path
-    REFERENCE_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/empty_team.png"
+    REFERENCE_IMAGE="$PROJECT_DIR/img/empty_team.png"
 
     # Party slot coordinates
     X=505 # Migrated
@@ -1014,7 +1014,7 @@ leaveParty() {
 
 forceAutoParty() {
     # Reference image path
-    local REFERENCE_IMAGE="/Users/icerrate/AndroidStudioProjects/bot/img/check_auto_party.png"
+    local REFERENCE_IMAGE="$PROJECT_DIR/img/check_auto_party.png"
 
     # Auto party checkbox coordinates
     local X=121 # Migrated

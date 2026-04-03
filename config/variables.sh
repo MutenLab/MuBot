@@ -2,8 +2,15 @@
 # Configuration file for game automation scripts
 # ==============================================
 
-# Project base directory
-PROJECT_DIR="/Users/icerrate/AndroidStudioProjects/bot"
+# Project base directory (read from local.properties, with auto-detect fallback)
+_VARS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_PROJECT_ROOT="$(dirname "$_VARS_DIR")"
+if [ -f "$_PROJECT_ROOT/local.properties" ]; then
+    PROJECT_DIR="$(grep '^project.dir=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+fi
+: "${PROJECT_DIR:=$_PROJECT_ROOT}"
+export PROJECT_DIR
+unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings
 # ===============

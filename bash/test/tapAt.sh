@@ -4,7 +4,7 @@
 # Example: ./tapAt.sh 1950 820
 # ==================================================
 
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
+source $PROJECT_DIR/config/variables.sh
 
 x=$1
 y=$2

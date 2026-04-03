@@ -2,8 +2,8 @@
 # Test script for checkRemainTimeForEventToStart
 # ==================================================
 
-source /Users/icerrate/AndroidStudioProjects/bot/config/variables.sh
-source /Users/icerrate/AndroidStudioProjects/bot/bash/utils/farmingUtils.sh
+source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
 
 echo "[$(date '+%H:%M:%S')] Testing checkRemainTimeForEventToStart..."
 remainTime=$(checkRemainTimeForEventToStart)
