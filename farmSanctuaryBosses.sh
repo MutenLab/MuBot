@@ -64,7 +64,11 @@ startTime=$(date +%s)
 bossesKilled=0
 bossesSkipped=0
 cycleCount=0
-currentWire=1
+# Parse wire sequence from config (e.g., "1,2,3" -> array (1 2 3))
+IFS=',' read -ra WIRE_SEQUENCE <<< "$SANCTUARY_WIRES"
+WIRE_COUNT=${#WIRE_SEQUENCE[@]}
+wireIndex=0
+currentWire=1  # Assume player starts on wire 1
 lastBuffTime=0
 buffInterval=1620  # 27 minutes in seconds
 
@@ -295,16 +299,13 @@ while true; do
         needReturnToSanctuary=true
     fi
 
-    # Alternate wires: odd cycles = wire 1, even cycles = wire 2
-    if [ $((cycleCount % 2)) -eq 1 ]; then
-        targetWire=1
-    else
-        targetWire=2
-    fi
+    # Cycle through wire sequence (e.g., 1,2,3 -> 1,2,3,1,2,3,...)
+    targetWire=${WIRE_SEQUENCE[$wireIndex]}
+    wireIndex=$(( (wireIndex + 1) % WIRE_COUNT ))
 
-    # Switch wire if needed (skip on first cycle, assume already on wire 1)
+    # Switch wire if needed
     wireSwitched=false
-    if [ $cycleCount -gt 1 ] && [ $currentWire -ne $targetWire ]; then
+    if [ $currentWire -ne $targetWire ]; then
         echo "[$(date '+%H:%M:%S')] Switching to wire $targetWire..."
         $PROJECT_DIR/bash/actions/switchWire.sh $targetWire
         currentWire=$targetWire
@@ -517,8 +518,9 @@ while true; do
     aliveBosses=$(getAliveBosses "$boss_status")
 
     if [ -z "$aliveBosses" ]; then
-        echo "[$(date '+%H:%M:%S')] All bosses dead this cycle, continuing to next..."
-        sleep 2
+        echo "[$(date '+%H:%M:%S')] All bosses dead this cycle. Returning to entrance..."
+        $PROJECT_DIR/bash/actions/switchWire.sh $currentWire
+        sleep $WIRE_SWITCH_TIME
         continue
     fi
 

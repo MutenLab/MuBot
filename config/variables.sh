@@ -26,6 +26,7 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     EVENT_BC_MINUTES_END="$(grep '^event.blood.castle.minutes.end=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     EVENT_DS_MAX_FAILS="$(grep '^event.devil.square.max.fails=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     EVENT_BC_MAX_FAILS="$(grep '^event.blood.castle.max.fails=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    SANCTUARY_WIRES="$(grep '^sanctuary.wires=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
 fi
 : "${PROJECT_DIR:=$_PROJECT_ROOT}"
 : "${QUICK_BUFF:=false}"
@@ -47,6 +48,7 @@ fi
 : "${EVENT_BC_MINUTES_END:=14}"
 : "${EVENT_DS_MAX_FAILS:=3}"
 : "${EVENT_BC_MAX_FAILS:=3}"
+: "${SANCTUARY_WIRES:=1,2}"
 export PROJECT_DIR
 export QUICK_BUFF
 export PICKUP_ITEMS_BOSS
@@ -67,6 +69,7 @@ export EVENT_BC_MINUTES_START
 export EVENT_BC_MINUTES_END
 export EVENT_DS_MAX_FAILS
 export EVENT_BC_MAX_FAILS
+export SANCTUARY_WIRES
 unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings
