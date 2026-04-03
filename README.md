@@ -52,6 +52,7 @@ Create a `local.properties` file at the project root with your local project dir
 # local.properties
 project.dir=/path/to/your/MuBot
 emulator.id=127.0.0.1:5555
+game.package=com.tszz.gpen.nowgg
 use.immortal.satan=true
 quick.buff=false
 pickup.items.boss=10
@@ -64,6 +65,7 @@ This file is gitignored — each computer needs its own. If omitted, the project
 |----------|-------------|---------|
 | `project.dir` | Absolute path to the project directory | Auto-detected |
 | `emulator.id` | ADB device ID (get with `adb devices`) | `127.0.0.1:5555` |
+| `game.package` | Game package name installed on the emulator | `com.tszz.gpen.nowgg` |
 | `use.immortal.satan` | When `true`, uses `satan_immortal.png` marker. When `false`, uses `satan.png`. | `true` |
 | `quick.buff` | When `true`, only one buff (attack or defense) is needed during buff check. When `false`, both are required. | `false` |
 | `pickup.items.boss` | Seconds to wait picking up items after killing a boss | `10` |
@@ -73,7 +75,6 @@ This file is gitignored — each computer needs its own. If omitted, the project
 ### 5. Update configuration
 
 Edit `config/variables.sh`:
-- `GAME_PACKAGE` - game package name
 
 ## Project Structure
 

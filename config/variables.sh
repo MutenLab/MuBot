@@ -13,6 +13,7 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     AUTOPLAY_ATTACK_TIMEOUT="$(grep '^autoPlay.attack.timeout=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     EMULATOR_ID="$(grep '^emulator.id=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     USE_IMMORTAL_SATAN="$(grep '^use.immortal.satan=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    GAME_PACKAGE="$(grep '^game.package=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
 fi
 : "${PROJECT_DIR:=$_PROJECT_ROOT}"
 : "${QUICK_BUFF:=false}"
@@ -21,6 +22,7 @@ fi
 : "${AUTOPLAY_ATTACK_TIMEOUT:=240}"
 : "${EMULATOR_ID:=127.0.0.1:5555}"
 : "${USE_IMMORTAL_SATAN:=true}"
+: "${GAME_PACKAGE:=com.tszz.gpen.nowgg}"
 export PROJECT_DIR
 export QUICK_BUFF
 export PICKUP_ITEMS_BOSS
@@ -28,6 +30,7 @@ export PICKUP_ITEMS_GOLDEN
 export AUTOPLAY_ATTACK_TIMEOUT
 export EMULATOR_ID
 export USE_IMMORTAL_SATAN
+export GAME_PACKAGE
 unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings
@@ -100,7 +103,7 @@ tap_settings_auto_plan1() { adb_tap 1330 945; } # Migrated
 tap_settings_auto_plan2() { adb_tap 1580 945; } # Migrated
 tap_close_by_outside() { adb_tap 460 560; } # Migrated
 
-tap_event_open_now() { adb_tap 243 326; } # PENDING TO VALIDATE
+tap_event_open_now() { adb_tap 233 318; } # Migrated
 tap_event_scoreboard_close() { adb_tap 1310 188; } # Migrated
 tap_event_last_level() { adb_tap 630 785; } # Migrated
 tap_event_enter()   { adb_tap 1100 785; } # Migrated
@@ -132,7 +135,7 @@ tap_startup_close_ads() { adb_tap 1889 76; }
 
 # Game Package Name
 # ==================
-GAME_PACKAGE="com.tszz.gpen.nowgg"
+# Resolved from local.properties (game.package)
 
 # Satan Imp Settings
 # ==================
