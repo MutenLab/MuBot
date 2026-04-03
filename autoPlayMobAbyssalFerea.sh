@@ -127,10 +127,9 @@ while true; do
       else
         ((dsFailCount++))
         echo "[$(date '+%H:%M:%S')] Devil Square failed ($dsFailCount/2 attempts this hour)"
-        needToTeleportToMap=true
-        continue
       fi
       needToTeleportToMap=true
+      continue
     fi
   fi
   # CHECK FOR BLOOD CASTLE EVENT
@@ -161,10 +160,9 @@ while true; do
       else
         ((bcFailCount++))
         echo "[$(date '+%H:%M:%S')] Blood Castle failed ($bcFailCount/2 attempts this hour)"
-        needToTeleportToMap=true
-        continue
       fi
       needToTeleportToMap=true
+      continue
     fi
   fi
   # BUY POTIONS TO SURVIVE.
