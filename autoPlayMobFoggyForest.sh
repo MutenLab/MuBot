@@ -21,7 +21,7 @@ echo "[$(date '+%H:%M:%S')] Starting auto play at Foggy Forest mob zone. Press k
 # Constants for configuration
 buyPotsCycleAt=6      # Buy potions every 6 cycles
 healthPotions=2500    # Health pots to buy
-manaPotions=2500      # Mana pots to buy
+manaPotions=3000      # Mana pots to buy
 pauseFlagFile="/tmp/mubot_paused"
 
 # Buff settings

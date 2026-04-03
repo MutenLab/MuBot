@@ -12,6 +12,10 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     PICKUP_ITEMS_GOLDEN="$(grep '^pickup.items.golden=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     AUTOPLAY_ATTACK_TIMEOUT="$(grep '^autoPlay.attack.timeout=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     EMULATOR_ID="$(grep '^emulator.id=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    # Ensure ADB connection for TCP-based emulators (e.g., BlueStacks)
+    if [[ "$EMULATOR_ID" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+$ ]]; then
+        adb connect "$EMULATOR_ID" > /dev/null 2>&1
+    fi
     USE_IMMORTAL_SATAN="$(grep '^use.immortal.satan=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     GAME_PACKAGE="$(grep '^game.package=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     PLAN_BEFORE_DEVIL_SQUARE="$(grep '^plan.before.devil.square=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
