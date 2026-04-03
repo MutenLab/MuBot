@@ -52,6 +52,9 @@ eventStartEpoch=$(waitToStartEvent)
 tap_openMap
 sleep 1
 tap_event_bc_best_location
+sleep 0.5
+# Close Map
+tap_closeMap
 sleep 15
 # Click auto attack to start
 tap_auto
