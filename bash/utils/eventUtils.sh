@@ -124,8 +124,9 @@ isTimeInRange() {
     fi
 }
 
-# Function to check if it's time for Devil Square event (hours 0,2,4,6 at :00-:14)
-# Returns: 0 if it's Devil Square time (only hours 0,2,4,6), 1 otherwise
+# Function to check if it's time for Devil Square event
+# Hours and minutes configured in local.properties
+# Returns: 0 if it's Devil Square time, 1 otherwise
 isDevilSquareTime() {
     local currentHour=$(date '+%H' | sed 's/^0*//')  # Get hour, remove leading zeros
 
@@ -134,19 +135,20 @@ isDevilSquareTime() {
         currentHour=0
     fi
 
-    # Check if hour is 0, 2, 4, or 6
-    if [ $currentHour -eq 0 ] || [ $currentHour -eq 2 ] || [ $currentHour -eq 4 ] || [ $currentHour -eq 6 ]; then
-        # Valid hour, now check if minutes are between 00 and 14
-        isTimeInRange 0 14
-        return $?
-    else
-        # Not a valid Devil Square hour
-        return 1
-    fi
+    # Check if current hour matches any configured hour
+    IFS=',' read -ra dsHours <<< "$EVENT_DS_HOURS"
+    for h in "${dsHours[@]}"; do
+        if [ "$currentHour" -eq "$h" ]; then
+            isTimeInRange $EVENT_DS_MINUTES_START $EVENT_DS_MINUTES_END
+            return $?
+        fi
+    done
+    return 1
 }
 
-# Function to check if it's time for Blood Castle event (hours 1,3,5 at :00-:14)
-# Returns: 0 if it's Blood Castle time (only hours 1,3,5), 1 otherwise
+# Function to check if it's time for Blood Castle event
+# Hours and minutes configured in local.properties
+# Returns: 0 if it's Blood Castle time, 1 otherwise
 isBloodCastleTime() {
     local currentHour=$(date '+%H' | sed 's/^0*//')  # Get hour, remove leading zeros
 
@@ -155,15 +157,15 @@ isBloodCastleTime() {
         currentHour=0
     fi
 
-    # Check if hour is 1, 3, or 5
-    if [ $currentHour -eq 1 ] || [ $currentHour -eq 3 ] || [ $currentHour -eq 5 ]; then
-        # Valid hour, now check if minutes are between 00 and 14
-        isTimeInRange 0 14
-        return $?
-    else
-        # Not a valid Blood Castle hour
-        return 1
-    fi
+    # Check if current hour matches any configured hour
+    IFS=',' read -ra bcHours <<< "$EVENT_BC_HOURS"
+    for h in "${bcHours[@]}"; do
+        if [ "$currentHour" -eq "$h" ]; then
+            isTimeInRange $EVENT_BC_MINUTES_START $EVENT_BC_MINUTES_END
+            return $?
+        fi
+    done
+    return 1
 }
 
 # Function to handle periodic recycling and use skill during events

@@ -71,6 +71,12 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `pickup.items.boss` | Seconds to wait picking up items after killing a boss | `10` |
 | `pickup.items.golden` | Seconds to wait picking up items after killing a golden monster | `4` |
 | `autoPlay.attack.timeout` | Timeout in seconds for the smartAutoPlay attack script | `240` |
+| `event.devil.square.hours` | Hours when Devil Square is available (comma-separated) | `0,2,4,6` |
+| `event.devil.square.minutes.start` | Start minute of the Devil Square window | `0` |
+| `event.devil.square.minutes.end` | End minute of the Devil Square window | `14` |
+| `event.blood.castle.hours` | Hours when Blood Castle is available (comma-separated) | `1,3,5` |
+| `event.blood.castle.minutes.start` | Start minute of the Blood Castle window | `0` |
+| `event.blood.castle.minutes.end` | End minute of the Blood Castle window | `14` |
 | `plan.before.devil.square` | Plan to set before Devil Square (0=no change, 1=plan 1, 2=plan 2) | `1` |
 | `plan.after.devil.square` | Plan to set after Devil Square (0=no change, 1=plan 1, 2=plan 2) | `2` |
 | `plan.before.blood.castle` | Plan to set before Blood Castle (0=no change, 1=plan 1, 2=plan 2) | `2` |

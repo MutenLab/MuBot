@@ -18,6 +18,12 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     PLAN_AFTER_DEVIL_SQUARE="$(grep '^plan.after.devil.square=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     PLAN_BEFORE_BLOOD_CASTLE="$(grep '^plan.before.blood.castle=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     PLAN_AFTER_BLOOD_CASTLE="$(grep '^plan.after.blood.castle=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    EVENT_DS_HOURS="$(grep '^event.devil.square.hours=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    EVENT_DS_MINUTES_START="$(grep '^event.devil.square.minutes.start=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    EVENT_DS_MINUTES_END="$(grep '^event.devil.square.minutes.end=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    EVENT_BC_HOURS="$(grep '^event.blood.castle.hours=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    EVENT_BC_MINUTES_START="$(grep '^event.blood.castle.minutes.start=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    EVENT_BC_MINUTES_END="$(grep '^event.blood.castle.minutes.end=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
 fi
 : "${PROJECT_DIR:=$_PROJECT_ROOT}"
 : "${QUICK_BUFF:=false}"
@@ -31,6 +37,12 @@ fi
 : "${PLAN_AFTER_DEVIL_SQUARE:=2}"
 : "${PLAN_BEFORE_BLOOD_CASTLE:=2}"
 : "${PLAN_AFTER_BLOOD_CASTLE:=0}"
+: "${EVENT_DS_HOURS:=0,2,4,6}"
+: "${EVENT_DS_MINUTES_START:=0}"
+: "${EVENT_DS_MINUTES_END:=14}"
+: "${EVENT_BC_HOURS:=1,3,5}"
+: "${EVENT_BC_MINUTES_START:=0}"
+: "${EVENT_BC_MINUTES_END:=14}"
 export PROJECT_DIR
 export QUICK_BUFF
 export PICKUP_ITEMS_BOSS
@@ -43,6 +55,12 @@ export PLAN_BEFORE_DEVIL_SQUARE
 export PLAN_AFTER_DEVIL_SQUARE
 export PLAN_BEFORE_BLOOD_CASTLE
 export PLAN_AFTER_BLOOD_CASTLE
+export EVENT_DS_HOURS
+export EVENT_DS_MINUTES_START
+export EVENT_DS_MINUTES_END
+export EVENT_BC_HOURS
+export EVENT_BC_MINUTES_START
+export EVENT_BC_MINUTES_END
 unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings
