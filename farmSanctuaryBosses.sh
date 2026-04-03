@@ -334,7 +334,7 @@ while true; do
             dsFailHour=$currentHour
         fi
 
-        if [ $dsFailCount -ge 2 ] && [ "$forceDevilSquare" != true ]; then
+        if [ $dsFailCount -ge $EVENT_DS_MAX_FAILS ] && [ "$forceDevilSquare" != true ]; then
             echo "[$(date '+%H:%M:%S')] Devil Square skipped (failed $dsFailCount times this hour)"
         else
             if [ "$forceDevilSquare" = true ]; then
@@ -408,7 +408,7 @@ while true; do
             bcFailHour=$currentHour
         fi
 
-        if [ $bcFailCount -ge 2 ] && [ "$forceBloodCastle" != true ]; then
+        if [ $bcFailCount -ge $EVENT_BC_MAX_FAILS ] && [ "$forceBloodCastle" != true ]; then
             echo "[$(date '+%H:%M:%S')] Blood Castle skipped (failed $bcFailCount times this hour)"
         else
             if [ "$forceBloodCastle" = true ]; then

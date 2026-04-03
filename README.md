@@ -77,6 +77,8 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `event.blood.castle.hours` | Hours when Blood Castle is available (comma-separated) | `1,3,5` |
 | `event.blood.castle.minutes.start` | Start minute of the Blood Castle window | `0` |
 | `event.blood.castle.minutes.end` | End minute of the Blood Castle window | `14` |
+| `event.devil.square.max.fails` | Max failed attempts per hour before skipping Devil Square | `3` |
+| `event.blood.castle.max.fails` | Max failed attempts per hour before skipping Blood Castle | `3` |
 | `plan.before.devil.square` | Plan to set before Devil Square (0=no change, 1=plan 1, 2=plan 2) | `1` |
 | `plan.after.devil.square` | Plan to set after Devil Square (0=no change, 1=plan 1, 2=plan 2) | `2` |
 | `plan.before.blood.castle` | Plan to set before Blood Castle (0=no change, 1=plan 1, 2=plan 2) | `2` |

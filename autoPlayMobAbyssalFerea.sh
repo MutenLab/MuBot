@@ -107,10 +107,10 @@ while true; do
       dsFailCount=0
       dsFailHour=$currentHour
     fi
-    if [ $dsFailCount -ge 2 ]; then
+    if [ $dsFailCount -ge $EVENT_DS_MAX_FAILS ]; then
       echo "[$(date '+%H:%M:%S')] Devil Square skipped (failed $dsFailCount times this hour)"
     else
-      echo "[$(date '+%H:%M:%S')] Devil Square event time detected! (attempt $((dsFailCount + 1))/2)"
+      echo "[$(date '+%H:%M:%S')] Devil Square event time detected! (attempt $((dsFailCount + 1))/$EVENT_DS_MAX_FAILS)"
       currentTime=$(date +%s)
       timeSinceLastBuff=$((currentTime - lastBuffTime))
       buffRemaining=$((1800 - timeSinceLastBuff))
@@ -140,10 +140,10 @@ while true; do
       bcFailCount=0
       bcFailHour=$currentHour
     fi
-    if [ $bcFailCount -ge 2 ]; then
+    if [ $bcFailCount -ge $EVENT_BC_MAX_FAILS ]; then
       echo "[$(date '+%H:%M:%S')] Blood Castle skipped (failed $bcFailCount times this hour)"
     else
-      echo "[$(date '+%H:%M:%S')] Blood Castle event time detected! (attempt $((bcFailCount + 1))/2)"
+      echo "[$(date '+%H:%M:%S')] Blood Castle event time detected! (attempt $((bcFailCount + 1))/$EVENT_BC_MAX_FAILS)"
       currentTime=$(date +%s)
       timeSinceLastBuff=$((currentTime - lastBuffTime))
       buffRemaining=$((1800 - timeSinceLastBuff))
@@ -274,8 +274,13 @@ while true; do
     echo "[$(date '+%H:%M:%S')] Arrived to mob spot. Starting auto skill for $((remainingBuffTime / 60))m $((remainingBuffTime % 60))s..."
 
     # Run autoPlaySkill with death detection and event time check
+    # Disable event check if we already failed max attempts this hour
+    checkDS=$devilSquareEnabled
+    checkBC=$bloodCastleEnabled
+    if [ $dsFailCount -ge $EVENT_DS_MAX_FAILS ]; then checkDS=false; fi
+    if [ $bcFailCount -ge $EVENT_BC_MAX_FAILS ]; then checkBC=false; fi
     # Parameters: duration, keyCode, cooldown, checkDevilSquare, checkBloodCastle
-    $PROJECT_DIR/bash/attack/autoPlaySkill.sh $remainingBuffTime 5 3 $devilSquareEnabled $bloodCastleEnabled
+    $PROJECT_DIR/bash/attack/autoPlaySkill.sh $remainingBuffTime 5 3 $checkDS $checkBC
     autoSkill_exit=$?
 
     # Handle autoPlaySkill exit codes
