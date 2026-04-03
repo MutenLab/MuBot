@@ -142,28 +142,70 @@ ensure_emulator_connected
 # Resolved from local.properties (game.package)
 
 # ADB wrapper functions - automatically target the correct emulator
+# All wrappers retry once with reconnection if device not found
 adb_shell() {
-    adb -s "$EMULATOR_ID" shell "$@"
+    local output
+    output=$(adb -s "$EMULATOR_ID" shell "$@" 2>&1)
+    local rc=$?
+    if [[ $rc -ne 0 && "$output" == *"not found"* ]]; then
+        ensure_emulator_connected
+        output=$(adb -s "$EMULATOR_ID" shell "$@" 2>&1)
+        rc=$?
+    fi
+    echo "$output"
+    return $rc
 }
 
 adb_tap() {
-    adb -s "$EMULATOR_ID" shell input tap "$@"
+    local output
+    output=$(adb -s "$EMULATOR_ID" shell input tap "$@" 2>&1)
+    local rc=$?
+    if [[ $rc -ne 0 && "$output" == *"not found"* ]]; then
+        ensure_emulator_connected
+        adb -s "$EMULATOR_ID" shell input tap "$@"
+    fi
 }
 
 adb_swipe() {
-    adb -s "$EMULATOR_ID" shell input swipe "$@"
+    local output
+    output=$(adb -s "$EMULATOR_ID" shell input swipe "$@" 2>&1)
+    local rc=$?
+    if [[ $rc -ne 0 && "$output" == *"not found"* ]]; then
+        ensure_emulator_connected
+        adb -s "$EMULATOR_ID" shell input swipe "$@"
+    fi
 }
 
 adb_text() {
-    adb -s "$EMULATOR_ID" shell input text "$@"
+    local output
+    output=$(adb -s "$EMULATOR_ID" shell input text "$@" 2>&1)
+    local rc=$?
+    if [[ $rc -ne 0 && "$output" == *"not found"* ]]; then
+        ensure_emulator_connected
+        adb -s "$EMULATOR_ID" shell input text "$@"
+    fi
 }
 
 adb_key() {
-    adb -s "$EMULATOR_ID" shell input keyevent "$@"
+    local output
+    output=$(adb -s "$EMULATOR_ID" shell input keyevent "$@" 2>&1)
+    local rc=$?
+    if [[ $rc -ne 0 && "$output" == *"not found"* ]]; then
+        ensure_emulator_connected
+        adb -s "$EMULATOR_ID" shell input keyevent "$@"
+    fi
 }
 
 adb_screencap() {
-    adb -s "$EMULATOR_ID" exec-out screencap -p
+    local output
+    output=$(adb -s "$EMULATOR_ID" exec-out screencap -p 2>&1)
+    local rc=$?
+    if [[ $rc -ne 0 && "$output" == *"not found"* ]]; then
+        ensure_emulator_connected
+        adb -s "$EMULATOR_ID" exec-out screencap -p
+    else
+        echo "$output"
+    fi
 }
 
 # Common tap shortcuts
