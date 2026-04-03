@@ -83,7 +83,59 @@ export PATH="/opt/homebrew/bin:$PATH"
 # Emulator ID is read from local.properties (emulator.id)
 # For Android Emulator: emulator-5554, emulator-5556, etc.
 # For BlueStacks: typically localhost:5555, localhost:5556, etc.
-#   Make sure ADB is connected first: adb connect localhost:5555
+
+# Ensure the configured emulator is connected and resolve its actual ADB device ID
+ensure_emulator_connected() {
+    local configured_id="$EMULATOR_ID"
+
+    # Step 1: Attempt adb connect (idempotent, harmless if already connected)
+    adb connect "$configured_id" >/dev/null 2>&1
+
+    # Step 2: Check if the configured ID appears in adb devices
+    if adb devices | grep -q "^${configured_id}[[:space:]]"; then
+        return 0
+    fi
+
+    # Step 3: Check for emulator-XXXX alias (console_port = adb_port - 1)
+    local port="${configured_id##*:}"
+    if [[ "$port" =~ ^[0-9]+$ ]]; then
+        local console_port=$((port - 1))
+        local alt_id="emulator-${console_port}"
+        if adb devices | grep -q "^${alt_id}[[:space:]]"; then
+            echo "[ADB] Device found as '$alt_id' instead of '$configured_id' — using '$alt_id'"
+            EMULATOR_ID="$alt_id"
+            export EMULATOR_ID
+            return 0
+        fi
+    fi
+
+    # Step 4: Retry connection after brief wait
+    echo "[ADB] Warning: Device '$configured_id' not found. Retrying connection..."
+    adb connect "$configured_id" 2>&1
+    sleep 2
+
+    if adb devices | grep -q "^${configured_id}[[:space:]]"; then
+        return 0
+    fi
+    if [[ "$port" =~ ^[0-9]+$ ]]; then
+        local console_port=$((port - 1))
+        local alt_id="emulator-${console_port}"
+        if adb devices | grep -q "^${alt_id}[[:space:]]"; then
+            echo "[ADB] Device found as '$alt_id' after retry — using '$alt_id'"
+            EMULATOR_ID="$alt_id"
+            export EMULATOR_ID
+            return 0
+        fi
+    fi
+
+    echo "[ADB] ERROR: Could not find device '$configured_id'. Check that BlueStacks is running."
+    echo "[ADB] Available devices:"
+    adb devices
+    return 1
+}
+
+# Run connection check at source time
+ensure_emulator_connected
 
 # Game Package Name
 # ===================

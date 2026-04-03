@@ -12,7 +12,9 @@
       "Bash(magick:*)",
       "Bash(bash:*)",
       "Bash(python3 -c \"import easyocr\")",
-      "Bash(xargs sed:*)"
+      "Bash(xargs sed:*)",
+      "Bash(python3 /Users/icerrate/StudioProjects/MuBot/python/readNumbersOCR.py --stdin)",
+      "Bash(find:*)"
     ]
   }
 }
