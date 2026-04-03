@@ -286,8 +286,8 @@ while true; do
     # Buy potions every X cycles
     if [ $buyPotsCounter -ge $buyPotsCycleAt ]; then
         # Read current potion counts
-        currentHP=$($PROJECT_DIR/bash/utils/readNumbers.sh 795 1047 57 20) # Migrated
-        currentMP=$($PROJECT_DIR/bash/utils/readNumbers.sh 894 1047 57 20) # Migrated
+        currentHP=$($PROJECT_DIR/bash/utils/readNumbers.sh 792 1046 61 22) # Migrated
+        currentMP=$($PROJECT_DIR/bash/utils/readNumbers.sh 891 1046 61 22) # Migrated
         echo "[$(date '+%H:%M:%S')] Current potions - HP: $currentHP, MP: $currentMP"
         echo "[$(date '+%H:%M:%S')] Buying potions ($healthPotions HP, $manaPotions MP)..."
         performBuyPotions $healthPotions $manaPotions

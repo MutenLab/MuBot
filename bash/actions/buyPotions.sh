@@ -10,8 +10,8 @@ POTIONS_PER_BUY=99
 
 # Read current potion counts from screen
 echo "[$(date '+%H:%M:%S')] Reading current potion counts from screen..."
-CURRENT_HEALTH_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 795 1047 57 20) # Migrated
-CURRENT_MANA_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 894 1047 57 20) # Migrated
+CURRENT_HEALTH_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 792 1046 61 22) # Migrated
+CURRENT_MANA_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 891 1046 61 22) # Migrated
 
 # Validate that we got numbers
 if [[ -z "$CURRENT_HEALTH_POTIONS" ]]; then
