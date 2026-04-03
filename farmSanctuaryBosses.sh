@@ -303,19 +303,9 @@ while true; do
     targetWire=${WIRE_SEQUENCE[$wireIndex]}
     wireIndex=$(( (wireIndex + 1) % WIRE_COUNT ))
 
-    # Switch wire if needed
-    wireSwitched=false
-    if [ $currentWire -ne $targetWire ]; then
-        echo "[$(date '+%H:%M:%S')] Switching to wire $targetWire..."
-        $PROJECT_DIR/bash/actions/switchWire.sh $targetWire
-        currentWire=$targetWire
-        wireSwitched=true
-        sleep 3
-    fi
-
     echo ""
     echo "========================================="
-    echo "[$(date '+%H:%M:%S')] Cycle $cycleCount - Wire $currentWire"
+    echo "[$(date '+%H:%M:%S')] Cycle $cycleCount - Target wire $targetWire"
     echo "========================================="
 
     # Check if buff is needed (every 28 minutes)
@@ -477,9 +467,6 @@ while true; do
     # Always teleport if we left Sanctuary $SANCTUARY_LEVEL (potions, buff, events)
     if [ "$needReturnToSanctuary" = true ]; then
         needTeleport=true
-    elif [ "$wireSwitched" = true ]; then
-        echo "[$(date '+%H:%M:%S')] Wire switched - already at Sanctuary $SANCTUARY_LEVEL entrance"
-        needTeleport=false
     else
         currentLocation=$(getLocation)
         if [ "$currentLocation" -eq "$SANCTUARY_LOC" ]; then
@@ -500,7 +487,7 @@ while true; do
             continue
         fi
 
-        # Teleporting to Sanctuary $SANCTUARY_LEVEL always arrives at wire 1
+        # Teleporting to Sanctuary always arrives at wire 1
         currentWire=1
 
         # Wait for teleport to complete
@@ -509,6 +496,14 @@ while true; do
 
     # Reset flag - we're now at Sanctuary $SANCTUARY_LEVEL
     needReturnToSanctuary=false
+
+    # Switch to target wire if needed (must be after teleport since teleport resets to wire 1)
+    if [ $currentWire -ne $targetWire ]; then
+        echo "[$(date '+%H:%M:%S')] Switching to wire $targetWire..."
+        $PROJECT_DIR/bash/actions/switchWire.sh $targetWire
+        currentWire=$targetWire
+        sleep 3
+    fi
 
     # Check all bosses status
     echo "[$(date '+%H:%M:%S')] Checking boss status..."
