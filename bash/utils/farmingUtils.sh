@@ -578,8 +578,8 @@ validatePots() {
     local MIN_MANA_POTIONS=100
 
     # Read current potion counts from screen
-    local CURRENT_HEALTH_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 1325 1305 69 25)
-    local CURRENT_MANA_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 1445 1303 68 28)
+    local CURRENT_HEALTH_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 795 1047 57 20) # Migrated
+    local CURRENT_MANA_POTIONS=$($PROJECT_DIR/bash/utils/readNumbers.sh 894 1047 57 20) # Migrated
 
     # Validate that we got numbers
     if [[ -z "$CURRENT_HEALTH_POTIONS" || ! "$CURRENT_HEALTH_POTIONS" =~ ^[0-9]+$ ]]; then
