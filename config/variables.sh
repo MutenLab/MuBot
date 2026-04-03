@@ -11,17 +11,23 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     PICKUP_ITEMS_BOSS="$(grep '^pickup.items.boss=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     PICKUP_ITEMS_GOLDEN="$(grep '^pickup.items.golden=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     AUTOPLAY_ATTACK_TIMEOUT="$(grep '^autoPlay.attack.timeout=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    EMULATOR_ID="$(grep '^emulator.id=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    USE_IMMORTAL_SATAN="$(grep '^use.immortal.satan=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
 fi
 : "${PROJECT_DIR:=$_PROJECT_ROOT}"
 : "${QUICK_BUFF:=false}"
 : "${PICKUP_ITEMS_BOSS:=10}"
 : "${PICKUP_ITEMS_GOLDEN:=4}"
 : "${AUTOPLAY_ATTACK_TIMEOUT:=240}"
+: "${EMULATOR_ID:=127.0.0.1:5555}"
+: "${USE_IMMORTAL_SATAN:=true}"
 export PROJECT_DIR
 export QUICK_BUFF
 export PICKUP_ITEMS_BOSS
 export PICKUP_ITEMS_GOLDEN
 export AUTOPLAY_ATTACK_TIMEOUT
+export EMULATOR_ID
+export USE_IMMORTAL_SATAN
 unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings
@@ -32,11 +38,10 @@ export PATH="/opt/homebrew/bin:$PATH"
 
 # ADB Device Settings
 # ===================
-# Emulator ID for ADB commands (get with: adb devices)
+# Emulator ID is read from local.properties (emulator.id)
 # For Android Emulator: emulator-5554, emulator-5556, etc.
 # For BlueStacks: typically localhost:5555, localhost:5556, etc.
 #   Make sure ADB is connected first: adb connect localhost:5555
-EMULATOR_ID="127.0.0.1:5555"
 
 # ADB wrapper functions - automatically target the correct emulator
 adb_shell() {
@@ -131,8 +136,12 @@ GAME_PACKAGE="com.tszz.gpen.nowgg"
 
 # Satan Imp Settings
 # ==================
-# Set to "satan" for new satan imp or "satan_old" for old satan imp
-satanImpType="satan"
+# Resolved from local.properties (use.immortal.satan)
+if [ "$USE_IMMORTAL_SATAN" = true ]; then
+    satanImpType="satan_immortal"
+else
+    satanImpType="satan"
+fi
 
 # Recycle Settings
 # ================

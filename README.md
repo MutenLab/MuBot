@@ -51,6 +51,8 @@ Create a `local.properties` file at the project root with your local project dir
 ```bash
 # local.properties
 project.dir=/path/to/your/MuBot
+emulator.id=127.0.0.1:5555
+use.immortal.satan=true
 quick.buff=false
 pickup.items.boss=10
 pickup.items.golden=4
@@ -61,6 +63,8 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | Property | Description | Default |
 |----------|-------------|---------|
 | `project.dir` | Absolute path to the project directory | Auto-detected |
+| `emulator.id` | ADB device ID (get with `adb devices`) | `127.0.0.1:5555` |
+| `use.immortal.satan` | When `true`, uses `satan_immortal.png` marker. When `false`, uses `satan.png`. | `true` |
 | `quick.buff` | When `true`, only one buff (attack or defense) is needed during buff check. When `false`, both are required. | `false` |
 | `pickup.items.boss` | Seconds to wait picking up items after killing a boss | `10` |
 | `pickup.items.golden` | Seconds to wait picking up items after killing a golden monster | `4` |
@@ -69,9 +73,7 @@ This file is gitignored — each computer needs its own. If omitted, the project
 ### 5. Update configuration
 
 Edit `config/variables.sh`:
-- `EMULATOR_ID` - ADB device ID (check with `adb devices`)
 - `GAME_PACKAGE` - game package name
-- `satanImpType` - set to `"satan"` or `"satan_old"` depending on equipped imp
 
 ## Project Structure
 

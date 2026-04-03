@@ -114,7 +114,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [x] `img/check_auto_party.png`
 - [x] `img/dead_title.png`
 - [x] `img/satan.png`
-- [x] `img/satan_old.png`
+- [x] `img/satan_immortal.png`
 - [x] `img/angel.png`
 - [x] `img/empty_team.png`
 - [x] `img/recycle_popup_marker.png`
