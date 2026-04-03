@@ -557,10 +557,10 @@ isExpiredPopupVisible() {
 isOpenNowButtonVisible() {
     local MARKER_IMAGE="$PROJECT_DIR/img/open_now_button_marker.png"
 
-    local X=371
-    local Y=381
-    local WIDTH=140
-    local HEIGHT=29
+    local X=177
+    local Y=305
+    local WIDTH=110
+    local HEIGHT=23
 
     local result=$(compareScreenRegionWithImage "$X" "$Y" "$WIDTH" "$HEIGHT" "$MARKER_IMAGE")
 
