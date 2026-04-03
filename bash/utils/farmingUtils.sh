@@ -84,10 +84,7 @@ performBuyPotions() {
 
     # Teleport to Lorencia first to avoid cooldown/attack effects blocking OCR
     echo "[$(date '+%H:%M:%S')] Teleporting to Lorencia to read potions safely..."
-    tap_openMap
-    sleep 0.5
-    adb_tap 825 370
-    sleep 5
+    $PROJECT_DIR/bash/teleport/toLorencia.sh
 
     echo "[$(date '+%H:%M:%S')] Running Buying potions block..."
     # Background execution
