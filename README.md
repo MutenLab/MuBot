@@ -51,9 +51,15 @@ Create a `local.properties` file at the project root with your local project dir
 ```bash
 # local.properties
 project.dir=/path/to/your/MuBot
+quick.buff=false
 ```
 
 This file is gitignored — each computer needs its own. If omitted, the project path is auto-detected from the script location.
+
+| Property | Description | Default |
+|----------|-------------|---------|
+| `project.dir` | Absolute path to the project directory | Auto-detected |
+| `quick.buff` | When `true`, only one buff (attack or defense) is needed during buff check. When `false`, both are required. | `false` |
 
 ### 5. Update configuration
 

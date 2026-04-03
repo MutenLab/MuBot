@@ -7,9 +7,12 @@ _VARS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 _PROJECT_ROOT="$(dirname "$_VARS_DIR")"
 if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     PROJECT_DIR="$(grep '^project.dir=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    QUICK_BUFF="$(grep '^quick.buff=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
 fi
 : "${PROJECT_DIR:=$_PROJECT_ROOT}"
+: "${QUICK_BUFF:=false}"
 export PROJECT_DIR
+export QUICK_BUFF
 unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings

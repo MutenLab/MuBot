@@ -545,19 +545,33 @@ checkBuff() {
                 shield_found=true
             fi
         fi
-        # Early exit if both found
-        if [ "$attack_found" = true ] && [ "$shield_found" = true ]; then
-            break
+        # Early exit if both found, or one found in quick mode
+        if [ "$QUICK_BUFF" = true ]; then
+            if [ "$attack_found" = true ] || [ "$shield_found" = true ]; then
+                break
+            fi
+        else
+            if [ "$attack_found" = true ] && [ "$shield_found" = true ]; then
+                break
+            fi
         fi
     done
 
     rm -f "$TEMP_SS"
 
-    # Both buffs must be found for valid buff
-    if [[ "$attack_found" == true ]] && [[ "$shield_found" == true ]]; then
-        return 0  # Valid buff
+    # Quick mode: at least one buff needed. Normal mode: both buffs needed.
+    if [ "$QUICK_BUFF" = true ]; then
+        if [[ "$attack_found" == true ]] || [[ "$shield_found" == true ]]; then
+            return 0  # Valid buff
+        else
+            return 1  # Invalid buff
+        fi
     else
-        return 1  # Invalid buff
+        if [[ "$attack_found" == true ]] && [[ "$shield_found" == true ]]; then
+            return 0  # Valid buff
+        else
+            return 1  # Invalid buff
+        fi
     fi
 }
 
