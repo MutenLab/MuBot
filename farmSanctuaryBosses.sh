@@ -292,6 +292,7 @@ while true; do
         # Read current potion counts
         currentHP=$($PROJECT_DIR/bash/utils/readNumbers.sh 792 1046 61 22) # Migrated
         currentMP=$($PROJECT_DIR/bash/utils/readNumbers.sh 891 1046 61 22) # Migrated
+        [[ ${#currentMP} -gt 4 ]] && currentMP=${currentMP: -4}
         echo "[$(date '+%H:%M:%S')] Current potions - HP: $currentHP, MP: $currentMP"
         echo "[$(date '+%H:%M:%S')] Buying potions ($healthPotions HP, $manaPotions MP)..."
         performBuyPotions $healthPotions $manaPotions
