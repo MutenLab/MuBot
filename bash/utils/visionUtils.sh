@@ -74,8 +74,7 @@ readNumbersFromZone() {
     # Capture screenshot, crop, and enhance for OCR
     # Using ImageMagick preprocessing to improve OCR accuracy:
     # - Convert to grayscale
-    # - Increase contrast
-    # - Apply threshold for better text recognition
+    # - Scale up for better recognition
     local DETECTED_TEXT
 
     if [ "$DEBUG_SAVE_IMAGE" = true ]; then
@@ -83,8 +82,6 @@ readNumbersFromZone() {
         DETECTED_TEXT=$(adb_screencap | \
             magick png:- -crop ${WIDTH}x${HEIGHT}+${X}+${Y} \
             -colorspace Gray \
-            -contrast-stretch 0 \
-            -threshold ${THRESHOLD}% \
             -scale 300% \
             png:- | \
             tee "$TEMP_FILE" | \
@@ -96,8 +93,6 @@ readNumbersFromZone() {
         DETECTED_TEXT=$(adb_screencap | \
             magick png:- -crop ${WIDTH}x${HEIGHT}+${X}+${Y} \
             -colorspace Gray \
-            -contrast-stretch 0 \
-            -threshold ${THRESHOLD}% \
             -scale 300% \
             png:- | \
             python3 "$OCR_SCRIPT" --stdin 2>/dev/null)

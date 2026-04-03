@@ -85,6 +85,7 @@ performBuyPotions() {
     # Teleport to Lorencia first to avoid cooldown/attack effects blocking OCR
     echo "[$(date '+%H:%M:%S')] Teleporting to Lorencia to read potions safely..."
     $PROJECT_DIR/bash/teleport/toLorencia.sh
+    sleep 5
 
     echo "[$(date '+%H:%M:%S')] Running Buying potions block..."
     # Background execution
