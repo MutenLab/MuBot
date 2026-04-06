@@ -25,7 +25,7 @@ sleep 0.5
 tap_closeMap
 
 # Use travel time to perform optional tasks
-runDuringTravelling 23 true "$validationType" true $LOC_SANCTUARY_2  # remainTime=25s, performRecycle=true, validationType, performGameValidation=true, expectedLocation=Sanctuary2
+runDuringTravelling 23 true "$validationType" true $LOC_SANCTUARY  # remainTime=25s, performRecycle=true, validationType, performGameValidation=true, expectedLocation=Sanctuary2
 exit_code=$?
 if [ $exit_code -ne 0 ]; then
     exit $exit_code

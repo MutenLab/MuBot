@@ -25,19 +25,14 @@ readonly LOC_HIGH_HEAVEN=9
 readonly LOC_PURGATORY_OF_MISERY=10
 readonly LOC_ENDLESS_ABYSS=11
 readonly LOC_CORRIDOR_OF_AGONY=12
-readonly LOC_SANCTUARY_1=13
 readonly LOC_CORRUPTED_LANDS=14
 readonly LOC_LAND_OF_DEMONS=15
-readonly LOC_SANCTUARY_2=16
 readonly LOC_FOGGY_FOREST=17
-readonly LOC_SANCTUARY_3=21
-readonly LOC_SANCTUARY_4=22
-readonly LOC_SANCTUARY_5=23
-readonly LOC_SANCTUARY_6=24
 readonly LOC_EVERSONG_FOREST=18
 readonly LOC_DEVIL_SQUARE=19
 readonly LOC_BLOOD_CASTLE=20
 readonly LOC_ABYSSAL_FEREA=25
+readonly LOC_SANCTUARY=99
 
 # Script to check if a cropped zone has red tone dominance
 # Returns: "true" if red tones are dominant, "false" otherwise
@@ -257,18 +252,8 @@ getLocation() {
         echo $LOC_SWAMP_OF_PEACE
     elif [[ "$locationLower" == *"raklion"* && "$locationLower" == *"3"* ]]; then
         echo $LOC_RAKLION_3
-    elif [[ "$locationLower" == *"tuary"* && "$locationLower" == *"1"* ]]; then
-        echo $LOC_SANCTUARY_1
-    elif [[ "$locationLower" == *"tuary"* && "$locationLower" == *"2"* ]]; then
-        echo $LOC_SANCTUARY_2
-    elif [[ "$locationLower" == *"tuary"* && "$locationLower" == *"3"* ]]; then
-        echo $LOC_SANCTUARY_3
-    elif [[ "$locationLower" == *"tuary"* && "$locationLower" == *"4"* ]]; then
-        echo $LOC_SANCTUARY_4
-    elif [[ "$locationLower" == *"tuary"* && "$locationLower" == *"5"* ]]; then
-        echo $LOC_SANCTUARY_5
-    elif [[ "$locationLower" == *"tuary"* && "$locationLower" == *"6"* ]]; then
-        echo $LOC_SANCTUARY_6
+    elif [[ "$locationLower" == *"tuary"* ]]; then
+        echo $LOC_SANCTUARY
     elif [[ "$locationLower" == *"orrupt"* && "$locationLower" == *"land"* ]]; then
         echo $LOC_CORRUPTED_LANDS
     elif [[ "$locationLower" == *"divine"* ]]; then

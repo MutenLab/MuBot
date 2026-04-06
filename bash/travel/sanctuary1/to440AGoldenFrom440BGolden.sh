@@ -28,7 +28,7 @@ tap_closeMap
 # Alternate between recycle+validation or game check
 if [ "$performGameValidation" = "true" ]; then
     # Only do game check (no recycle, no validation) + location validation
-    runDuringTravelling 14 true "none" true $LOC_SANCTUARY_1  # remainTime=14s, performRecycle=true, validationType=none, performGameValidation=true, expectedLocation=Sanctuary1
+    runDuringTravelling 14 true "none" true $LOC_SANCTUARY  # remainTime=14s, performRecycle=true, validationType=none, performGameValidation=true, expectedLocation=Sanctuary1
     exit_code=$?
     if [ $exit_code -ne 0 ]; then
         exit $exit_code

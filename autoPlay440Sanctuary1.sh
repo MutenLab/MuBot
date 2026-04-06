@@ -123,7 +123,7 @@ while true; do
     
     # GO BACK TO SANCTUARY 1 after buying potions
     needsGoToMap=false
-    teleportTo $LOC_SANCTUARY_1
+    teleportTo \$LOC_SANCTUARY 1
 
     # Restart buy potions counter
     buyPotsCounter=0
@@ -176,7 +176,7 @@ while true; do
 
       # GO BACK TO SANCTUARY 1 after buffing
       needsGoToMap=false
-      teleportTo $LOC_SANCTUARY_1
+      teleportTo \$LOC_SANCTUARY 1
       teleport_exit_code=$?
 
       # Handle exit codes from teleport
@@ -292,7 +292,7 @@ while true; do
 
     # GO BACK TO SANCTUARY 1 after Devil Square
     needsGoToMap=false
-    teleportTo $LOC_SANCTUARY_1
+    teleportTo \$LOC_SANCTUARY 1
     teleport_exit_code=$?
 
     # Handle exit codes from teleport
@@ -413,7 +413,7 @@ while true; do
 
     # GO BACK TO SANCTUARY 1 after Blood Castle
     needsGoToMap=false
-    teleportTo $LOC_SANCTUARY_1
+    teleportTo \$LOC_SANCTUARY 1
     teleport_exit_code=$?
 
     # Handle exit codes from teleport
@@ -458,7 +458,7 @@ while true; do
   echo "[$(date '+%H:%M:%S')]-New cycle... (BuyPots: $buyPotsCounter/$buyPotsCycleAt) [$elapsedFormatted]"
 
   if [ "$needsGoToMap" = true ]; then
-    teleportTo $LOC_SANCTUARY_1
+    teleportTo \$LOC_SANCTUARY 1
       needsGoToMap=false
   fi
 
@@ -563,7 +563,7 @@ while true; do
   if [ $travel_exit_code -eq 1 ]; then
     sleep 5
     echo "[$(date '+%H:%M:%S')] Game recovered. Returning to Sanctuary 1..."
-    teleportTo $LOC_SANCTUARY_1
+    teleportTo \$LOC_SANCTUARY 1
     sleep 1
     # Equip angel from shortcut
     tap_equipAngel
@@ -795,7 +795,7 @@ while true; do
   if [ $travel_exit_code -eq 1 ]; then
     sleep 5
     echo "[$(date '+%H:%M:%S')] Game recovered. Returning to Sanctuary 1..."
-    teleportTo $LOC_SANCTUARY_1
+    teleportTo \$LOC_SANCTUARY 1
     sleep 1
     # Equip angel from shortcut
     tap_equipAngel

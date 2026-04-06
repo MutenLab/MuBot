@@ -19,15 +19,7 @@ source $PROJECT_DIR/bash/utils/farmingUtils.sh
 source $PROJECT_DIR/bash/utils/eventUtils.sh
 source $PROJECT_DIR/config/sanctuary_bosses.sh
 
-# Map level to location constant
-case $SANCTUARY_LEVEL in
-    1) SANCTUARY_LOC=$LOC_SANCTUARY_1 ;;
-    2) SANCTUARY_LOC=$LOC_SANCTUARY_2 ;;
-    3) SANCTUARY_LOC=$LOC_SANCTUARY_3 ;;
-    4) SANCTUARY_LOC=$LOC_SANCTUARY_4 ;;
-    5) SANCTUARY_LOC=$LOC_SANCTUARY_5 ;;
-    6) SANCTUARY_LOC=$LOC_SANCTUARY_6 ;;
-esac
+SANCTUARY_LOC=$LOC_SANCTUARY
 
 PYTHON_DETECT="$PROJECT_DIR/python/detectBossStatusOnSanctuaryMap.py"
 PYTHON_OPTIMIZE="$PROJECT_DIR/python/optimizeBossRouteOnSanctuaryMap.py"
@@ -468,9 +460,7 @@ while true; do
         needTeleport=true
     else
         currentLocation=$(getLocation)
-        if [ "$currentLocation" -eq "$LOC_SANCTUARY_1" ] || [ "$currentLocation" -eq "$LOC_SANCTUARY_2" ] || \
-           [ "$currentLocation" -eq "$LOC_SANCTUARY_3" ] || [ "$currentLocation" -eq "$LOC_SANCTUARY_4" ] || \
-           [ "$currentLocation" -eq "$LOC_SANCTUARY_5" ] || [ "$currentLocation" -eq "$LOC_SANCTUARY_6" ]; then
+        if [ "$currentLocation" -eq "$LOC_SANCTUARY" ]; then
             echo "[$(date '+%H:%M:%S')] Already at Sanctuary, skipping teleport..."
             needTeleport=false
         else
@@ -479,7 +469,7 @@ while true; do
     fi
 
     if [ "$needTeleport" = true ]; then
-        teleportTo $SANCTUARY_LOC
+        teleportTo $SANCTUARY_LOC $SANCTUARY_LEVEL
         teleport_exit_code=$?
 
         if [ $teleport_exit_code -ne 0 ]; then

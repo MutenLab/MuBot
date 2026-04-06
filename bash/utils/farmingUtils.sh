@@ -795,14 +795,9 @@ getLocationName() {
         $LOC_PURGATORY_OF_MISERY) echo "Purgatory of Misery" ;;
         $LOC_ENDLESS_ABYSS) echo "Endless Abyss" ;;
         $LOC_CORRIDOR_OF_AGONY) echo "Corridor of Agony" ;;
-        $LOC_SANCTUARY_1) echo "Sanctuary 1" ;;
+        $LOC_SANCTUARY) echo "Sanctuary" ;;
         $LOC_CORRUPTED_LANDS) echo "Corrupted Lands" ;;
         $LOC_LAND_OF_DEMONS) echo "Lands of Demons" ;;
-        $LOC_SANCTUARY_2) echo "Sanctuary 2" ;;
-        $LOC_SANCTUARY_3) echo "Sanctuary 3" ;;
-        $LOC_SANCTUARY_4) echo "Sanctuary 4" ;;
-        $LOC_SANCTUARY_5) echo "Sanctuary 5" ;;
-        $LOC_SANCTUARY_6) echo "Sanctuary 6" ;;
         $LOC_FOGGY_FOREST) echo "Foggy Forest" ;;
         $LOC_EVERSONG_FOREST) echo "Eversong Forest" ;;
         $LOC_DEVIL_SQUARE) echo "Devil Square" ;;
@@ -826,6 +821,7 @@ getLocationName() {
 # Retries up to 3 times if location validation fails
 teleportTo() {
     local targetLocation=$1
+    local sanctuaryLevel=${2:-0}
     local maxRetries=3
     local attempt=0
     local teleportScript=""
@@ -866,29 +862,14 @@ teleportTo() {
         $LOC_CORRIDOR_OF_AGONY)
             teleportScript="$PROJECT_DIR/bash/teleport/toCorridorOfAgony.sh"
             ;;
-        $LOC_SANCTUARY_1)
-            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 1"
+        $LOC_SANCTUARY)
+            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh $sanctuaryLevel"
             ;;
         $LOC_CORRUPTED_LANDS)
             teleportScript="$PROJECT_DIR/bash/teleport/toCorruptedLands.sh"
             ;;
         $LOC_LAND_OF_DEMONS)
             teleportScript="$PROJECT_DIR/bash/teleport/toLandOfDemons.sh"
-            ;;
-        $LOC_SANCTUARY_2)
-            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 2"
-            ;;
-        $LOC_SANCTUARY_3)
-            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 3"
-            ;;
-        $LOC_SANCTUARY_4)
-            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 4"
-            ;;
-        $LOC_SANCTUARY_5)
-            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 5"
-            ;;
-        $LOC_SANCTUARY_6)
-            teleportScript="$PROJECT_DIR/bash/teleport/toSanctuary.sh 6"
             ;;
         $LOC_FOGGY_FOREST)
             teleportScript="$PROJECT_DIR/bash/teleport/toFoggyForest.sh"
