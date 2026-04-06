@@ -22,7 +22,7 @@ offensiveMode=true
 moveMobAttacking=false
 recycleCycleAt=5     # Recycle every 5 cycles
 buyPotsCycleAt=150   # Buy potions every 150 cycles
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 # Aux variables
 recyclerCounter=$recyclerCounterInit
 buyPotsCounter=0

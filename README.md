@@ -183,6 +183,7 @@ Double-click `screenshot.command` on Desktop to capture the emulator screen.
 
 ## Notes
 
+- Each project instance uses its own `.tmp/` directory for temporary files (screenshots, pause flags), avoiding collisions when running multiple instances
 - All tap coordinates are calibrated for **1920x1080** resolution
 - Reference images in `img/` must match the current resolution
 - See `MIGRATION_STATUS.md` for resolution migration progress

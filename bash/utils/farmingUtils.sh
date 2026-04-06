@@ -521,7 +521,7 @@ checkBuff() {
     local SCAN_POSITIONS="1484 1527 1567 1610" # Migrated
 
     # Take ONE screenshot to avoid animation differences between comparisons
-    local TEMP_SS=$(mktemp /tmp/mubot_buff_XXXXXX.png)
+    local TEMP_SS=$(mktemp "$MUBOT_TEMP_DIR/mubot_buff_XXXXXX.png")
     adb_screencap > "$TEMP_SS"
 
     local attack_found=false
@@ -1075,7 +1075,7 @@ autoSkill() {
 
     local skillCount=0
     local isPaused=false
-    local pauseFlagFile="/tmp/mubot_skill_paused"
+    local pauseFlagFile="$MUBOT_TEMP_DIR/mubot_skill_paused"
     local startTime=$(date +%s)
 
     while true; do

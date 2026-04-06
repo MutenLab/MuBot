@@ -21,7 +21,7 @@ echo "[$(date '+%H:%M:%S')] Starting auto play at Foggy Forest mob zone. Press k
 buyPotsCycleAt=6      # Buy potions every 6 cycles
 healthPotions=$FARM_HEALTH_POTIONS
 manaPotions=$FARM_MANA_POTIONS
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 
 # Buff settings
 if [ "$disableBuff" = true ]; then

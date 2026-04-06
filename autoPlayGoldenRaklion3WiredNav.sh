@@ -22,7 +22,7 @@ healthPotions=$FARM_HEALTH_POTIONS
 manaPotions=$FARM_MANA_POTIONS
 # Wire sequence - edit this array to define the order of wires to use
 wireSequence=(1 2 3)     # Cycles through wires 1, 2, 3
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 
 # Event flags
 devilSquareEnabled=false    # Set to false to disable Devil Square event

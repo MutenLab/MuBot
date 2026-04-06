@@ -23,7 +23,7 @@
 #   Other -> 10 = Abort execution
 # ==================================================
 
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 
 # Load configuration
 source $PROJECT_DIR/config/variables.sh

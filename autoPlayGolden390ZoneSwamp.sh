@@ -22,7 +22,7 @@ recycleCycleAt=10     # Recycle every N cycles
 buyPotsCycleAt=200    # Buy potions every N cycles
 # Wire sequence - edit this array to define the order of wires to use
 wireSequence=(1 2 3)  # Example: cycles through wires 6,5,4
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 # Event flags
 devilSquareEnabled=false   # Set to false to disable Devil Square event
 bloodCastleEnabled=true    # Set to false to disable Blood Castle event

@@ -30,7 +30,7 @@ repositionCounter=0
 minWire=4
 maxWire=5
 wireToAvoid=0
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 # Aux variables
 recyclerCounter=$recyclerCounterInit
 buyPotsCounter=0

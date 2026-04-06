@@ -24,7 +24,7 @@ echo "[$(date '+%H:%M:%S')] Starting auto play. Press key to cancel..."
 buyPotsCycleAt=60     # Buy potions every 60 cycles
 healthPotions=$FARM_HEALTH_POTIONS
 manaPotions=$FARM_MANA_POTIONS
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 
 # Event flags
 devilSquareEnabled=true    # Set to false to disable Devil Square event

@@ -279,5 +279,9 @@ else
     satanImpType="satan"
 fi
 
+# Per-instance temp directory inside the project (avoids collisions between instances)
+MUBOT_TEMP_DIR="$_PROJECT_ROOT/.tmp"
+mkdir -p "$MUBOT_TEMP_DIR"
+
 # Clean up stale temp files from previous runs
-rm -f /tmp/mubot_buff_*.png 2>/dev/null
+rm -f "$MUBOT_TEMP_DIR"/mubot_buff_*.png 2>/dev/null

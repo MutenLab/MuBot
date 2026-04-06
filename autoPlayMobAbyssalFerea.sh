@@ -18,7 +18,7 @@ echo "[$(date '+%H:%M:%S')] Starting auto play at Abyssal Ferea mob zone. Press 
 buyPotsCycleAt=10     # Buy potions every 10 cycles
 healthPotions=$FARM_HEALTH_POTIONS
 manaPotions=$FARM_MANA_POTIONS
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 
 # Event settings
 devilSquareEnabled=true    # Set to false to disable Devil Square

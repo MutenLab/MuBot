@@ -25,7 +25,7 @@ echo "[$(date '+%H:%M:%S')] Starting auto play at Land of Demons. Press key to c
 buyPotsCycleAt=100    # Buy potions every X cycles
 healthPotions=$FARM_HEALTH_POTIONS
 manaPotions=$FARM_MANA_POTIONS
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 
 # Event flags
 devilSquareEnabled=true   # Set to false to disable Devil Square event

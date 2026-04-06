@@ -31,7 +31,7 @@ checkBloodCastle=${5:-false}   # Check Blood Castle event time
 skillCount=0
 lastEventCheck=0           # Track last event time check
 isPaused=false
-pauseFlagFile="/tmp/mubot_skill_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_skill_paused"
 startTime=$(date +%s)
 
 # Check for expired popup before starting

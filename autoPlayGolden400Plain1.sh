@@ -20,7 +20,7 @@ buyPotsCycleAt=100    # Buy potions every 200 cycles
 lifePercent=40        # Reach percent life to heal
 # Wire sequence - edit this array to define the order of wires to use
 wireSequence=(1 2)  # Example: cycles through wires 6,5,4
-pauseFlagFile="/tmp/mubot_paused"
+pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 # Event flags
 devilSquareEnabled=true    # Set to false to disable Devil Square event
 bloodCastleEnabled=true    # Set to false to disable Blood Castle event
