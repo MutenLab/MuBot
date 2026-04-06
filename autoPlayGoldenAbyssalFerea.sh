@@ -21,6 +21,9 @@ source $PROJECT_DIR/bash/utils/eventUtils.sh
 
 echo "[$(date '+%H:%M:%S')] Starting auto play. Press key to cancel..."
 # Constants for configuration
+buyPotsCycleAt=60     # Buy potions every 60 cycles
+healthPotions=$FARM_HEALTH_POTIONS
+manaPotions=$FARM_MANA_POTIONS
 pauseFlagFile="/tmp/mubot_paused"
 
 # Event flags
@@ -29,6 +32,7 @@ bloodCastleEnabled=true    # Set to false to disable Blood Castle event
 buffEnabled=true           # Set to false to disable buff
 
 # Aux variables
+buyPotsCounter=0
 lastCycleTime=$(date +%s)   # Used for analytics
 doGameCheck=true           # Alternates between recycle+validation and game check
 firstReposition=true
@@ -55,6 +59,7 @@ devilSquareCount=0
 bloodCastleCount=0
 deathCount=0
 buffCount=0
+buyPotionsCount=0
 cycleCount=0
 shouldExit=false  # Flag to control script exit
 
@@ -89,6 +94,7 @@ displayStats() {
     echo "      Devil Square events: $devilSquareCount" >&2
     echo "      Blood Castle events: $bloodCastleCount" >&2
     echo "                   Buffed: $buffCount" >&2
+    echo "             Store visits: $buyPotionsCount" >&2
     echo "" >&2
     echo "                     Died: $deathCount" >&2
     echo "=========================================" >&2
@@ -176,6 +182,38 @@ while true; do
       forceBuff=false
       firstReposition=true
     fi
+  fi
+
+  # BUY POTIONS TO SURVIVE.
+  # ===============================================
+  if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
+    performBuyPotions $healthPotions $manaPotions
+    if [ $? -ne 0 ]; then
+      shouldExit=true
+      continue
+    fi
+    ((buyPotionsCount++))
+
+    # GO BACK TO ABYSSAL FEREA after buying potions
+    needsGoToMap=false
+    teleportTo $LOC_ABYSSAL_FEREA
+    teleport_exit_code=$?
+
+    if [ $teleport_exit_code -eq 10 ]; then
+      shouldExit=true
+      continue
+    elif [ $teleport_exit_code -eq 4 ]; then
+      forceBloodCastle=true
+    elif [ $teleport_exit_code -eq 3 ]; then
+      forceDevilSquare=true
+    elif [ $teleport_exit_code -eq 2 ]; then
+      forceBuff=true
+    elif [ $teleport_exit_code -eq 1 ]; then
+      continue
+    fi
+
+    firstReposition=true
+    buyPotsCounter=0
   fi
 
   # CHECK FOR DEVIL SQUARE EVENT (hours 0,2,4,6 at :10-:15 OR forced by user)
@@ -900,6 +938,8 @@ while true; do
   elif [ $cycle_exit_code -eq 3 ]; then # Timeout
     ((monsterSkipped++))
   fi
+
+  ((buyPotsCounter++))
 
 done
 

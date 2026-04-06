@@ -18,7 +18,7 @@ source $PROJECT_DIR/bash/utils/eventUtils.sh
 echo "[$(date '+%H:%M:%S')] Starting auto play at Abyssal Ferea mob zone. Press key to cancel..."
 
 # Constants for configuration
-buyPotsCycleAt=6      # Buy potions every 6 cycles
+buyPotsCycleAt=10     # Buy potions every 10 cycles
 healthPotions=$FARM_HEALTH_POTIONS
 manaPotions=$FARM_MANA_POTIONS
 pauseFlagFile="/tmp/mubot_paused"
@@ -167,7 +167,7 @@ while true; do
   fi
   # BUY POTIONS TO SURVIVE.
   # ===============================================
-  if [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
+  if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
     performBuyPotions $healthPotions $manaPotions
     if [ $? -ne 0 ]; then
       shouldExit=true

@@ -57,6 +57,7 @@ quick.buff=false
 use.immortal.satan=true
 pickup.items.boss=10
 pickup.items.golden=4
+farm.buy.potions=true
 farm.health.potions=2500
 farm.mana.potions=2000
 sanctuary.wires=1,2
@@ -76,6 +77,7 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `pickup.items.boss` | Seconds to wait picking up items after killing a boss | `10` |
 | `pickup.items.golden` | Seconds to wait picking up items after killing a golden monster | `4` |
 | `autoPlay.attack.timeout` | Timeout in seconds for the smartAutoPlay attack script | `240` |
+| `farm.buy.potions` | Enable potion buying during farming runs | `true` |
 | `farm.health.potions` | Target health potions to buy during farming runs | `2500` |
 | `farm.mana.potions` | Target mana potions to buy during farming runs | `2000` |
 | `sanctuary.wires` | Wire sequence for sanctuary boss farming (comma-separated, e.g., `1,2,3` or `2`) | `1,2` |
