@@ -468,8 +468,10 @@ while true; do
         needTeleport=true
     else
         currentLocation=$(getLocation)
-        if [ "$currentLocation" -eq "$SANCTUARY_LOC" ]; then
-            echo "[$(date '+%H:%M:%S')] Already at Sanctuary $SANCTUARY_LEVEL, skipping teleport..."
+        if [ "$currentLocation" -eq "$LOC_SANCTUARY_1" ] || [ "$currentLocation" -eq "$LOC_SANCTUARY_2" ] || \
+           [ "$currentLocation" -eq "$LOC_SANCTUARY_3" ] || [ "$currentLocation" -eq "$LOC_SANCTUARY_4" ] || \
+           [ "$currentLocation" -eq "$LOC_SANCTUARY_5" ] || [ "$currentLocation" -eq "$LOC_SANCTUARY_6" ]; then
+            echo "[$(date '+%H:%M:%S')] Already at Sanctuary, skipping teleport..."
             needTeleport=false
         else
             needTeleport=true
