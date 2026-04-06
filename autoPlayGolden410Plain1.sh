@@ -8,11 +8,10 @@
 # By pressing "q" key, skips to next loop and forces Devil Square event.
 # By pressing "r" key, skips to next loop and forces Blood Castle event.
 # Other keys cancels process.
-# Parameters: [buyPotsCycleAtInit=0] [skipBuffOnStart=false]
+# Parameters: [skipBuffOnStart=false]
 # ==================================================
 
-buyPotsCycleAtInit=${1:-0}      # Start cycle for buy potions action. 0
-skipBuffOnStart=${2:-false}     # Skip buff on first run (true/false)
+skipBuffOnStart=${1:-false}     # Skip buff on first run (true/false)
 
 # Load configuration and utilities
 source "$(dirname "$0")/config/variables.sh"
@@ -34,7 +33,7 @@ bloodCastleEnabled=false    # Set to false to disable Blood Castle event
 buffEnabled=true           # Set to false to disable Divine buff
 
 # Aux variables
-buyPotsCounter=$buyPotsCycleAtInit
+buyPotsCounter=0
 wireIndex=0                 # Start at first element of wireSequence
 lastCycleTime=$(date +%s)   # Used for analytics
 doGameCheck=false           # Alternates between recycle+validation and game check
@@ -114,7 +113,7 @@ while true; do
 
   # BUY POTIONS TO SURVIVE.
   # ===============================================
-  if [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
+  if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
     performBuyPotions $healthPotions $manaPotions
     if [ $? -ne 0 ]; then
       shouldExit=true

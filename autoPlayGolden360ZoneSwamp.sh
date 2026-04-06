@@ -7,9 +7,8 @@
 # ==================================================
 
 recyclerCounterInit=${1:-0}     # Start cycle for recycler action. 0
-buyPotsCycleAtInit=${2:-0}      # Start cycle for buy potions action. 0
-targetHealthPotionsInit=${3:-$FARM_HEALTH_POTIONS}    # Target health potions
-targetManaPotionsInit=${4:-$FARM_MANA_POTIONS}        # Target mana potions
+targetHealthPotionsInit=${2:-$FARM_HEALTH_POTIONS}    # Target health potions
+targetManaPotionsInit=${3:-$FARM_MANA_POTIONS}        # Target mana potions
 
 # Load configuration
 source "$(dirname "$0")/config/variables.sh"
@@ -27,7 +26,7 @@ buyPotsCycleAt=50   # Buy potions every 150 cycles
 pauseFlagFile="/tmp/mubot_paused"
 # Aux variables
 recyclerCounter=$recyclerCounterInit
-buyPotsCounter=$buyPotsCycleAtInit
+buyPotsCounter=0
 targetHealthPotions=$targetHealthPotionsInit
 targetManaPotions=$targetManaPotionsInit
 key_action="start"
@@ -58,7 +57,7 @@ while true; do
 
   # BUY POTIONS TO SURVIVE.
   # ========================
-  if [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
+  if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
     echo "Buying potions..."
     key_action="start"
     # Background execution

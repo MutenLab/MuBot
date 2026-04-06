@@ -5,11 +5,10 @@
 # By pressing "p" key, pauses execution.
 # By pressing "c" key during autoSkill, cancels current cycle.
 # Other keys cancel process.
-# Parameters: [buyPotsCycleAtInit=0] [skipBuffOnStart=false]
+# Parameters: [skipBuffOnStart=false]
 # ==================================================
 
-buyPotsCycleAtInit=${1:-0}      # Start cycle for buy potions action
-skipBuffOnStart=${2:-false}     # Skip buff on first run (true/false)
+skipBuffOnStart=${1:-false}     # Skip buff on first run (true/false)
 
 # Load configuration and utilities
 source "$(dirname "$0")/config/variables.sh"
@@ -28,7 +27,7 @@ pauseFlagFile="/tmp/mubot_paused"
 buffEnabled=true           # Set to false to disable Divine buff
 
 # Aux variables
-buyPotsCounter=$buyPotsCycleAtInit
+buyPotsCounter=0
 doGameCheck=false          # Alternates between recycle+validation and game check
 
 # Track last buff time - set to current time if skipping buff on start, otherwise 0
@@ -88,7 +87,7 @@ while true; do
 
   # BUY POTIONS TO SURVIVE.
   # ===============================================
-  if [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
+  if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
     performBuyPotions $healthPotions $manaPotions
     if [ $? -ne 0 ]; then
       shouldExit=true

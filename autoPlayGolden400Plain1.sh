@@ -7,7 +7,6 @@
 # ==================================================
 
 recyclerCounterInit=${1:-0}     # Start cycle for recycler action. 0
-buyPotsCycleAtInit=${2:-0}      # Start cycle for buy potions action. 0
 
 # Load configuration and utilities
 source "$(dirname "$0")/config/variables.sh"
@@ -27,7 +26,7 @@ devilSquareEnabled=true    # Set to false to disable Devil Square event
 bloodCastleEnabled=true    # Set to false to disable Blood Castle event
 # Aux variables
 recyclerCounter=$recyclerCounterInit
-buyPotsCounter=$buyPotsCycleAtInit
+buyPotsCounter=0
 wireIndex=0                 # Start at first element of wireSequence
 lastBuffTime=0             # Track last buff time (0 = never buffed)
 forceBuff=false            # Flag to force buff on next cycle
@@ -49,7 +48,7 @@ while true; do
 
   # BUY POTIONS TO SURVIVE.
   # ===============================================
-  if [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
+  if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
     performBuyPotions $FARM_HEALTH_POTIONS $FARM_MANA_POTIONS
     if [ $? -ne 0 ]; then
       exit 0

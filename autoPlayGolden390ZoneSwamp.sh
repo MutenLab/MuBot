@@ -5,12 +5,11 @@
 # By pressing "n" key, skips to next loop.
 # By pressing "b" key, skips to next loop and forces buff.
 # Other keys cancels process.
-# Parameters: [recyclerCounterInit=0] [buyPotsCycleAtInit=0] [skipBuffOnStart=false]
+# Parameters: [recyclerCounterInit=0] [skipBuffOnStart=false]
 # ==================================================
 
 recyclerCounterInit=${1:-0}     # Start cycle for recycler action. 0
-buyPotsCycleAtInit=${2:-0}      # Start cycle for buy potions action. 0
-skipBuffOnStart=${3:-false}     # Skip buff on first run (true/false)
+skipBuffOnStart=${2:-false}     # Skip buff on first run (true/false)
 
 # Load configuration and utilities
 source "$(dirname "$0")/config/variables.sh"
@@ -30,7 +29,7 @@ bloodCastleEnabled=true    # Set to false to disable Blood Castle event
 buffEnabled=false           # Set to false to disable Divine buff
 # Aux variables
 recyclerCounter=$recyclerCounterInit
-buyPotsCounter=$buyPotsCycleAtInit
+buyPotsCounter=0
 wireIndex=0                # Start at first element of wireSequence
 
 # Track last buff time - set to current time if skipping buff on start, otherwise 0
@@ -59,7 +58,7 @@ while true; do
 
   # BUY POTIONS TO SURVIVE.
   # ===============================================
-  if [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
+  if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
     performBuyPotions $FARM_HEALTH_POTIONS $FARM_MANA_POTIONS
     if [ $? -ne 0 ]; then
       exit 0

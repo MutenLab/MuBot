@@ -5,10 +5,7 @@
 # By pressing "p" key, pauses execution.
 # By pressing "c" key during autoSkill, cancels current cycle.
 # Other keys cancel process.
-# Parameters: [buyPotsCycleAtInit=0]
 # ==================================================
-
-buyPotsCycleAtInit=${1:-0}      # Start cycle for buy potions action
 
 # Load configuration and utilities
 source "$(dirname "$0")/config/variables.sh"
@@ -28,7 +25,7 @@ devilSquareEnabled=true    # Set to false to disable Devil Square
 bloodCastleEnabled=true    # Set to false to disable Blood Castle
 
 # Aux variables
-buyPotsCounter=$buyPotsCycleAtInit
+buyPotsCounter=0
 
 # Aux variables for buff timing
 lastBuffTime=0

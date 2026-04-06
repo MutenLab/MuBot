@@ -288,7 +288,7 @@ while true; do
     previousBoss=0
 
     # Buy potions every X cycles
-    if [ $buyPotsCounter -ge $buyPotsCycleAt ]; then
+    if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -ge $buyPotsCycleAt ]; then
         # Read current potion counts
         currentHP=$($PROJECT_DIR/bash/utils/readNumbers.sh 792 1046 61 22) # Migrated
         currentMP=$($PROJECT_DIR/bash/utils/readNumbers.sh 891 1046 61 22) # Migrated
