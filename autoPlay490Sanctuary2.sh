@@ -23,8 +23,8 @@ source $PROJECT_DIR/bash/utils/eventUtils.sh
 echo "[$(date '+%H:%M:%S')] Starting auto play at Sanctuary 2. Press key to cancel..."
 # Constants for configuration
 buyPotsCycleAt=60     # Buy potions every 60 cycles
-healthPotions=4500    # Health pots to buy
-manaPotions=2500      # Mana pots to buy
+healthPotions=$SANCTUARY_HEALTH_POTIONS
+manaPotions=$SANCTUARY_MANA_POTIONS
 pauseFlagFile="/tmp/mubot_paused"
 
 # Event flags

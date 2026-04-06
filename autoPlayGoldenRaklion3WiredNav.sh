@@ -19,8 +19,8 @@ source $PROJECT_DIR/bash/utils/eventUtils.sh
 echo "[$(date '+%H:%M:%S')] Starting auto play at Raklion 3 golden zone. Press key to cancel..."
 # Constants for configuration
 buyPotsCycleAt=200       # Buy potions every 200 cycles
-healthPotions=3000       # Health pots to buy
-manaPotions=3000         # Mana pots to buy
+healthPotions=$FARM_HEALTH_POTIONS
+manaPotions=$FARM_MANA_POTIONS
 # Wire sequence - edit this array to define the order of wires to use
 wireSequence=(1 2 3)     # Cycles through wires 1, 2, 3
 pauseFlagFile="/tmp/mubot_paused"

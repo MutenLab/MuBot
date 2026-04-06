@@ -20,8 +20,8 @@ echo "[$(date '+%H:%M:%S')] Starting auto play at 410 mob zone. Press key to can
 
 # Constants for configuration
 buyPotsCycleAt=6      # Buy potions every 6 cycles
-healthPotions=2600    # Health pots to buy
-manaPotions=2000      # Mana pots to buy
+healthPotions=$FARM_HEALTH_POTIONS
+manaPotions=$FARM_MANA_POTIONS
 pauseFlagFile="/tmp/mubot_paused"
 
 # Buff settings

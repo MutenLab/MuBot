@@ -57,6 +57,10 @@ use.immortal.satan=true
 quick.buff=false
 pickup.items.boss=10
 pickup.items.golden=4
+farm.health.potions=2500
+farm.mana.potions=2000
+sanctuary.health.potions=3000
+sanctuary.mana.potions=3000
 ```
 
 This file is gitignored — each computer needs its own. If omitted, the project path is auto-detected from the script location.
@@ -83,7 +87,11 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `plan.after.devil.square` | Plan to set after Devil Square (0=no change, 1=plan 1, 2=plan 2) | `2` |
 | `plan.before.blood.castle` | Plan to set before Blood Castle (0=no change, 1=plan 1, 2=plan 2) | `2` |
 | `plan.after.blood.castle` | Plan to set after Blood Castle (0=no change, 1=plan 1, 2=plan 2) | `0` |
+| `farm.health.potions` | Target health potions to buy during farming runs | `2500` |
+| `farm.mana.potions` | Target mana potions to buy during farming runs | `2000` |
 | `sanctuary.wires` | Wire sequence for sanctuary boss farming (comma-separated, e.g., `1,2,3` or `2`) | `1,2` |
+| `sanctuary.health.potions` | Target health potions to buy during sanctuary runs | `3000` |
+| `sanctuary.mana.potions` | Target mana potions to buy during sanctuary runs | `3000` |
 
 ### 5. Update configuration
 

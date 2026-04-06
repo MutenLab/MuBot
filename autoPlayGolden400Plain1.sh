@@ -50,7 +50,7 @@ while true; do
   # BUY POTIONS TO SURVIVE.
   # ===============================================
   if [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
-    performBuyPotions 3000 1700
+    performBuyPotions $FARM_HEALTH_POTIONS $FARM_MANA_POTIONS
     if [ $? -ne 0 ]; then
       exit 0
     fi

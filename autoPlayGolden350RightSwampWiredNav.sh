@@ -8,8 +8,8 @@
 
 recyclerCounterInit=${1:-0}     # Start cycle for recycler action. 0
 buyPotsCycleAtInit=${2:-0}      # Start cycle for buy potions action. 0
-targetHealthPotionsInit=${3:-3465}    # Target health potions. 3465
-targetManaPotionsInit=${4:-1980}      # Target mana potions. 1980
+targetHealthPotionsInit=${3:-$FARM_HEALTH_POTIONS}    # Target health potions
+targetManaPotionsInit=${4:-$FARM_MANA_POTIONS}        # Target mana potions
 wireToAvoid=${5:-0}             # Wire to avoid (0 = none, 1-3 = wire number to skip)
 
 # Load configuration

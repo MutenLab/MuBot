@@ -74,8 +74,8 @@ buffInterval=1620  # 27 minutes in seconds
 
 # Potion buying settings
 buyPotsCycleAt=10     # Buy potions every 10 cycles
-healthPotions=2500    # Health pots to buy
-manaPotions=2500      # Mana pots to buy
+healthPotions=$SANCTUARY_HEALTH_POTIONS
+manaPotions=$SANCTUARY_MANA_POTIONS
 buyPotsCounter=0      # Current cycle counter
 
 # Event flags

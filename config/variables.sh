@@ -31,6 +31,10 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     EVENT_DS_MAX_FAILS="$(grep '^event.devil.square.max.fails=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     EVENT_BC_MAX_FAILS="$(grep '^event.blood.castle.max.fails=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     SANCTUARY_WIRES="$(grep '^sanctuary.wires=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    SANCTUARY_HEALTH_POTIONS="$(grep '^sanctuary.health.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    SANCTUARY_MANA_POTIONS="$(grep '^sanctuary.mana.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    FARM_HEALTH_POTIONS="$(grep '^farm.health.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    FARM_MANA_POTIONS="$(grep '^farm.mana.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
 fi
 : "${PROJECT_DIR:=$_PROJECT_ROOT}"
 : "${QUICK_BUFF:=false}"
@@ -53,6 +57,10 @@ fi
 : "${EVENT_DS_MAX_FAILS:=3}"
 : "${EVENT_BC_MAX_FAILS:=3}"
 : "${SANCTUARY_WIRES:=1,2}"
+: "${SANCTUARY_HEALTH_POTIONS:=3000}"
+: "${SANCTUARY_MANA_POTIONS:=3000}"
+: "${FARM_HEALTH_POTIONS:=2500}"
+: "${FARM_MANA_POTIONS:=2000}"
 export PROJECT_DIR
 export QUICK_BUFF
 export PICKUP_ITEMS_BOSS
@@ -74,6 +82,10 @@ export EVENT_BC_MINUTES_END
 export EVENT_DS_MAX_FAILS
 export EVENT_BC_MAX_FAILS
 export SANCTUARY_WIRES
+export SANCTUARY_HEALTH_POTIONS
+export SANCTUARY_MANA_POTIONS
+export FARM_HEALTH_POTIONS
+export FARM_MANA_POTIONS
 unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings

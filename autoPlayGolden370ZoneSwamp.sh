@@ -8,8 +8,8 @@
 
 recyclerCounterInit=${1:-0}     # Start cycle for recycler action. 0
 buyPotsCycleAtInit=${2:-0}      # Start cycle for buy potions action. 0
-targetHealthPotionsInit=${3:-3465}    # Target health potions. 3465
-targetManaPotionsInit=${4:-1980}      # Target mana potions. 1980
+targetHealthPotionsInit=${3:-$FARM_HEALTH_POTIONS}    # Target health potions
+targetManaPotionsInit=${4:-$FARM_MANA_POTIONS}        # Target mana potions
 smallPath=${5:-false}           # Small path doesn't relocate at center. false
 avoidReposition=${6:-false}     # Avoid reposition. false
 

@@ -4,8 +4,8 @@
 source $PROJECT_DIR/config/variables.sh
 
 # Target potion counts (accept as parameters with defaults)
-TARGET_HEALTH_POTIONS=${1:-2200}
-TARGET_MANA_POTIONS=${2:-1800}
+TARGET_HEALTH_POTIONS=${1:-$FARM_HEALTH_POTIONS}
+TARGET_MANA_POTIONS=${2:-$FARM_MANA_POTIONS}
 POTIONS_PER_BUY=99
 
 # Read current potion counts from screen

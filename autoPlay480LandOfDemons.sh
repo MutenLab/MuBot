@@ -24,8 +24,8 @@ source $PROJECT_DIR/bash/utils/eventUtils.sh
 echo "[$(date '+%H:%M:%S')] Starting auto play at Land of Demons. Press key to cancel..."
 # Constants for configuration
 buyPotsCycleAt=100    # Buy potions every X cycles
-healthPotions=3500    # Health pots to buy
-manaPotions=2700      # Mana pots to buy
+healthPotions=$FARM_HEALTH_POTIONS
+manaPotions=$FARM_MANA_POTIONS
 pauseFlagFile="/tmp/mubot_paused"
 
 # Event flags

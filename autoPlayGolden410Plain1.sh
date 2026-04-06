@@ -22,8 +22,8 @@ source $PROJECT_DIR/bash/utils/eventUtils.sh
 echo "[$(date '+%H:%M:%S')] Starting auto play. Press key to cancel..."
 # Constants for configuration
 buyPotsCycleAt=100    # Buy potions every 200 cycles
-healthPotions=2400    # Health pots to buy
-manaPotions=1600      # Mana pots to buy
+healthPotions=$FARM_HEALTH_POTIONS
+manaPotions=$FARM_MANA_POTIONS
 # Wire sequence - edit this array to define the order of wires to use
 wireSequence=(3 4 5)  # Example: cycles through wires 6,5,4
 pauseFlagFile="/tmp/mubot_paused"
