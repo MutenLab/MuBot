@@ -9,6 +9,7 @@
 # ==================================================
 
 disableBuff=${1:-false}         # Disable buff entirely (true/false)
+initialBuyPotsCounter=${2:-0}   # Starting buy pots counter (pass 6 to buy on first cycle)
 
 # Load configuration and utilities
 source "$(dirname "$0")/config/variables.sh"
@@ -36,7 +37,7 @@ devilSquareEnabled=true    # Set to false to disable Devil Square
 bloodCastleEnabled=true    # Set to false to disable Blood Castle
 
 # Aux variables
-buyPotsCounter=0
+buyPotsCounter=$initialBuyPotsCounter
 
 # Aux variables for buff timing
 lastBuffTime=0
