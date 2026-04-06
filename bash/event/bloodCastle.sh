@@ -15,10 +15,6 @@ sleep 15
 # Click on last level
 tap_event_last_level
 sleep 0.5
-screenshotName="BC_$(date '+%H.%M').png"
-adb_screencap > "$HOME/Desktop/$screenshotName"
-echo "[$(date '+%H:%M:%S')] Screenshot saved: $screenshotName"
-sleep 0.5
 # Enter button
 tap_event_enter
 sleep 5
