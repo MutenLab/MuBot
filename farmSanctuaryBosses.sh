@@ -1,22 +1,20 @@
 #!/bin/bash
 # FARM SANCTUARY BOSSES
-# Usage: farmSanctuaryBosses.sh <level>  (1-6, default: 2)
+# Sanctuary level is read from local.properties (sanctuary.level)
 # Travels through all 12 boss locations, fights alive bosses, skips dead ones.
 # Alternates between wire 1 and wire 2 each cycle.
 # Checks for Devil Square and Blood Castle events at scheduled times.
 # Keys: 'p'=pause(5min), 's'=stop(15min), 'n'=skip boss, 'q'=force Devil Square, 'r'=force Blood Castle, other=abort
 # ==================================================
 
-SANCTUARY_LEVEL=${1:-2}
+# Load configuration and utilities
+source "$(dirname "$0")/config/variables.sh"
 
 # Validate level
 if [ "$SANCTUARY_LEVEL" -lt 1 ] || [ "$SANCTUARY_LEVEL" -gt 6 ]; then
     echo "Error: Invalid sanctuary level: $SANCTUARY_LEVEL (must be 1-6)"
     exit 1
 fi
-
-# Load configuration and utilities
-source "$(dirname "$0")/config/variables.sh"
 source $PROJECT_DIR/bash/utils/farmingUtils.sh
 source $PROJECT_DIR/bash/utils/eventUtils.sh
 source $PROJECT_DIR/config/sanctuary_bosses.sh
