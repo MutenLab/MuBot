@@ -280,7 +280,7 @@ else
 fi
 
 # Per-instance temp directory inside the project (avoids collisions between instances)
-MUBOT_TEMP_DIR="$_PROJECT_ROOT/.tmp"
+MUBOT_TEMP_DIR="$PROJECT_DIR/.tmp"
 mkdir -p "$MUBOT_TEMP_DIR"
 
 # Clean up stale temp files from previous runs
