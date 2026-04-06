@@ -244,14 +244,13 @@ tap_party_pop_up_leave() { adb_tap 1570 870; } # Migrated
 tap_left_quest_tab() { adb_tap 30 145; } # Migrated
 tap_left_team_tab() { adb_tap 30 300; } # Migrated
 
-tap_close_expired_pop_up() { adb_tap 2160 380; }
+tap_close_expired_pop_up() { adb_tap 1492 303; } # Migrated
 tap_close_auto_play_pop_up() { adb_tap 1675 165; } # Migrated
 tap_character_selection_start_game() { adb_tap 960 995; } # Migrated
 tap_login_start_game() { adb_tap 960 805; } # Migrated
 tap_update_confirm() { adb_tap 1104 639; } # Migrated
-tap_close_ads() { adb_tap 1890 40; } # PENDING TO VALIDATE
 tap_auto_party_box() { adb_tap 140 338; } # Migrated
-tap_startup_close_ads() { adb_tap 1889 76; }
+tap_startup_close_ads() { adb_tap 1889 76; } # Migrated
 
 # Satan Imp Settings
 # ==================
