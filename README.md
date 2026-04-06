@@ -53,12 +53,13 @@ Create a `local.properties` file at the project root with your local project dir
 project.dir=/path/to/your/MuBot
 emulator.id=127.0.0.1:5555
 game.package=com.tszz.gpen.nowgg
-use.immortal.satan=true
 quick.buff=false
+use.immortal.satan=true
 pickup.items.boss=10
 pickup.items.golden=4
 farm.health.potions=2500
 farm.mana.potions=2000
+sanctuary.wires=1,2
 sanctuary.health.potions=3000
 sanctuary.mana.potions=3000
 ```
@@ -75,6 +76,11 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `pickup.items.boss` | Seconds to wait picking up items after killing a boss | `10` |
 | `pickup.items.golden` | Seconds to wait picking up items after killing a golden monster | `4` |
 | `autoPlay.attack.timeout` | Timeout in seconds for the smartAutoPlay attack script | `240` |
+| `farm.health.potions` | Target health potions to buy during farming runs | `2500` |
+| `farm.mana.potions` | Target mana potions to buy during farming runs | `2000` |
+| `sanctuary.wires` | Wire sequence for sanctuary boss farming (comma-separated, e.g., `1,2,3` or `2`) | `1,2` |
+| `sanctuary.health.potions` | Target health potions to buy during sanctuary runs | `3000` |
+| `sanctuary.mana.potions` | Target mana potions to buy during sanctuary runs | `3000` |
 | `event.devil.square.hours` | Hours when Devil Square is available (comma-separated) | `0,2,4,6` |
 | `event.devil.square.minutes.start` | Start minute of the Devil Square window | `0` |
 | `event.devil.square.minutes.end` | End minute of the Devil Square window | `14` |
@@ -87,11 +93,6 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `plan.after.devil.square` | Plan to set after Devil Square (0=no change, 1=plan 1, 2=plan 2) | `2` |
 | `plan.before.blood.castle` | Plan to set before Blood Castle (0=no change, 1=plan 1, 2=plan 2) | `2` |
 | `plan.after.blood.castle` | Plan to set after Blood Castle (0=no change, 1=plan 1, 2=plan 2) | `0` |
-| `farm.health.potions` | Target health potions to buy during farming runs | `2500` |
-| `farm.mana.potions` | Target mana potions to buy during farming runs | `2000` |
-| `sanctuary.wires` | Wire sequence for sanctuary boss farming (comma-separated, e.g., `1,2,3` or `2`) | `1,2` |
-| `sanctuary.health.potions` | Target health potions to buy during sanctuary runs | `3000` |
-| `sanctuary.mana.potions` | Target mana potions to buy during sanctuary runs | `3000` |
 
 ### 5. Update configuration
 
