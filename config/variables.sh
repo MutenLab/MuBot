@@ -278,3 +278,6 @@ if [ "$USE_IMMORTAL_SATAN" = true ]; then
 else
     satanImpType="satan"
 fi
+
+# Clean up stale temp files from previous runs
+rm -f /tmp/mubot_buff_*.png 2>/dev/null
