@@ -18,9 +18,9 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [ ] `python/debug/debugBossHealthBar.py`
 
 ### Utility Scripts
-- [~] `bash/utils/visionUtils.sh` — remaining: checkRemainTimeForEventToEnd
-- [~] `bash/utils/farmingUtils.sh` — remaining: other coordinate-dependent functions
-- [~] `bash/utils/eventUtils.sh` — remaining: runWhileEvent tap coordinate
+- [x] `bash/utils/visionUtils.sh`
+- [x] `bash/utils/farmingUtils.sh`
+- [x] `bash/utils/eventUtils.sh`
 - [x] `bash/attack/smartAutoPlay.sh` — no migration needed
 - [x] `bash/attack/autoPlaySkill.sh` — no migration needed
 - [x] `bash/detection/checkBossStatus.sh` — no migration needed
@@ -139,5 +139,5 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [ ] `autoPlay450CorruptedLands.sh`
 - [ ] `autoPlay440Sanctuary1.sh`
 - [ ] `autoPlay410MobPlain1.sh`
-- [ ] `autoPlayGoldenAbyssalFerea.sh`
-- [ ] `autoPlayMobAbyssalFerea.sh`
+- [x] `autoPlayGoldenAbyssalFerea.sh`
+- [x] `autoPlayMobAbyssalFerea.sh`

@@ -182,46 +182,6 @@ readTextFromZone() {
 
 # Function to check remaining time for event to end
 # Reads red text at position 718,450 in mm:ss format
-# Returns: remaining time in seconds, or -1 if unable to read
-# Exit code: 0 if time read successfully, 1 if failed
-checkRemainTimeForEventToEnd() {
-    local X=718
-    local Y=450
-    local WIDTH=120
-    local HEIGHT=40
-
-    # Get OCR script path
-    local OCR_SCRIPT="$PROJECT_DIR/python/readTextOCR.py"
-
-    # Capture screenshot, crop, isolate red channel, and OCR
-    local DETECTED_TEXT
-    DETECTED_TEXT=$(adb_screencap | \
-        magick png:- -crop ${WIDTH}x${HEIGHT}+${X}+${Y} \
-        -channel R -separate \
-        -negate \
-        -contrast-stretch 0 \
-        -threshold 60% \
-        -scale 300% \
-        png:- | \
-        python3 "$OCR_SCRIPT" --stdin 2>/dev/null)
-
-    # Try to extract mm:ss or mm.ss pattern (OCR may read colon as dot)
-    local timeMatch
-    timeMatch=$(echo "$DETECTED_TEXT" | grep -oE '[0-9]{1,2}[:.][0-9]{2}')
-
-    if [[ -n "$timeMatch" ]]; then
-        local minutes=$(echo "$timeMatch" | sed 's/[:.]/\n/' | head -1)
-        local seconds=$(echo "$timeMatch" | sed 's/[:.]/\n/' | tail -1)
-        minutes=$((10#$minutes))
-        seconds=$((10#$seconds))
-        local totalSeconds=$(( minutes * 60 + seconds ))
-        echo "$totalSeconds"
-        return 0
-    else
-        echo "-1"
-        return 1
-    fi
-}
 
 # Function to check remaining time for event to start
 # Reads red text at position (TBD) in mm:ss format

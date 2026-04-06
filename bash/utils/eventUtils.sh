@@ -229,18 +229,11 @@ runWhileEvent() {
     local tapInterval=3
     local eventDuration=600  # 10 minutes default
 
-    # Try to read timer from screen
-    local readTime=$(checkRemainTimeForEventToEnd)
-    if [ $? -eq 0 ] && [ "$readTime" -gt 0 ] && [ "$readTime" -le 600 ]; then
-        eventDuration=$readTime
-        echo "[$(date '+%H:%M:%S')] Running event for ${eventDuration}s (from screen)..."
-    else
-        # Calculate from start time
-        local now=$(date +%s)
-        local elapsedSinceStart=$((now - startEpoch))
-        eventDuration=$((600 - elapsedSinceStart))
-        echo "[$(date '+%H:%M:%S')] Running event for ${eventDuration}s (calculated)..."
-    fi
+    # Calculate remaining time from start time
+    local now=$(date +%s)
+    local elapsedSinceStart=$((now - startEpoch))
+    eventDuration=$((600 - elapsedSinceStart))
+    echo "[$(date '+%H:%M:%S')] Running event for ${eventDuration}s..."
 
     local elapsed=0
     local recycleInterval=180  # Recycle every 3 minutes
@@ -256,7 +249,7 @@ runWhileEvent() {
             echo "[$(date '+%H:%M:%S')] Recycling inventory... (${elapsed}s/${eventDuration}s)"
             $PROJECT_DIR/bash/actions/recycle.sh
             sleep 1
-            adb_tap 1200 600
+            tap_close_by_outside
             sinceLastRecycle=0
         fi
     done
