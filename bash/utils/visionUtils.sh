@@ -535,10 +535,10 @@ isEventOver() {
 isExpiredPopupVisible() {
     local MARKER_IMAGE="$PROJECT_DIR/img/expired_popup_marker.png"
 
-    local X=1585
-    local Y=865
-    local WIDTH=190
-    local HEIGHT=42
+    local X=1030
+    local Y=700
+    local WIDTH=150
+    local HEIGHT=28
 
     local result=$(compareScreenRegionWithImage "$X" "$Y" "$WIDTH" "$HEIGHT" "$MARKER_IMAGE")
 

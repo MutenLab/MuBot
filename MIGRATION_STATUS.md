@@ -18,7 +18,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [ ] `python/debug/debugBossHealthBar.py`
 
 ### Utility Scripts
-- [~] `bash/utils/visionUtils.sh` — remaining: isExpiredPopupVisible, checkRemainTimeForEventToEnd
+- [~] `bash/utils/visionUtils.sh` — remaining: checkRemainTimeForEventToEnd
 - [~] `bash/utils/farmingUtils.sh` — remaining: other coordinate-dependent functions
 - [~] `bash/utils/eventUtils.sh` — remaining: runWhileEvent tap coordinate
 - [x] `bash/attack/smartAutoPlay.sh` — no migration needed
@@ -121,7 +121,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [x] `img/attack_buff.png`
 - [x] `img/shield_buff.png`
 - [x] `img/open_now_button_marker.png`
-- [ ] `img/expired_popup_marker.png`
+- [x] `img/expired_popup_marker.png`
 
 ### Main AutoPlay Scripts
 - [x] `autoPlayGolden510EversongForest.sh` — no migration needed
