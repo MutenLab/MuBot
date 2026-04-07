@@ -24,8 +24,4 @@ sleep 0.5
 tap_closeMap
 
 # Use travel time to perform recycle + satan validation + game check + location validation
-runDuringTravelling 44 true "$validationType" true $LOC_FOGGY_FOREST  # remainTime=44s, performRecycle=true, validationType, performGameValidation=true, expectedLocation=FoggyForest
-exit_code=$?
-if [ $exit_code -ne 0 ]; then
-    exit $exit_code
-fi
+runDuringTravelling 44 true "$validationType" true  # remainTime=44s, performRecycle=true, validationType, performGameValidation=true
