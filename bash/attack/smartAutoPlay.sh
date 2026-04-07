@@ -113,6 +113,8 @@ while true; do
                 # Click auto button to grab items
                 tap_auto
                 sleep $grabItemsTime
+                # Click auto again to make sure we stop auto
+                tap_auto
                 exit 0
             fi
         else
