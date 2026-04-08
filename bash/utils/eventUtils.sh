@@ -21,6 +21,51 @@ openDailyGoals() {
     tap_more_top_daily_goal
 }
 
+# Open Daily Goals and collect all chests (A through E)
+openDailyGoalsChests() {
+    openDailyGoals
+    sleep 1
+
+    # Chest A
+    tap_daily_goal_chest_a
+    sleep 0.5
+    tap_daily_goal_chest_claim
+    sleep 0.5
+    tap_daily_goal_chest_close
+    sleep 0.5
+
+    # Chest B
+    tap_daily_goal_chest_b
+    sleep 0.5
+    tap_daily_goal_chest_claim
+    sleep 0.5
+    tap_daily_goal_chest_close
+    sleep 0.5
+
+    # Chest C
+    tap_daily_goal_chest_c
+    sleep 0.5
+    tap_daily_goal_chest_claim
+    sleep 0.5
+    tap_daily_goal_chest_close
+    sleep 0.5
+
+    # Chest D
+    tap_daily_goal_chest_d
+    sleep 0.5
+    tap_daily_goal_chest_claim
+    sleep 0.5
+    tap_daily_goal_chest_close
+    sleep 0.5
+
+    # Chest E
+    tap_daily_goal_chest_e
+    sleep 0.5
+    tap_daily_goal_chest_claim
+    sleep 0.5
+    tap_daily_goal_chest_close
+}
+
 # Change auto-play plan
 # Parameters: $1 = plan number (1 = Evil Spirit, 2 = Blizzard)
 changePlan() {

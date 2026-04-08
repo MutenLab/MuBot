@@ -259,6 +259,13 @@ tap_event_kundun_trial_best_location() { adb_tap 840 430; } # Migrated
 tap_more_top_button() { adb_tap 1575 60; } # Migrated
 tap_more_top_daily_goal() { adb_tap 1030 170; } # Migrated
 tap_daily_goal_event_tab() { adb_tap 540 220; } # Migrated
+tap_daily_goal_chest_a() { adb_tap 1470 665; } # Migrated
+tap_daily_goal_chest_b() { adb_tap 1470 575; } # Migrated
+tap_daily_goal_chest_c() { adb_tap 1470 485; } # Migrated
+tap_daily_goal_chest_d() { adb_tap 1470 395; } # Migrated
+tap_daily_goal_chest_e() { adb_tap 1470 305; } # Migrated
+tap_daily_goal_chest_claim() { adb_tap 960 700; } # Migrated
+tap_daily_goal_chest_close() { adb_tap 1380 390; } # Migrated
 
 tap_mode_select()   { adb_tap 1415 1050; } # Migrated
 tap_mode_all()      { adb_tap 1415 1000; } # Migrated
