@@ -11,3 +11,5 @@ sleep 4
 $PROJECT_DIR/bash/actions/switchWire.sh 1 &
 switchWirePID=$!              # Save PID
 wait $switchWirePID           # Wait to ensure it's terminated
+sleep 3
+adb_tap 585 460
