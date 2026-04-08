@@ -41,6 +41,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [x] `bash/test/testDevilSquare.sh` — no migration needed
 - [x] `bash/test/testLeaveParty.sh` — no migration needed
 - [x] `bash/test/tapAt.sh` — no migration needed
+- [x] `bash/test/testFindDailyGoalEvent.sh` — new
 
 ### Actions
 - [x] `bash/actions/buyPotions.sh`
@@ -55,7 +56,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [x] `bash/actions/goToLandOfDemonsBuffSpot.sh` — no migration needed
 - [x] `bash/actions/goToKanturuRelics2BuffSpot.sh` — no migration needed
 - [x] `bash/actions/goToFoggyForestBuffSpot.sh` — no migration needed
-- [ ] `bash/actions/kundunTrial.sh` — NEEDS MIGRATION
+- [x] `bash/actions/kundunTrial.sh` — uses findAndTapDailyGoalEvent with icon detection
 
 ### Change Mode
 - [x] `bash/changeMode/toAll.sh`
@@ -122,6 +123,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [x] `img/shield_buff.png`
 - [x] `img/open_now_button_marker.png`
 - [x] `img/expired_popup_marker.png`
+- [x] `img/daily_goal/*.png` — 8 event icons for daily goal grid detection
 
 ### Main AutoPlay Scripts
 - [x] `autoPlayGolden530FoggyForest.sh` — no migration needed

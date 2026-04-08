@@ -589,12 +589,12 @@ findAndTapDailyGoalEvent() {
     local ICON_Y_ROW3=698
 
     # Tap centers for each cell
-    local TAP_X_COL0=500
-    local TAP_X_COL1=980
-    local TAP_Y_ROW0=320
-    local TAP_Y_ROW1=466
-    local TAP_Y_ROW2=612
-    local TAP_Y_ROW3=758
+    local TAP_X_COL0=730
+    local TAP_X_COL1=1300
+    local TAP_Y_ROW0=325
+    local TAP_Y_ROW1=475
+    local TAP_Y_ROW2=625
+    local TAP_Y_ROW3=775
 
     # Check each cell: (col0,row0) (col1,row0) (col0,row1) ... (col1,row3)
     local iconXList="$ICON_X_COL0 $ICON_X_COL1 $ICON_X_COL0 $ICON_X_COL1 $ICON_X_COL0 $ICON_X_COL1 $ICON_X_COL0 $ICON_X_COL1"

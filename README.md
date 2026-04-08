@@ -136,7 +136,9 @@ bot/
 │       ├── visionUtils.sh    # Screen reading, OCR, image comparison
 │       ├── farmingUtils.sh   # Buff, validation, party management
 │       └── eventUtils.sh     # Event timing and handling
-├── img/                      # Reference images for screen comparison
+├── img/
+│   ├── daily_goal/           # Daily Goal event icons for grid detection
+│   └── ...                   # Other reference images for screen comparison
 ├── autoPlay*.sh              # Main farming loop scripts
 ├── farmSanctuaryBosses.sh    # Sanctuary boss farming script
 └── MIGRATION_STATUS.md       # Resolution migration tracking
