@@ -7,10 +7,10 @@
 source $PROJECT_DIR/config/variables.sh
 
 # Health bar region coordinates
-X=1435
-Y=353
-WIDTH=120
-HEIGHT=2
+X=860
+Y=48
+WIDTH=280
+HEIGHT=14
 
 OUTPUT_FILE="$HOME/Desktop/health_bar_crop.png"
 

@@ -14,8 +14,8 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [x] `python/readTextOCR.py` — no migration needed
 - [x] `python/compareImages.py` — no migration needed
 - [x] `python/optimizeBossRouteOnSanctuaryMap.py` — no migration needed
-- [ ] `python/debug/debugBossColors.py`
-- [ ] `python/debug/debugBossHealthBar.py`
+- [x] `python/debug/debugBossColors.py`
+- [x] `python/debug/debugBossHealthBar.py`
 
 ### Utility Scripts
 - [x] `bash/utils/visionUtils.sh`
@@ -26,7 +26,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [x] `bash/detection/checkBossStatus.sh` — no migration needed
 
 ### Tests
-- [ ] `bash/test/debugHealthBar.sh` — NEEDS MIGRATION (X=1435, Y=353)
+- [x] `bash/debug/debugHealthBar.sh` — moved from bash/test/
 - [x] `bash/test/checkBossHealth.sh` — new
 - [x] `bash/test/checkGoldenHealth.sh` — new
 - [x] `bash/test/checkCurrentLocation.sh` — new
@@ -79,7 +79,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [ ] `bash/teleport/toCorruptedLands.sh`
 - [ ] `bash/teleport/toRaklion3.sh`
 - [ ] `bash/teleport/toRaklion2.sh`
-- [ ] `bash/teleport/toAbyssalFerea.sh`
+- [x] `bash/teleport/toAbyssalFerea.sh`
 
 ### Travel
 - [x] `bash/travel/foggyForest/toMobsFromCenter.sh`
@@ -95,7 +95,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [ ] `bash/travel/corruptedLands/*.sh`
 - [ ] `bash/travel/landOfDemons/*.sh`
 - [ ] `bash/travel/plain1/*.sh`
-- [ ] `bash/travel/abyssalFerea/*.sh`
+- [x] `bash/travel/abyssalFerea/*.sh`
 
 ### Boss
 - [ ] `bash/boss/goToSwamp350Boss.sh`
@@ -124,6 +124,7 @@ Migration from **2992x1344** (Android Emulator) to **1920x1080** (BlueStacks).
 - [x] `img/expired_popup_marker.png`
 
 ### Main AutoPlay Scripts
+- [x] `autoPlayGolden530FoggyForest.sh` — no migration needed
 - [x] `autoPlayGolden510EversongForest.sh` — no migration needed
 - [x] `autoPlayMobFoggyForest.sh` — no migration needed
 - [x] `farmSanctuaryBosses.sh`
