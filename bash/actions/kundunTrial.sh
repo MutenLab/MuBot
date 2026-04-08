@@ -2,6 +2,7 @@
 
 # Load configuration
 source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/visionUtils.sh
 
 attackTime=20
 
@@ -9,35 +10,28 @@ attackTime=20
 tap_auto
 sleep 1
 tap_auto
+sleep 0.5
 
 # Click expand top buttons
-sleep 0.5
 tap_more_top_button
 sleep 0.5
 # Click Daily Goal
 tap_more_top_daily_goal
 
-# Click Kundun Trial button
-sleep 4
-# When are first tries
-# adb_tap 1215 773
-# When are last tries
-# adb_tap 1830 960
+# Find and tap Kundun Trial in the daily goals grid
+sleep 1
+findAndTapDailyGoalEvent $DG_KUNDUN_TRIAL
 
+# Enter event
 sleep 0.5
-# Click enter
-adb_tap 1960 1030
+tap_event_kundun_trial_enter
 sleep 8
 
 # Move to Kundun spot
-adb_tap 890 170
-sleep 1.9
-adb_tap 890 170
-sleep 1.9
-adb_tap 890 170
-sleep 1.9
-adb_tap 890 170
-sleep 1
+tap_openMap
+sleep 3
+tap_event_kundun_trial_best_location
+sleep 7
 
 # Auto attack
 tap_auto

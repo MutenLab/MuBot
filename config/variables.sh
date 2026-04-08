@@ -250,9 +250,11 @@ tap_close_by_outside() { adb_tap 460 560; } # Migrated
 tap_event_open_now() { adb_tap 233 318; } # Migrated
 tap_event_scoreboard_close() { adb_tap 1310 188; } # Migrated
 tap_event_last_level() { adb_tap 630 785; } # Migrated
-tap_event_enter()   { adb_tap 1100 785; } # Migrated
+tap_event_enter() { adb_tap 1100 785; } # Migrated
 tap_event_bc_best_location() { adb_tap 1138 533; } # Migrated
 tap_event_ds_best_location() { adb_tap 1100 525; } # Migrated
+tap_event_kundun_trial_enter() { adb_tap 1340 820; } # Migrated
+tap_event_kundun_trial_best_location() { adb_tap 840 430; } # Migrated
 
 tap_more_top_button() { adb_tap 1575 60; } # Migrated
 tap_more_top_daily_goal() { adb_tap 1030 170; } # Migrated

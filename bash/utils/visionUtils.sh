@@ -34,6 +34,18 @@ readonly LOC_BLOOD_CASTLE=20
 readonly LOC_ABYSSAL_FEREA=25
 readonly LOC_SANCTUARY=99
 
+# ============================================
+# Daily Goal Event Constants
+# ============================================
+readonly DG_MYSTICLAND_BOSS=1
+readonly DG_BLOOD_CASTLE=2
+readonly DG_COURAGE_TRIAL=3
+readonly DG_KUNDUN_TRIAL=4
+readonly DG_GOLDEN_MONSTER=5
+readonly DG_FIELD_BOSS=6
+readonly DG_DEVIL_SQUARE=7
+readonly DG_WARRIOR_QUEST=8
+
 # Script to check if a cropped zone has red tone dominance
 # Returns: "true" if red tones are dominant, "false" otherwise
 # Function to read numbers from a cropped screen region
@@ -529,4 +541,83 @@ isRecyclePopupVisible() {
     else
         return 1
     fi
+}
+
+# Function to find and tap a daily goal event by comparing icons in the grid
+# The Daily Goal window has a 2-column x 4-row grid of events
+# Parameters: $1 = Daily Goal constant (DG_KUNDUN_TRIAL, DG_BLOOD_CASTLE, etc.)
+# Returns: 0 if found and tapped, 1 if not found
+findAndTapDailyGoalEvent() {
+    local eventId=$1
+
+    if [[ -z "$eventId" ]]; then
+        echo "Error: Missing event. Usage: findAndTapDailyGoalEvent DG_EVENT" >&2
+        return 1
+    fi
+
+    # Map event constant to marker image file
+    local markerImage=""
+    case $eventId in
+        $DG_MYSTICLAND_BOSS) markerImage="mysticland_boss.png" ;;
+        $DG_BLOOD_CASTLE)    markerImage="blood_castle.png" ;;
+        $DG_COURAGE_TRIAL)   markerImage="courage_trial.png" ;;
+        $DG_KUNDUN_TRIAL)    markerImage="kundun_trial.png" ;;
+        $DG_GOLDEN_MONSTER)  markerImage="golden_monster.png" ;;
+        $DG_FIELD_BOSS)      markerImage="field_boss.png" ;;
+        $DG_DEVIL_SQUARE)    markerImage="devil_square.png" ;;
+        $DG_WARRIOR_QUEST)   markerImage="warrior_quest.png" ;;
+        *)
+            echo "Error: Unknown daily goal event '$eventId'" >&2
+            return 1
+            ;;
+    esac
+
+    local MARKER_PATH="$PROJECT_DIR/img/daily_goal/$markerImage"
+    if [[ ! -f "$MARKER_PATH" ]]; then
+        echo "Error: Marker image not found: $MARKER_PATH" >&2
+        return 1
+    fi
+
+    # Grid icon positions: 2 columns x 4 rows
+    # Icon size: 118x118
+    local ICON_SIZE=118
+    local ICON_X_COL0=260
+    local ICON_X_COL1=834
+    local ICON_Y_ROW0=260
+    local ICON_Y_ROW1=406
+    local ICON_Y_ROW2=552
+    local ICON_Y_ROW3=698
+
+    # Tap centers for each cell
+    local TAP_X_COL0=500
+    local TAP_X_COL1=980
+    local TAP_Y_ROW0=320
+    local TAP_Y_ROW1=466
+    local TAP_Y_ROW2=612
+    local TAP_Y_ROW3=758
+
+    # Check each cell: (col0,row0) (col1,row0) (col0,row1) ... (col1,row3)
+    local iconXList="$ICON_X_COL0 $ICON_X_COL1 $ICON_X_COL0 $ICON_X_COL1 $ICON_X_COL0 $ICON_X_COL1 $ICON_X_COL0 $ICON_X_COL1"
+    local iconYList="$ICON_Y_ROW0 $ICON_Y_ROW0 $ICON_Y_ROW1 $ICON_Y_ROW1 $ICON_Y_ROW2 $ICON_Y_ROW2 $ICON_Y_ROW3 $ICON_Y_ROW3"
+    local tapXList="$TAP_X_COL0 $TAP_X_COL1 $TAP_X_COL0 $TAP_X_COL1 $TAP_X_COL0 $TAP_X_COL1 $TAP_X_COL0 $TAP_X_COL1"
+    local tapYList="$TAP_Y_ROW0 $TAP_Y_ROW0 $TAP_Y_ROW1 $TAP_Y_ROW1 $TAP_Y_ROW2 $TAP_Y_ROW2 $TAP_Y_ROW3 $TAP_Y_ROW3"
+
+    local cell=0
+    while [ $cell -lt 8 ]; do
+        local ix=$(echo $iconXList | cut -d' ' -f$((cell+1)))
+        local iy=$(echo $iconYList | cut -d' ' -f$((cell+1)))
+        local tx=$(echo $tapXList | cut -d' ' -f$((cell+1)))
+        local ty=$(echo $tapYList | cut -d' ' -f$((cell+1)))
+
+        local result=$(compareScreenRegionWithImage $ix $iy $ICON_SIZE $ICON_SIZE "$MARKER_PATH")
+        if [[ "$result" == "similar" ]]; then
+            echo "[Daily Goal] Found event in cell $cell, tapping ($tx, $ty)" >&2
+            adb_tap $tx $ty
+            return 0
+        fi
+        cell=$((cell + 1))
+    done
+
+    echo "[Daily Goal] Event not found in any cell" >&2
+    return 1
 }
