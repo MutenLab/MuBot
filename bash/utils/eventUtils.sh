@@ -24,7 +24,7 @@ openDailyGoals() {
 # Open Daily Goals and collect all chests (A through E)
 openDailyGoalsChests() {
     openDailyGoals
-    sleep 1
+    sleep 0.5
 
     # Chest A
     tap_daily_goal_chest_a
@@ -64,6 +64,9 @@ openDailyGoalsChests() {
     tap_daily_goal_chest_claim
     sleep 0.5
     tap_daily_goal_chest_close
+    sleep 0.5
+
+    tap_daily_goal_close
 }
 
 # Change auto-play plan

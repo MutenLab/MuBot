@@ -259,6 +259,7 @@ tap_event_kundun_trial_best_location() { adb_tap 840 430; } # Migrated
 tap_more_top_button() { adb_tap 1575 60; } # Migrated
 tap_more_top_daily_goal() { adb_tap 1030 170; } # Migrated
 tap_daily_goal_event_tab() { adb_tap 540 220; } # Migrated
+tap_daily_goal_close() { adb_tap 1685 165; } # Migrated
 tap_daily_goal_chest_a() { adb_tap 1470 665; } # Migrated
 tap_daily_goal_chest_b() { adb_tap 1470 575; } # Migrated
 tap_daily_goal_chest_c() { adb_tap 1470 485; } # Migrated
