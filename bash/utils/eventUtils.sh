@@ -6,6 +6,21 @@
 # Load configuration
 source $PROJECT_DIR/config/variables.sh
 
+# Open the Daily Goals window from the top buttons menu
+openDailyGoals() {
+    # Auto attack to make sure top buttons are hidden
+    tap_auto
+    sleep 1
+    tap_auto
+    sleep 0.5
+
+    # Click expand top buttons
+    tap_more_top_button
+    sleep 0.5
+    # Click Daily Goal
+    tap_more_top_daily_goal
+}
+
 # Change auto-play plan
 # Parameters: $1 = plan number (1 = Evil Spirit, 2 = Blizzard)
 changePlan() {

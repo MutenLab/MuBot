@@ -8,8 +8,16 @@ source $PROJECT_DIR/bash/utils/eventUtils.sh
 # ================
 echo "[$(date '+%H:%M:%S')] Going to Devil Square..."
 $PROJECT_DIR/bash/actions/openEventWindow.sh
+# Open Daily Goals window
+openDailyGoals
+# Find and tap event in the daily goals grid
 sleep 1
-clickEventGoButton "devil"
+findAndTapDailyGoalEvent $DG_DEVIL_SQUARE
+if [ $? -ne 0 ]; then
+    echo "[$(date '+%H:%M:%S')] Devil Square event not found. Exiting."
+    exit 1
+fi
+# Wait to arrive
 sleep 12
 # Click on last level
 tap_event_last_level

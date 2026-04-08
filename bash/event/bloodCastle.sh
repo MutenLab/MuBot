@@ -8,9 +8,16 @@ source $PROJECT_DIR/bash/utils/eventUtils.sh
 # ENTER EVENT
 # ================
 echo "[$(date '+%H:%M:%S')] Going to Blood Castle..."
-$PROJECT_DIR/bash/actions/openEventWindow.sh
+# Open Daily Goals window
+openDailyGoals
+# Find and tap event in the daily goals grid
 sleep 1
-clickEventGoButton "blood"
+findAndTapDailyGoalEvent $DG_BLOOD_CASTLE
+if [ $? -ne 0 ]; then
+    echo "[$(date '+%H:%M:%S')] Blood Castle event not found. Exiting."
+    exit 1
+fi
+# Wait to arrive
 sleep 15
 # Click on last level
 tap_event_last_level
