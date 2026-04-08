@@ -1,4 +1,5 @@
 #!/bin/bash
+source $PROJECT_DIR/config/variables.sh
 # Use first argument to teleport or not
 teleport=${1:-true}
 # TELEPORT TO SWAMP OF PEACE
