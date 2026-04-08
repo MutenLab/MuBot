@@ -11,6 +11,8 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     PICKUP_ITEMS_BOSS="$(grep '^pickup.items.boss=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     PICKUP_ITEMS_GOLDEN="$(grep '^pickup.items.golden=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     AUTOPLAY_ATTACK_TIMEOUT="$(grep '^autoPlay.attack.timeout=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    AUTOPLAY_HEALTHBAR_CHECK_INTERVAL="$(grep '^autoPlay.healthbar.check.interval=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    AUTOPLAY_HEALTHBAR_TIMES_KILLED="$(grep '^autoPlay.healthbar.times.killed=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     EMULATOR_ID="$(grep '^emulator.id=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     # Ensure ADB connection for TCP-based emulators (e.g., BlueStacks)
     if [[ "$EMULATOR_ID" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+$ ]]; then
@@ -43,6 +45,8 @@ fi
 : "${PICKUP_ITEMS_BOSS:=10}"
 : "${PICKUP_ITEMS_GOLDEN:=4}"
 : "${AUTOPLAY_ATTACK_TIMEOUT:=240}"
+: "${AUTOPLAY_HEALTHBAR_CHECK_INTERVAL:=1}"
+: "${AUTOPLAY_HEALTHBAR_TIMES_KILLED:=1}"
 : "${EMULATOR_ID:=127.0.0.1:5555}"
 : "${USE_IMMORTAL_SATAN:=true}"
 : "${GAME_PACKAGE:=com.tszz.gpen.nowgg}"
@@ -70,6 +74,8 @@ export QUICK_BUFF
 export PICKUP_ITEMS_BOSS
 export PICKUP_ITEMS_GOLDEN
 export AUTOPLAY_ATTACK_TIMEOUT
+export AUTOPLAY_HEALTHBAR_CHECK_INTERVAL
+export AUTOPLAY_HEALTHBAR_TIMES_KILLED
 export EMULATOR_ID
 export USE_IMMORTAL_SATAN
 export GAME_PACKAGE

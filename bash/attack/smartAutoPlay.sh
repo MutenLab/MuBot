@@ -27,7 +27,7 @@ fi
 
 # Constants
 SCRIPT_TIMEOUT=$AUTOPLAY_ATTACK_TIMEOUT  # Script timeout in seconds (from local.properties)
-CHECK_INTERVAL=1                 # Check status every X seconds
+CHECK_INTERVAL=$AUTOPLAY_HEALTHBAR_CHECK_INTERVAL  # Check status every X seconds (from local.properties)
 
 # Load utilities
 source $PROJECT_DIR/config/variables.sh
@@ -87,7 +87,7 @@ while true; do
 
     # Check script timeout
     if [ $scriptElapsedTime -ge $SCRIPT_TIMEOUT ]; then
-        echo "[$(date '+%H:%M:%S')] Script timeout reached (4 minutes)."
+        echo "[$(date '+%H:%M:%S')] Script timeout reached ($((SCRIPT_TIMEOUT / 60)) minutes)."
         exit 3
     fi
 
@@ -104,7 +104,7 @@ while true; do
         checkTargetAlive
         if [ $? -ne 0 ]; then
             ((noTargetCounter++))
-            if [ $noTargetCounter -ge 1 ]; then
+            if [ $noTargetCounter -ge $AUTOPLAY_HEALTHBAR_TIMES_KILLED ]; then
                 # Calculate kill time
                 killTime=$(($(date +%s) - scriptStartTime))
                 killMins=$((killTime / 60))

@@ -57,6 +57,9 @@ quick.buff=false
 use.immortal.satan=true
 pickup.items.boss=10
 pickup.items.golden=4
+autoPlay.attack.timeout=240
+autoPlay.healthbar.check.interval=1
+autoPlay.healthbar.times.killed=1
 farm.buy.potions=true
 farm.health.potions=2500
 farm.mana.potions=2000
@@ -78,6 +81,8 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `pickup.items.boss` | Seconds to wait picking up items after killing a boss | `10` |
 | `pickup.items.golden` | Seconds to wait picking up items after killing a golden monster | `4` |
 | `autoPlay.attack.timeout` | Timeout in seconds for the smartAutoPlay attack script | `240` |
+| `autoPlay.healthbar.check.interval` | Seconds between health bar checks in smartAutoPlay. Increase to `2` if the computer is under heavy load | `1` |
+| `autoPlay.healthbar.times.killed` | Number of consecutive "no health bar" detections before considering the target dead | `1` |
 | `farm.buy.potions` | Enable potion buying during farming runs | `true` |
 | `farm.health.potions` | Target health potions to buy during farming runs | `2500` |
 | `farm.mana.potions` | Target mana potions to buy during farming runs | `2000` |
