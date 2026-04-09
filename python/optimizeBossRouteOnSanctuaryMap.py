@@ -4,8 +4,9 @@ Calculate optimal boss route using greedy nearest-neighbor approach.
 At each step, go to the closest unvisited boss (comparing direct vs via entrance).
 
 Usage:
-    python3 optimizeBossRouteOnSanctuaryMap.py "1 3 5 7 9"
-    python3 optimizeBossRouteOnSanctuaryMap.py --stdin
+    python3 optimizeBossRouteOnSanctuaryMap.py E "1 3 5 7 9"
+    python3 optimizeBossRouteOnSanctuaryMap.py 3 "1 3 5 7 9"
+    python3 optimizeBossRouteOnSanctuaryMap.py E --stdin
 
 Output:
     Optimal route as space-separated boss numbers
@@ -137,7 +138,7 @@ def get_optimal_step_time(from_boss, to_boss):
     return (via_entrance, 'entrance')
 
 
-def find_greedy_route(alive_bosses):
+def find_greedy_route(alive_bosses, start='ENTRANCE'):
     """
     Greedy nearest-neighbor: always go to closest unvisited boss.
     O(n²) complexity - very fast.
@@ -148,14 +149,23 @@ def find_greedy_route(alive_bosses):
         return ([], 0, [])
 
     if len(alive_bosses) == 1:
-        time = get_direct_travel_time('ENTRANCE', alive_bosses[0])
-        return ([alive_bosses[0]], time, [{'from': 'ENTRANCE', 'to': alive_bosses[0], 'time': time, 'method': 'direct'}])
+        time = get_direct_travel_time(start, alive_bosses[0])
+        method = 'direct'
+        if start != 'ENTRANCE':
+            opt_time, opt_method = get_optimal_step_time(start, alive_bosses[0])
+            time = opt_time
+            method = opt_method
+        route = []
+        if method == 'entrance':
+            route.append('E')
+        route.append(alive_bosses[0])
+        return (route, time, [{'from': start, 'to': alive_bosses[0], 'time': time, 'method': method}])
 
     unvisited = set(alive_bosses)
     route = []
     details = []
     total_time = 0
-    current = 'ENTRANCE'
+    current = start
 
     while unvisited:
         # Find nearest unvisited boss
@@ -198,11 +208,22 @@ def main():
     read_from_stdin = '--stdin' in sys.argv
     verbose = '--verbose' in sys.argv or '-v' in sys.argv
 
+    args = [a for a in sys.argv[1:] if not a.startswith('-')]
+
+    # First positional arg: starting position (E or boss number)
+    start_str = args[0] if args else 'E'
+    if start_str.upper() == 'E':
+        start = 'ENTRANCE'
+    else:
+        try:
+            start = int(start_str)
+        except ValueError:
+            start = 'ENTRANCE'
+
     if read_from_stdin:
         alive_str = sys.stdin.read().strip()
     else:
-        args = [a for a in sys.argv[1:] if not a.startswith('-')]
-        alive_str = args[0] if args else ""
+        alive_str = args[1] if len(args) > 1 else ""
 
     alive_bosses = []
     for x in alive_str.split():
@@ -215,7 +236,7 @@ def main():
         print("")
         return
 
-    route, total_time, details = find_greedy_route(alive_bosses)
+    route, total_time, details = find_greedy_route(alive_bosses, start)
 
     if verbose:
         print(f"Alive bosses: {alive_bosses}", file=sys.stderr)

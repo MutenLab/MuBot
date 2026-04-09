@@ -141,6 +141,7 @@ bot/
 │   └── ...                   # Other reference images for screen comparison
 ├── autoPlay*.sh              # Main farming loop scripts
 ├── farmSanctuaryBosses.sh    # Sanctuary boss farming script
+├── farmSanctuaryBossesImproved.sh  # Improved version: re-scans after each boss fight
 └── MIGRATION_STATUS.md       # Resolution migration tracking
 ```
 
@@ -157,6 +158,9 @@ bash autoPlayMobFoggyForest.sh
 
 # Farm sanctuary bosses (level 1-6)
 bash farmSanctuaryBosses.sh 2
+
+# Farm sanctuary bosses with re-scan after each kill (adapts to boss respawns/kills by others)
+bash farmSanctuaryBossesImproved.sh 2
 ```
 
 ### Key controls during farming
