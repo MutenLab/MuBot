@@ -195,33 +195,15 @@ performBuffKanturuRelics2() {
     done
     wait $travelPID
 
-    # Give time to elf to buff character (7*6 seconds with buff checking and key monitoring)
-    elapsed=0
-    while [ $elapsed -lt 7 ]; do
-        read -t 1 -n 1 key
-        if [ $? = 0 ]; then
-            if [ "$key" = "p" ]; then
-                $PROJECT_DIR/bash/actions/wait.sh
-                wait_exit_code=$?
-                if [ $wait_exit_code -ne 1 ]; then
-                    return 1
-                fi
-            elif [ "$key" = "n" ]; then
-                echo " key pressed. Skipping buff..."
-                return 0
-            else
-                echo " key pressed. Aborting buff..."
-                return 1
-            fi
-        else
-            ((elapsed++))
-            # Check for buffs every second
-            checkBuff
-            if [ $? -eq 0 ]; then
-                echo "[$(date '+%H:%M:%S')] Buffs detected early at ${elapsed}s"
-                return 0
-            fi
+    # Wait for buffs (check every second, timeout 30s)
+    SECONDS=0
+    while [ $SECONDS -lt 30 ]; do
+        checkBuff
+        if [ $? -eq 0 ]; then
+            echo "[$(date '+%H:%M:%S')] Buffs detected at ${SECONDS}s"
+            return 0
         fi
+        sleep 1
     done
 
     echo "[$(date '+%H:%M:%S')] Buff timeout reached"
@@ -261,33 +243,15 @@ performBuffFoggyForest() {
         done
         wait $travelPID
 
-        # Give time to elf to buff character (7 seconds with buff checking and key monitoring)
-        elapsed=0
-        while [ $elapsed -lt 7 ]; do
-            read -t 1 -n 1 key
-            if [ $? = 0 ]; then
-                if [ "$key" = "p" ]; then
-                    $PROJECT_DIR/bash/actions/wait.sh
-                    wait_exit_code=$?
-                    if [ $wait_exit_code -ne 1 ]; then
-                        return 1
-                    fi
-                elif [ "$key" = "n" ]; then
-                    echo " key pressed. Skipping buff..."
-                    return 0
-                else
-                    echo " key pressed. Aborting buff..."
-                    return 1
-                fi
-            else
-                ((elapsed++))
-                # Check for buffs every second
-                checkBuff
-                if [ $? -eq 0 ]; then
-                    echo "[$(date '+%H:%M:%S')] Buffs detected early at ${elapsed}s"
-                    return 0
-                fi
+        # Wait for buffs (check every second, timeout 30s)
+        SECONDS=0
+        while [ $SECONDS -lt 30 ]; do
+            checkBuff
+            if [ $? -eq 0 ]; then
+                echo "[$(date '+%H:%M:%S')] Buffs detected at ${SECONDS}s"
+                return 0
             fi
+            sleep 1
         done
 
         echo "[$(date '+%H:%M:%S')] Buff timeout reached (attempt $attempt/$maxRetries)"
@@ -360,33 +324,15 @@ performBuffLandOfDemons() {
     done
     wait $travelPID
 
-    # Give time to elf to buff character (7 seconds with buff checking and key monitoring)
-    elapsed=0
-    while [ $elapsed -lt 7 ]; do
-        read -t 1 -n 1 key
-        if [ $? = 0 ]; then
-            if [ "$key" = "p" ]; then
-                $PROJECT_DIR/bash/actions/wait.sh
-                wait_exit_code=$?
-                if [ $wait_exit_code -ne 1 ]; then
-                    return 1
-                fi
-            elif [ "$key" = "n" ]; then
-                echo " key pressed. Skipping buff..."
-                return 0
-            else
-                echo " key pressed. Aborting buff..."
-                return 1
-            fi
-        else
-            ((elapsed++))
-            # Check for buffs every second
-            checkBuff
-            if [ $? -eq 0 ]; then
-                echo "[$(date '+%H:%M:%S')] Buffs detected early at ${elapsed}s"
-                return 0
-            fi
+    # Wait for buffs (check every second, timeout 30s)
+    SECONDS=0
+    while [ $SECONDS -lt 30 ]; do
+        checkBuff
+        if [ $? -eq 0 ]; then
+            echo "[$(date '+%H:%M:%S')] Buffs detected at ${SECONDS}s"
+            return 0
         fi
+        sleep 1
     done
 
     echo "[$(date '+%H:%M:%S')] Buff timeout reached"
