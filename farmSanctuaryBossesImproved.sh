@@ -265,7 +265,6 @@ navigateToBoss() {
         travel_exit_code=$?
     fi
 
-    echo "[$(date '+%H:%M:%S')] Arrived at $boss_name"
     return $travel_exit_code
 }
 
@@ -662,7 +661,6 @@ while true; do
 
         case $attack_exit_code in
             0)
-                echo "[$(date '+%H:%M:%S')] $boss_name killed!"
                 ((bossesKilled++))
                 currentPosition=$i
                 ;;
