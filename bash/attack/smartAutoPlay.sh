@@ -113,8 +113,9 @@ while true; do
                 # Click auto button to grab items
                 tap_auto
                 sleep $grabItemsTime
-                # Click auto again to make sure we stop auto
-                tap_auto
+                # Click attack to make sure we stop auto but we keep attacking if boss still alive
+                # due to low health bar giving false dead status
+                tap_attack
                 exit 0
             fi
         else
