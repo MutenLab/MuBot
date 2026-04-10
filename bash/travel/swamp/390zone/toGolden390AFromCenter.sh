@@ -1,10 +1,11 @@
 #!/bin/bash
-# MOVE TO GOLDEN 350 FROM RIGHT GATE
+# MOVE TO GOLDEN 390 A FROM CENTER
 # We assume character is initially on Swamp of peace
 # ==================================================
 
 # Load configuration
 source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
 
 # TO TOP GATE
 # ==============
@@ -20,4 +21,6 @@ adb_tap 1680 1095
 sleep 0.2
 # Close map
 tap_closeMap
-sleep 5
+
+# Use travel time to perform recycle
+runDuringTravelling 5 true "none"

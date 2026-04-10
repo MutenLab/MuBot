@@ -1,10 +1,11 @@
 #!/bin/bash
-# MOVE TO GOLDEN 350 FROM RIGHT GATE
-# We assume character is initially on Swamp of peace
+# MOVE TO GOLDEN 400 FROM CENTER
+# We assume character is initially on Plain of Four Winds 1
 # ==================================================
 
 # Load configuration
 source $PROJECT_DIR/config/variables.sh
+source $PROJECT_DIR/bash/utils/farmingUtils.sh
 
 sleep 2
 # TO GOLDEN 400
@@ -17,4 +18,6 @@ adb_tap 1740 1120
 sleep 0.5
 # Close map
 tap_closeMap
-sleep 30
+
+# Use travel time to perform recycle + game check
+runDuringTravelling 30 true "none" true

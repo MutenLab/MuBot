@@ -6,8 +6,6 @@
 # Other keys cancels process.
 # ==================================================
 
-recyclerCounterInit=${1:-0}     # Start cycle for recycler action. 0
-
 # Load configuration and utilities
 source "$(dirname "$0")/config/variables.sh"
 source $PROJECT_DIR/bash/utils/farmingUtils.sh
@@ -15,7 +13,6 @@ source $PROJECT_DIR/bash/utils/eventUtils.sh
 
 echo "[$(date '+%H:%M:%S')] Starting auto play at golden 400 zone. Press key to cancel..."
 # Constants for configuration
-recycleCycleAt=8      # Recycle every 8 cycles
 buyPotsCycleAt=100    # Buy potions every 200 cycles
 lifePercent=40        # Reach percent life to heal
 # Wire sequence - edit this array to define the order of wires to use
@@ -25,7 +22,6 @@ pauseFlagFile="$MUBOT_TEMP_DIR/mubot_paused"
 devilSquareEnabled=true    # Set to false to disable Devil Square event
 bloodCastleEnabled=true    # Set to false to disable Blood Castle event
 # Aux variables
-recyclerCounter=$recyclerCounterInit
 buyPotsCounter=0
 wireIndex=0                 # Start at first element of wireSequence
 lastBuffTime=0             # Track last buff time (0 = never buffed)
@@ -35,17 +31,6 @@ forceBuff=false            # Flag to force buff on next cycle
 rm -f "$pauseFlagFile"
 
 while true; do
-  # RECYCLE TO CLEAN INVENTORY.
-  # ===============================================
-  if [ $recyclerCounter -eq $recycleCycleAt ]; then
-    performSingleRecycle
-    if [ $? -ne 0 ]; then
-      exit 0
-    fi
-    # Restart counter
-    recyclerCounter=0
-  fi
-
   # BUY POTIONS TO SURVIVE.
   # ===============================================
   if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -eq $buyPotsCycleAt ]; then
@@ -130,7 +115,7 @@ while true; do
   wireIndex=$(echo $result | cut -d' ' -f1)
   currentWire=$(echo $result | cut -d' ' -f2)
       
-  echo "[$(date '+%H:%M:%S')] New cycle at w$currentWire... (Recycler: $recyclerCounter/$recycleCycleAt, BuyPots: $buyPotsCounter/$buyPotsCycleAt)"
+  echo "[$(date '+%H:%M:%S')] New cycle at w$currentWire... (BuyPots: $buyPotsCounter/$buyPotsCycleAt)"
     
   # GO TO INITIAL POSITION FROM CENTER.
   # ===============================================
@@ -154,14 +139,12 @@ while true; do
       elif [ "$key" = "n" ]; then
         # Skip to next parent loop
         echo "n key pressed. Skipping to next cycle..."
-        ((recyclerCounter++))
         ((buyPotsCounter++))
         continue 2
       elif [ "$key" = "b" ]; then
         # Force buff on next cycle
         echo "b key pressed. Forcing buff on next cycle..."
         forceBuff=true
-        ((recyclerCounter++))
         ((buyPotsCounter++))
         continue 2
       else
@@ -214,7 +197,6 @@ while true; do
   tap_revive_button
   # sleep 0.5
 
-  ((recyclerCounter++))     # Increase recycler counter
   ((buyPotsCounter++))      # Increase buy potions counter
 done
 
