@@ -310,7 +310,7 @@ runWhileEvent() {
         # Recycle every 3 minutes
         if [ $sinceLastRecycle -ge $recycleInterval ]; then
             echo "[$(date '+%H:%M:%S')] Recycling inventory... (${elapsed}s/${eventDuration}s)"
-            $PROJECT_DIR/bash/actions/recycle.sh
+            performSingleRecycle
             sleep 1
             tap_close_by_outside
             sinceLastRecycle=0
