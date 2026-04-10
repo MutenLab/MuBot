@@ -86,6 +86,7 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `farm.buy.potions` | Enable potion buying during farming runs | `true` |
 | `farm.health.potions` | Target health potions to buy during farming runs | `2500` |
 | `farm.mana.potions` | Target mana potions to buy during farming runs | `2000` |
+| `farm.auto.recycle` | Enable automatic recycling during travel | `true` |
 | `sanctuary.level` | Sanctuary level for boss farming (1-6) | `2` |
 | `sanctuary.wires` | Wire sequence for sanctuary boss farming (comma-separated, e.g., `1,2,3` or `2`) | `1,2` |
 | `sanctuary.health.potions` | Target health potions to buy during sanctuary runs | `3000` |

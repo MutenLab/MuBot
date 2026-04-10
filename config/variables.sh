@@ -39,6 +39,7 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     FARM_BUY_POTIONS="$(grep '^farm.buy.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     FARM_HEALTH_POTIONS="$(grep '^farm.health.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     FARM_MANA_POTIONS="$(grep '^farm.mana.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    FARM_AUTO_RECYCLE="$(grep '^farm.auto.recycle=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
 fi
 : "${PROJECT_DIR:=$_PROJECT_ROOT}"
 : "${QUICK_BUFF:=false}"
@@ -69,6 +70,7 @@ fi
 : "${FARM_BUY_POTIONS:=true}"
 : "${FARM_HEALTH_POTIONS:=2500}"
 : "${FARM_MANA_POTIONS:=2000}"
+: "${FARM_AUTO_RECYCLE:=true}"
 export PROJECT_DIR
 export QUICK_BUFF
 export PICKUP_ITEMS_BOSS
@@ -98,6 +100,7 @@ export SANCTUARY_MANA_POTIONS
 export FARM_BUY_POTIONS
 export FARM_HEALTH_POTIONS
 export FARM_MANA_POTIONS
+export FARM_AUTO_RECYCLE
 unset _VARS_DIR _PROJECT_ROOT
 
 # Python Settings

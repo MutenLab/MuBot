@@ -575,7 +575,7 @@ runDuringTravelling() {
     local elapsed
 
     # Run recycling if requested
-    if [ "$performRecycle" = true ]; then
+    if [ "$performRecycle" = true ] && [ "$FARM_AUTO_RECYCLE" = true ]; then
         # echo "[$(date '+%H:%M:%S')] Running recycle during travel..."
         startTime=$(date +%s)
         performSingleRecycle
