@@ -496,40 +496,53 @@ while true; do
         sleep 3
     fi
 
-    # Check all bosses status
-    echo "[$(date '+%H:%M:%S')] Checking boss status..."
-    boss_status=$(checkAllBossesStatus)
+    # Track current position for route optimization (E=entrance, or boss number)
+    currentPosition="E"
 
-    # Get list of alive bosses
-    aliveBosses=$(getAliveBosses "$boss_status")
+    # Process bosses by scanning and re-routing after each fight
+    while true; do
+        # Scan boss status and compute route from current position
+        echo "[$(date '+%H:%M:%S')] Checking boss status..."
+        boss_status=$(checkAllBossesStatus)
+        aliveBosses=$(getAliveBosses "$boss_status")
 
-    if [ -z "$aliveBosses" ]; then
-        echo "[$(date '+%H:%M:%S')] All bosses dead this cycle. Returning to entrance..."
-        $PROJECT_DIR/bash/actions/switchWire.sh $currentWire
-        sleep $WIRE_SWITCH_TIME
-        continue
-    fi
+        if [ -z "$aliveBosses" ]; then
+            echo "[$(date '+%H:%M:%S')] All bosses dead this cycle."
+            break
+        fi
 
-    # echo "[$(date '+%H:%M:%S')] Alive bosses:$aliveBosses"
+        optimalRoute=$(getOptimalRoute "$currentPosition" "$aliveBosses")
+        echo "[$(date '+%H:%M:%S')] Route from $currentPosition: $optimalRoute"
 
-    # Get optimal route using Python optimizer
-    optimalRoute=$(getOptimalRoute "E" "$aliveBosses")
-    echo "[$(date '+%H:%M:%S')] Optimal route: $optimalRoute"
+        # Get only the first target (with optional E prefix)
+        nextIsEntrance=false
+        targetBoss=""
+        for i in $optimalRoute; do
+            if [ "$i" = "E" ]; then
+                nextIsEntrance=true
+                continue
+            fi
+            targetBoss=$i
+            break
+        done
 
-    # Track previous boss for travel time calculation
-    previousBoss=0
+        if [ -z "$targetBoss" ]; then
+            break
+        fi
 
-    # Process bosses in optimal order (route may contain "E" for entrance)
-    for i in $optimalRoute; do
-        # Check for entrance marker - switch wire to go to entrance
-        if [ "$i" = "E" ]; then
+        # Go to entrance first if needed
+        if [ "$nextIsEntrance" = true ]; then
             echo "[$(date '+%H:%M:%S')] Going to entrance (wire switch)..."
             $PROJECT_DIR/bash/actions/switchWire.sh $currentWire
             sleep $WIRE_SWITCH_TIME
-            previousBoss=0
-            continue
+            currentPosition="E"
         fi
 
+        i=$targetBoss
+        previousBoss=0
+        if [ "$currentPosition" != "E" ]; then
+            previousBoss=$currentPosition
+        fi
         boss_name="BOSS_$i"
 
         # Check if buff is needed before traveling to this boss
@@ -636,10 +649,10 @@ while true; do
             fi
         done
 
-        # If boss was skipped, continue to next boss
+        # If boss was skipped, update position and re-scan
         if [ "$skippedBoss" = true ]; then
             ((bossesSkipped++))
-            previousBoss=$i
+            currentPosition=$i
             continue
         fi
 
@@ -649,6 +662,7 @@ while true; do
         case $attack_exit_code in
             0)
                 ((bossesKilled++))
+                currentPosition=$i
                 ;;
             1)
                 echo "[$(date '+%H:%M:%S')] Character died! Buffing and rescanning on wire $currentWire..."
@@ -661,15 +675,14 @@ while true; do
             2)
                 echo "[$(date '+%H:%M:%S')] $boss_name was already dead"
                 ((bossesSkipped++))
+                currentPosition=$i
                 ;;
             3)
                 echo "[$(date '+%H:%M:%S')] $boss_name timeout"
                 ((bossesSkipped++))
+                currentPosition=$i
                 ;;
         esac
-
-        # Update previous boss for next iteration
-        previousBoss=$i
     done
 
     # Display cycle stats
