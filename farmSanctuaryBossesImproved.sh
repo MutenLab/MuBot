@@ -174,7 +174,6 @@ checkAllBossesStatus() {
     echo "$status"
 }
 
-
 # Get status of specific boss from status string
 getBossStatus() {
     local status_string=$1
