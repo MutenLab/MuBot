@@ -50,10 +50,8 @@ handleKeyPress() {
 }
 
 # Statistics
-startTime=$(date +%s)
 bossesKilled=0
 bossesSkipped=0
-cycleCount=0
 # Parse wire sequence from config (e.g., "1,2,3" -> array (1 2 3))
 IFS=',' read -ra WIRE_SEQUENCE <<< "$SANCTUARY_WIRES"
 WIRE_COUNT=${#WIRE_SEQUENCE[@]}
@@ -116,19 +114,6 @@ getTravelTimeFromEntrance() {
     getTravelTime "ENTRANCE" "$target_boss"
 }
 
-# Find first alive boss from status string
-getFirstAliveBoss() {
-    local status_string=$1
-    for i in {1..12}; do
-        local status=$(getBossStatus "$status_string" "$i")
-        if [ "$status" = "alive" ]; then
-            echo "$i"
-            return
-        fi
-    done
-    echo "0"  # No alive boss found
-}
-
 # Get all alive bosses as space-separated list
 getAliveBosses() {
     local status_string=$1
@@ -189,15 +174,6 @@ checkAllBossesStatus() {
     echo "$status"
 }
 
-# Check if all bosses are dead
-areAllBossesDead() {
-    local status=$1
-    # Check if any boss is alive
-    if [[ "$status" == *":alive"* ]]; then
-        return 1  # Not all dead
-    fi
-    return 0  # All dead
-}
 
 # Get status of specific boss from status string
 getBossStatus() {
@@ -270,12 +246,7 @@ navigateToBoss() {
 
 # Main farming loop
 while true; do
-    ((cycleCount++))
     ((buyPotsCounter++))
-
-    # Reset route data for new cycle
-    optimalRoute=""
-    previousBoss=0
 
     # Buy potions every X cycles
     if [ "$FARM_BUY_POTIONS" = true ] && [ $buyPotsCounter -ge $buyPotsCycleAt ]; then
@@ -296,7 +267,7 @@ while true; do
 
     echo ""
     echo "========================================="
-    echo "[$(date '+%H:%M:%S')] Cycle $cycleCount - Target wire $targetWire"
+    echo "[$(date '+%H:%M:%S')] Cycle $buyPotsCounter/$buyPotsCycleAt - Target wire $targetWire"
     echo "========================================="
 
     # Check if buff is needed (every 28 minutes)
@@ -554,8 +525,6 @@ while true; do
             echo "[$(date '+%H:%M:%S')] Buff performed. Restarting cycle on wire 1 with fresh scan..."
             currentWire=1
             needReturnToSanctuary=true  # We left Sanctuary $SANCTUARY_LEVEL for buff
-            # Decrement cycle count since we'll restart this cycle
-            ((cycleCount--))
             continue 2  # Break out of boss loop and restart main loop
         fi
 
@@ -577,12 +546,10 @@ while true; do
         if [ $navigate_exit_code -eq 1 ]; then
             echo "[$(date '+%H:%M:%S')] Game was closed! Restarting cycle..."
             needReturnToSanctuary=true
-            ((cycleCount--))
             continue 2  # Restart main loop
         elif [ $navigate_exit_code -eq 2 ]; then
             echo "[$(date '+%H:%M:%S')] Location validation failed! Restarting cycle..."
             needReturnToSanctuary=true
-            ((cycleCount--))
             continue 2  # Restart main loop
         fi
 
@@ -668,8 +635,6 @@ while true; do
                 echo "[$(date '+%H:%M:%S')] Character died! Buffing and rescanning on wire $currentWire..."
                 lastBuffTime=0  # Force buff
                 sleep 3
-                # Decrement cycle count since we'll restart this cycle
-                ((cycleCount--))
                 continue 2  # Restart main loop with fresh scan, keep current wire
                 ;;
             2)
@@ -687,7 +652,7 @@ while true; do
 
     # Display cycle stats
     echo ""
-    echo "[$(date '+%H:%M:%S')] Cycle $cycleCount complete - Killed: $bossesKilled, Skipped: $bossesSkipped"
+    echo "[$(date '+%H:%M:%S')] Cycle $buyPotsCounter/$buyPotsCycleAt complete - Killed: $bossesKilled, Skipped: $bossesSkipped"
     echo "[$(date '+%H:%M:%S')] Starting next cycle..."
     sleep 2
 done

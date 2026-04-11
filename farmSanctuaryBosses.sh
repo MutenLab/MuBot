@@ -116,19 +116,6 @@ getTravelTimeFromEntrance() {
     getTravelTime "ENTRANCE" "$target_boss"
 }
 
-# Find first alive boss from status string
-getFirstAliveBoss() {
-    local status_string=$1
-    for i in {1..12}; do
-        local status=$(getBossStatus "$status_string" "$i")
-        if [ "$status" = "alive" ]; then
-            echo "$i"
-            return
-        fi
-    done
-    echo "0"  # No alive boss found
-}
-
 # Get all alive bosses as space-separated list
 getAliveBosses() {
     local status_string=$1
@@ -189,15 +176,6 @@ checkAllBossesStatus() {
     echo "$status"
 }
 
-# Check if all bosses are dead
-areAllBossesDead() {
-    local status=$1
-    # Check if any boss is alive
-    if [[ "$status" == *":alive"* ]]; then
-        return 1  # Not all dead
-    fi
-    return 0  # All dead
-}
 
 # Get status of specific boss from status string
 getBossStatus() {
