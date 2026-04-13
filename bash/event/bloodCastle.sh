@@ -46,6 +46,7 @@ fi
 # ================
 # During wait time
 runDuringTravelling 15 true "satan"
+tap_more_top_button
 
 # WAIT COUNTDOWN & START EVENT
 # ================
