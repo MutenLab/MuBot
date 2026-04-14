@@ -240,7 +240,12 @@ while true; do
   # GO TO MOB POSITION FROM CENTER.
   # ===============================================
   sleep 1
-  # Alternate between recycle+validation and game check
+  # Switch to wire 2 before traveling to mob spot
+  $PROJECT_DIR/bash/actions/switchWire.sh 2 &
+  switchWirePID=$!
+  wait $switchWirePID
+  sleep 4
+  # Recycle and validate game while traveling
   $PROJECT_DIR/bash/travel/foggyForest/toMobsFromCenter.sh "satan" true &
   reposition_pid=$!
 
