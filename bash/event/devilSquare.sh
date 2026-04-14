@@ -48,10 +48,13 @@ sleep 0.5
 tap_closeMap
 sleep 1
 
-# CHANGE PLAN BEFORE EVENT
+# CHANGE PLAN AND PICKUP BEFORE EVENT
 # ================
 if [ "$PLAN_BEFORE_DEVIL_SQUARE" -ne 0 ]; then
     changePlan $PLAN_BEFORE_DEVIL_SQUARE
+fi
+if [ "$EVENT_CHANGE_GOLD_PICKUP" = "true" ]; then
+    setGoldPickup false
 fi
 
 # RECYCLER & SATAN VALIDATION
@@ -70,10 +73,13 @@ runWhileEvent $eventStartEpoch
 
 waitToEndEvent
 
-# CHANGE PLAN AFTER EVENT
+# CHANGE PLAN AND PICKUP AFTER EVENT
 # ================
 if [ "$PLAN_AFTER_DEVIL_SQUARE" -ne 0 ]; then
     changePlan $PLAN_AFTER_DEVIL_SQUARE
+fi
+if [ "$EVENT_CHANGE_GOLD_PICKUP" = "true" ]; then
+    setGoldPickup true
 fi
 
 # LEAVE PARTY

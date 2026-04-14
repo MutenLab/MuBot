@@ -32,6 +32,7 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     EVENT_BC_MINUTES_END="$(grep '^event.blood.castle.minutes.end=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     EVENT_DS_MAX_FAILS="$(grep '^event.devil.square.max.fails=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     EVENT_BC_MAX_FAILS="$(grep '^event.blood.castle.max.fails=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    EVENT_CHANGE_GOLD_PICKUP="$(grep '^event.change.gold.pickup=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     SANCTUARY_LEVEL="$(grep '^sanctuary.level=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     SANCTUARY_WIRES="$(grep '^sanctuary.wires=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     SANCTUARY_HEALTH_POTIONS="$(grep '^sanctuary.health.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
@@ -63,6 +64,7 @@ fi
 : "${EVENT_BC_MINUTES_END:=14}"
 : "${EVENT_DS_MAX_FAILS:=3}"
 : "${EVENT_BC_MAX_FAILS:=3}"
+: "${EVENT_CHANGE_GOLD_PICKUP:=false}"
 : "${SANCTUARY_LEVEL:=2}"
 : "${SANCTUARY_WIRES:=1,2}"
 : "${SANCTUARY_HEALTH_POTIONS:=3000}"
@@ -93,6 +95,7 @@ export EVENT_BC_MINUTES_START
 export EVENT_BC_MINUTES_END
 export EVENT_DS_MAX_FAILS
 export EVENT_BC_MAX_FAILS
+export EVENT_CHANGE_GOLD_PICKUP
 export SANCTUARY_LEVEL
 export SANCTUARY_WIRES
 export SANCTUARY_HEALTH_POTIONS
@@ -246,8 +249,10 @@ tap_exit_game_confirm() { adb_tap 1110 640; } # Migrated
 tap_more_right_button() { adb_tap 1860 280; } # Migrated
 tap_more_right_settings() { adb_tap 1870 960; } # Migrated
 tap_settings_auto_tab() { adb_tap 1870 260; } # Migrated
+tap_settings_pick_tab() { adb_tap 1870 372; } # Migrated
 tap_settings_auto_plan1() { adb_tap 1330 945; } # Migrated
 tap_settings_auto_plan2() { adb_tap 1580 945; } # Migrated
+tap_settings_pick_gold() { adb_tap 1326 349; } # Migrated
 tap_close_by_outside() { adb_tap 460 560; } # Migrated
 
 tap_event_open_now() { adb_tap 233 318; } # Migrated

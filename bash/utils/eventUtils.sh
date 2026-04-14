@@ -69,18 +69,23 @@ openDailyGoalsChests() {
     tap_daily_goal_close
 }
 
-# Change auto-play plan
-# Parameters: $1 = plan number (1 = Evil Spirit, 2 = Blizzard)
-changePlan() {
-    local plan=${1:-1}
-    
-    sleep 1
+# Open the Settings window from the right-side more menu
+openSettings() {
     # Click on more button
     tap_more_right_button
     sleep 0.5
     # Click on settings button
     tap_more_right_settings
     sleep 0.5
+}
+
+# Change auto-play plan
+# Parameters: $1 = plan number (1 = Evil Spirit, 2 = Blizzard)
+changePlan() {
+    local plan=${1:-1}
+    
+    sleep 0.5
+    openSettings
     # Click on Auto-Play button from settings
     tap_settings_auto_tab
     sleep 0.5
@@ -231,16 +236,48 @@ isBloodCastleTime() {
     return 1
 }
 
-# Function to handle periodic recycling and use skill during events
-# Parameters: $1 = total duration in seconds, $2 = recycle interval in seconds
-# Used in event scripts like Blood Castle, Devil Square, etc.
-# Function to find and click GO button for a specific event
-# Reads headers of visible event panels and clicks the GO button when found
-# Scrolls horizontally if the event is not visible in current view
-# Parameters: $1 = search text (case-insensitive partial match, e.g. "blood" for Blood Castle)
-# Returns: 0 if event found and clicked, 1 if not found after scrolling
-# Header positions (x): 666, 1110, 1554, 1998 (y: 330, width: 400, height: 40)
-# GO button positions (x): 845, 1290, 1731, 2175 (y: 1075)
+# Set the Gold Coins auto-pick checkbox to the desired state
+# Parameters: $1 = desired state ("true" to enable, "false" to disable)
+# Assumes the Auto Pick settings panel is already open on screen
+setGoldPickup() {
+    local desired=${1:-true}
+    local MARKER_IMAGE="$PROJECT_DIR/img/gold_pickup_check_marker.png"
+
+    local X=1304
+    local Y=328
+    local WIDTH=45
+    local HEIGHT=45
+
+    sleep 0.5
+    openSettings
+    tap_settings_auto_tab
+    tap_settings_pick_tab
+    sleep 0.5
+
+    local result=$(compareScreenRegionWithImage "$X" "$Y" "$WIDTH" "$HEIGHT" "$MARKER_IMAGE")
+
+    local isChecked="false"
+    if [[ "$result" == "similar" ]]; then
+        isChecked="true"
+    fi
+
+    if [[ "$desired" == "$isChecked" ]]; then
+        echo "[$(date '+%H:%M:%S')] Gold pickup already set to $desired."
+    else
+        echo "[$(date '+%H:%M:%S')] Toggling gold pickup to $desired."
+        tap_settings_pick_gold
+    fi
+
+    sleep 0.5
+    # Close windows to go back to game
+    tap_close_by_outside
+    sleep 0.5
+
+    # Click on more button to avoid issues
+    tap_more_right_button
+    sleep 1
+}
+
 clickEventGoButton() {
     local searchText="$1"
     local searchLower=$(echo "$searchText" | tr '[:upper:]' '[:lower:]')

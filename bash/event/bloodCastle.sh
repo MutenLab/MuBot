@@ -36,10 +36,13 @@ if [ "$currentLocation" -ne "$LOC_BLOOD_CASTLE" ]; then
 fi
 echo "[$(date '+%H:%M:%S')] Confirmed at Blood Castle."
 
-# CHANGE PLAN BEFORE EVENT
+# CHANGE PLAN AND PICKUP BEFORE EVENT
 # ================
 if [ "$PLAN_BEFORE_BLOOD_CASTLE" -ne 0 ]; then
     changePlan $PLAN_BEFORE_BLOOD_CASTLE
+fi
+if [ "$EVENT_CHANGE_GOLD_PICKUP" = "true" ]; then
+    setGoldPickup false
 fi
 
 # RECYCLER & SATAN VALIDATION
@@ -72,10 +75,13 @@ runWhileEvent $eventStartEpoch
 
 waitToEndEvent
 
-# CHANGE PLAN AFTER EVENT
+# CHANGE PLAN AND PICKUP AFTER EVENT
 # ================
 if [ "$PLAN_AFTER_BLOOD_CASTLE" -ne 0 ]; then
     changePlan $PLAN_AFTER_BLOOD_CASTLE
+fi
+if [ "$EVENT_CHANGE_GOLD_PICKUP" = "true" ]; then
+    setGoldPickup true
 fi
 
 # LEAVE PARTY
