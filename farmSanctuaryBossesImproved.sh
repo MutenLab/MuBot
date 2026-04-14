@@ -1,9 +1,16 @@
 #!/bin/bash
-# FARM SANCTUARY BOSSES
+# FARM SANCTUARY BOSSES (IMPROVED)
 # Sanctuary level is read from local.properties (sanctuary.level)
 # Travels through all 12 boss locations, fights alive bosses, skips dead ones.
-# Alternates between wire 1 and wire 2 each cycle.
-# Checks for Devil Square and Blood Castle events at scheduled times.
+# Rotates wires per local.properties (sanctuary.wires).
+# Checks for Devil Square and Blood Castle events at scheduled times:
+#   - At the top of every cycle (before teleport/buff/boss loop).
+#   - Before every boss iteration (mid-wire guard), so an event window that
+#     opens while clearing a wire is caught on the next boss iteration instead
+#     of waiting for the whole wire to finish.
+# After an event, we always teleport back to Sanctuary (lands on wire 1) and
+# re-switch to the wire that was in progress — wireIndex is advanced only at
+# the end of a fully-executed cycle so events do not consume a wire slot.
 # Keys: 'p'=pause(5min), 's'=stop(15min), 'n'=skip boss, 'q'=force Devil Square, 'r'=force Blood Castle, other=abort
 # ==================================================
 
@@ -260,9 +267,11 @@ while true; do
         needReturnToSanctuary=true
     fi
 
-    # Cycle through wire sequence (e.g., 1,2,3 -> 1,2,3,1,2,3,...)
+    # Cycle through wire sequence (e.g., 1,2,3 -> 1,2,3,1,2,3,...).
+    # wireIndex is advanced at the END of the cycle (after the boss loop),
+    # so an event `continue` leaves the same targetWire picked on the next
+    # iteration — the interrupted wire resumes with a fresh scan.
     targetWire=${WIRE_SEQUENCE[$wireIndex]}
-    wireIndex=$(( (wireIndex + 1) % WIRE_COUNT ))
 
     echo ""
     echo "========================================="
@@ -276,151 +285,95 @@ while true; do
         needReturnToSanctuary=true
     fi
 
-    # CHECK FOR DEVIL SQUARE EVENT (hours 0,2,4,6 at :10-:15 OR forced by user)
+    # CHECK FOR DEVIL SQUARE EVENT
     # ===============================================
     if ( [ "$devilSquareEnabled" = true ] && isDevilSquareTime ) || [ "$forceDevilSquare" = true ]; then
-        # Reset fail counter if hour changed
         currentHour=$(date '+%H')
         if [ "$currentHour" != "$dsFailHour" ]; then
             dsFailCount=0
             dsFailHour=$currentHour
         fi
-
         if [ $dsFailCount -ge $EVENT_DS_MAX_FAILS ] && [ "$forceDevilSquare" != true ]; then
             echo "[$(date '+%H:%M:%S')] Devil Square skipped (failed $dsFailCount times this hour)"
         else
             if [ "$forceDevilSquare" = true ]; then
                 echo "[$(date '+%H:%M:%S')] Devil Square event forced by user!"
             else
-                echo "[$(date '+%H:%M:%S')] Devil Square event time detected!"
+                echo "[$(date '+%H:%M:%S')] Devil Square event time detected! (attempt $((dsFailCount + 1))/$EVENT_DS_MAX_FAILS)"
             fi
 
-            # Force buff before event if it's been more than 16 minutes
             currentTime=$(date +%s)
             timeSinceLastBuff=$((currentTime - lastBuffTime))
-            if [ $timeSinceLastBuff -gt 960 ]; then
-                echo "[$(date '+%H:%M:%S')] Buffing before Devil Square event (last buff: $((timeSinceLastBuff / 60)) minutes ago)..."
+            buffRemaining=$((1800 - timeSinceLastBuff))
+            if [ $buffRemaining -lt 720 ]; then
+                echo "[$(date '+%H:%M:%S')] Buff remaining: ${buffRemaining}s (<12min). Buffing before event..."
                 performBuffFoggyForest
                 buff_exit_code=$?
                 if [ $buff_exit_code -eq 0 ]; then
                     lastBuffTime=$(date +%s)
                 fi
+            else
+                echo "[$(date '+%H:%M:%S')] Buff remaining: ${buffRemaining}s (>=12min). Skipping buff."
             fi
 
-            # Call Devil Square script
-            $PROJECT_DIR/bash/event/devilSquare.sh &
-            devilsquare_pid=$!
-
-            # Wait for Devil Square to finish, checking for key presses
-            event_stopped=false
-            while kill -0 $devilsquare_pid 2>/dev/null; do
-                read -t 1 -n 1 key
-                if [ $? = 0 ]; then
-                    kill $devilsquare_pid 2>/dev/null
-                    wait $devilsquare_pid 2>/dev/null
-                    if [ "$key" = "s" ]; then
-                        echo "[$(date '+%H:%M:%S')] Devil Square stopped by user. Waiting (15 minutes timeout)..."
-                        $PROJECT_DIR/bash/actions/wait.sh 900
-                        event_stopped=true
-                        break
-                    else
-                        echo "[$(date '+%H:%M:%S')] Devil Square interrupted by user"
-                        handleKeyPress "$key"
-                        event_stopped=true
-                        break
-                    fi
-                fi
-            done
-
-            wait $devilsquare_pid
-            event_exit_code=$?
-
-            if [ "$event_stopped" = false ]; then
-                if [ $event_exit_code -eq 0 ]; then
-                    ((devilSquareCount++))
-                    echo "[$(date '+%H:%M:%S')] Devil Square completed. Total: $devilSquareCount"
-                else
-                    ((dsFailCount++))
-                    echo "[$(date '+%H:%M:%S')] Devil Square failed ($dsFailCount/2 attempts this hour)"
-                fi
+            $PROJECT_DIR/bash/event/devilSquare.sh
+            if [ $? -eq 0 ]; then
+                ((devilSquareCount++))
+                echo "[$(date '+%H:%M:%S')] Devil Square completed. Total: $devilSquareCount"
+            else
+                ((dsFailCount++))
+                echo "[$(date '+%H:%M:%S')] Devil Square failed ($dsFailCount/$EVENT_DS_MAX_FAILS attempts this hour)"
             fi
 
             forceDevilSquare=false
             needReturnToSanctuary=true
+            continue
         fi
     fi
 
-    # CHECK FOR BLOOD CASTLE EVENT (hours 1,3,5 at :10-:15 OR forced by user)
+    # CHECK FOR BLOOD CASTLE EVENT
     # ===============================================
     if ( [ "$bloodCastleEnabled" = true ] && isBloodCastleTime ) || [ "$forceBloodCastle" = true ]; then
-        # Reset fail counter if hour changed
         currentHour=$(date '+%H')
         if [ "$currentHour" != "$bcFailHour" ]; then
             bcFailCount=0
             bcFailHour=$currentHour
         fi
-
         if [ $bcFailCount -ge $EVENT_BC_MAX_FAILS ] && [ "$forceBloodCastle" != true ]; then
             echo "[$(date '+%H:%M:%S')] Blood Castle skipped (failed $bcFailCount times this hour)"
         else
             if [ "$forceBloodCastle" = true ]; then
                 echo "[$(date '+%H:%M:%S')] Blood Castle event forced by user!"
             else
-                echo "[$(date '+%H:%M:%S')] Blood Castle event time detected!"
+                echo "[$(date '+%H:%M:%S')] Blood Castle event time detected! (attempt $((bcFailCount + 1))/$EVENT_BC_MAX_FAILS)"
             fi
 
-            # Force buff before event if it's been more than 16 minutes
             currentTime=$(date +%s)
             timeSinceLastBuff=$((currentTime - lastBuffTime))
-            if [ $timeSinceLastBuff -gt 960 ]; then
-                echo "[$(date '+%H:%M:%S')] Buffing before Blood Castle event (last buff: $((timeSinceLastBuff / 60)) minutes ago)..."
+            buffRemaining=$((1800 - timeSinceLastBuff))
+            if [ $buffRemaining -lt 720 ]; then
+                echo "[$(date '+%H:%M:%S')] Buff remaining: ${buffRemaining}s (<12min). Buffing before event..."
                 performBuffFoggyForest
                 buff_exit_code=$?
                 if [ $buff_exit_code -eq 0 ]; then
                     lastBuffTime=$(date +%s)
                 fi
+            else
+                echo "[$(date '+%H:%M:%S')] Buff remaining: ${buffRemaining}s (>=12min). Skipping buff."
             fi
 
-            # Call Blood Castle script
-            $PROJECT_DIR/bash/event/bloodCastle.sh &
-            bloodcastle_pid=$!
-
-            # Wait for Blood Castle to finish, checking for key presses
-            event_stopped=false
-            while kill -0 $bloodcastle_pid 2>/dev/null; do
-                read -t 1 -n 1 key
-                if [ $? = 0 ]; then
-                    kill $bloodcastle_pid 2>/dev/null
-                    wait $bloodcastle_pid 2>/dev/null
-                    if [ "$key" = "s" ]; then
-                        echo "[$(date '+%H:%M:%S')] Blood Castle stopped by user. Waiting (15 minutes timeout)..."
-                        $PROJECT_DIR/bash/actions/wait.sh 900
-                        event_stopped=true
-                        break
-                    else
-                        echo "[$(date '+%H:%M:%S')] Blood Castle interrupted by user"
-                        handleKeyPress "$key"
-                        event_stopped=true
-                        break
-                    fi
-                fi
-            done
-
-            wait $bloodcastle_pid
-            event_exit_code=$?
-
-            if [ "$event_stopped" = false ]; then
-                if [ $event_exit_code -eq 0 ]; then
-                    ((bloodCastleCount++))
-                    echo "[$(date '+%H:%M:%S')] Blood Castle completed. Total: $bloodCastleCount"
-                else
-                    ((bcFailCount++))
-                    echo "[$(date '+%H:%M:%S')] Blood Castle failed ($bcFailCount/2 attempts this hour)"
-                fi
+            $PROJECT_DIR/bash/event/bloodCastle.sh
+            if [ $? -eq 0 ]; then
+                ((bloodCastleCount++))
+                echo "[$(date '+%H:%M:%S')] Blood Castle completed. Total: $bloodCastleCount"
+            else
+                ((bcFailCount++))
+                echo "[$(date '+%H:%M:%S')] Blood Castle failed ($bcFailCount/$EVENT_BC_MAX_FAILS attempts this hour)"
             fi
 
             forceBloodCastle=false
             needReturnToSanctuary=true
+            continue
         fi
     fi
 
@@ -471,6 +424,20 @@ while true; do
 
     # Process bosses by scanning and re-routing after each fight
     while true; do
+        # Event guard — runs at the top of every iteration so any outcome from
+        # the previous boss (killed, skipped, paused, already-dead, timeout)
+        # still checks the event window. Placed before the map scan to skip
+        # that cost on exit. On hit: `continue 2` returns to the main loop,
+        # where the top-of-cycle DS/BC block fires; `needReturnToSanctuary=true`
+        # forces the post-event teleport, and targetWire stays the same so the
+        # interrupted wire is resumed after the event.
+        if ( [ "$devilSquareEnabled" = true ] && isDevilSquareTime ) \
+           || ( [ "$bloodCastleEnabled" = true ] && isBloodCastleTime ); then
+            echo "[$(date '+%H:%M:%S')] Event window detected mid-wire. Returning to main cycle..."
+            needReturnToSanctuary=true
+            continue 2
+        fi
+
         # Scan boss status and compute route from current position
         echo "[$(date '+%H:%M:%S')] Checking boss status..."
         boss_status=$(checkAllBossesStatus)
@@ -647,7 +614,13 @@ while true; do
                 currentPosition=$i
                 ;;
         esac
+
     done
+
+    # Advance wire rotation only after a cycle fully completed its boss loop.
+    # Event `continue`s earlier in the cycle skip this line, so the same wire
+    # is picked again on the next iteration and resumed post-event.
+    wireIndex=$(( (wireIndex + 1) % WIRE_COUNT ))
 
     # Display cycle stats
     echo ""
