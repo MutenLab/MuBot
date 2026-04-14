@@ -46,7 +46,13 @@ adb devices  # verify connection
 
 ### 4. Configure project path
 
-Create a `local.properties` file at the project root with your local project directory:
+A ready-to-use template lives at `example/local_example.properties`. Copy it to the project root and rename it to `local.properties` (the filename and location are both required — scripts look for `<project_root>/local.properties`):
+
+```bash
+cp example/local_example.properties local.properties
+```
+
+Then edit the copied file and update at minimum `project.dir` and `emulator.id` for your machine. The full set of supported properties:
 
 ```bash
 # local.properties
