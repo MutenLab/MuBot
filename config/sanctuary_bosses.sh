@@ -47,7 +47,7 @@ getTravelTime() {
         1_3) echo 24 ;;   # Projection
         1_4) echo 36 ;;   # Projection
         1_5) echo 66 ;;   # Projection
-        1_6) echo 30 ;;   # Projection
+        1_6) echo 53 ;;   # Validated
         1_7) echo 28 ;;   # Validated
         1_8) echo 33 ;;   # Validated
         1_9) echo 43 ;;   # Projection
