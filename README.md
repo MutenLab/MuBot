@@ -97,6 +97,8 @@ This file is gitignored — each computer needs its own. If omitted, the project
 | `sanctuary.wires` | Wire sequence for sanctuary boss farming (comma-separated, e.g., `1,2,3` or `2`) | `1,2` |
 | `sanctuary.health.potions` | Target health potions to buy during sanctuary runs | `3000` |
 | `sanctuary.mana.potions` | Target mana potions to buy during sanctuary runs | `3000` |
+| `sanctuary.performance.mode` | When `true`, skips OCR-based location validation while traveling between sanctuary bosses (helps slow computers that struggle with OCR) | `false` |
+| `sanctuary.long.travel.duration` | Threshold in seconds for treating a boss-to-boss travel as "long". Travels at or above this run the full validation pass (recycle + game check + location); shorter travels only run recycle. Raise this on slow computers to route more travels through the lighter branch. | `15` |
 | `event.devil.square.hours` | Hours when Devil Square is available (comma-separated) | `0,2,4,6` |
 | `event.devil.square.minutes.start` | Start minute of the Devil Square window | `0` |
 | `event.devil.square.minutes.end` | End minute of the Devil Square window | `14` |

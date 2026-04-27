@@ -37,6 +37,8 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     SANCTUARY_WIRES="$(grep '^sanctuary.wires=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     SANCTUARY_HEALTH_POTIONS="$(grep '^sanctuary.health.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     SANCTUARY_MANA_POTIONS="$(grep '^sanctuary.mana.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    SANCTUARY_PERFORMANCE_MODE="$(grep '^sanctuary.performance.mode=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    SANCTUARY_LONG_TRAVEL_DURATION="$(grep '^sanctuary.long.travel.duration=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     FARM_BUY_POTIONS="$(grep '^farm.buy.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     FARM_HEALTH_POTIONS="$(grep '^farm.health.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     FARM_MANA_POTIONS="$(grep '^farm.mana.potions=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
@@ -69,6 +71,8 @@ fi
 : "${SANCTUARY_WIRES:=1,2}"
 : "${SANCTUARY_HEALTH_POTIONS:=3000}"
 : "${SANCTUARY_MANA_POTIONS:=3000}"
+: "${SANCTUARY_PERFORMANCE_MODE:=false}"
+: "${SANCTUARY_LONG_TRAVEL_DURATION:=15}"
 : "${FARM_BUY_POTIONS:=true}"
 : "${FARM_HEALTH_POTIONS:=2500}"
 : "${FARM_MANA_POTIONS:=2000}"
@@ -100,6 +104,8 @@ export SANCTUARY_LEVEL
 export SANCTUARY_WIRES
 export SANCTUARY_HEALTH_POTIONS
 export SANCTUARY_MANA_POTIONS
+export SANCTUARY_PERFORMANCE_MODE
+export SANCTUARY_LONG_TRAVEL_DURATION
 export FARM_BUY_POTIONS
 export FARM_HEALTH_POTIONS
 export FARM_MANA_POTIONS

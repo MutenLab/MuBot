@@ -237,9 +237,14 @@ navigateToBoss() {
     # runDuringTravelling: time, recycle, validation(angel/satan/none), gameCheck, expectedLocation
     # Minimum time for full check (recycle + gameCheck + location): ~12 seconds
     # Returns: 0=success, 2=location validation failed
+    # Performance mode: skip OCR-based location validation between bosses (expectedLocation=0)
+    local expectedLoc=$SANCTUARY_LOC
+    if [ "$SANCTUARY_PERFORMANCE_MODE" = true ]; then
+        expectedLoc=0
+    fi
     local travel_exit_code=0
-    if [ $travel_time -ge 15 ]; then
-        runDuringTravelling $travel_time true "none" true $SANCTUARY_LOC
+    if [ $travel_time -ge $SANCTUARY_LONG_TRAVEL_DURATION ]; then
+        runDuringTravelling $travel_time true "none" true $expectedLoc
         travel_exit_code=$?
     else
         # Short travel - only recycle, skip game check
