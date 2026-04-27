@@ -247,8 +247,8 @@ navigateToBoss() {
         runDuringTravelling $travel_time true "none" true $expectedLoc
         travel_exit_code=$?
     else
-        # Short travel - only recycle, skip game check
-        runDuringTravelling $travel_time true "none" true 0
+        # Short travel - skip recycle and game check
+        runDuringTravelling $travel_time false "none" true 0
         travel_exit_code=$?
     fi
 
