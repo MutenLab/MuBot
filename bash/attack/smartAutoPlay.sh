@@ -33,8 +33,11 @@ CHECK_INTERVAL=$AUTOPLAY_HEALTHBAR_CHECK_INTERVAL  # Check status every X second
 source $PROJECT_DIR/config/variables.sh
 source $PROJECT_DIR/bash/utils/farmingUtils.sh
 
-# Check for expired popup before starting
-detectAndCloseExpiredPopup
+# Check for expired popup before starting (skipped in autoPlay performance mode
+# to save the screencap + image-compare cost on slow PCs)
+if [ "$AUTOPLAY_PERFORMANCE_MODE" != true ]; then
+    detectAndCloseExpiredPopup
+fi
 
 # Select Python detection script based on target type
 if [ "$targetType" = "golden" ]; then

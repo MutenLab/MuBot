@@ -526,6 +526,14 @@ while true; do
 
         echo "[$(date '+%H:%M:%S')] $boss_name - Fighting..."
 
+        # Performance mode workaround: tap attack immediately to start fighting
+        # while smartAutoPlay is still warming up (sourcing config + popup
+        # precheck + screencap can add several seconds before its own tap_auto
+        # fires on weaker PCs).
+        if [ "$SANCTUARY_PERFORMANCE_MODE" = true ]; then
+            tap_attack
+        fi
+
         # Call smartAutoPlay in background (grabTime)
         $PROJECT_DIR/bash/attack/smartAutoPlay.sh boss &
         attack_pid=$!

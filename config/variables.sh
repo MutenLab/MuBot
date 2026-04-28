@@ -13,6 +13,7 @@ if [ -f "$_PROJECT_ROOT/local.properties" ]; then
     AUTOPLAY_ATTACK_TIMEOUT="$(grep '^autoPlay.attack.timeout=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     AUTOPLAY_HEALTHBAR_CHECK_INTERVAL="$(grep '^autoPlay.healthbar.check.interval=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     AUTOPLAY_HEALTHBAR_TIMES_KILLED="$(grep '^autoPlay.healthbar.times.killed=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
+    AUTOPLAY_PERFORMANCE_MODE="$(grep '^autoPlay.performance.mode=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     EMULATOR_ID="$(grep '^emulator.id=' "$_PROJECT_ROOT/local.properties" | cut -d'=' -f2)"
     # Ensure ADB connection for TCP-based emulators (e.g., BlueStacks)
     if [[ "$EMULATOR_ID" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+$ ]]; then
@@ -51,6 +52,7 @@ fi
 : "${AUTOPLAY_ATTACK_TIMEOUT:=240}"
 : "${AUTOPLAY_HEALTHBAR_CHECK_INTERVAL:=1}"
 : "${AUTOPLAY_HEALTHBAR_TIMES_KILLED:=1}"
+: "${AUTOPLAY_PERFORMANCE_MODE:=false}"
 : "${EMULATOR_ID:=127.0.0.1:5555}"
 : "${USE_IMMORTAL_SATAN:=true}"
 : "${GAME_PACKAGE:=com.tszz.gpen.nowgg}"
@@ -84,6 +86,7 @@ export PICKUP_ITEMS_GOLDEN
 export AUTOPLAY_ATTACK_TIMEOUT
 export AUTOPLAY_HEALTHBAR_CHECK_INTERVAL
 export AUTOPLAY_HEALTHBAR_TIMES_KILLED
+export AUTOPLAY_PERFORMANCE_MODE
 export EMULATOR_ID
 export USE_IMMORTAL_SATAN
 export GAME_PACKAGE
